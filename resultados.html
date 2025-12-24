@@ -6,596 +6,757 @@
   <title>SICCHA Streaming | Ganadores</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+    
     :root{
-      --bg:#030b17;
-      --panel: rgba(12, 22, 45, .78);
-      --border: rgba(255,255,255,.10);
-      --prime:#00A8E1;
-      --prime2:#2bd4ff;
-      --txt:#e7f1ff;
-      --muted: rgba(231,241,255,.72);
-      --good:#22c55e;
-      --shadow: 0 18px 70px rgba(0,0,0,.55);
-      --christmas:#e50914;
-      --gold:#ffd166;
+      --netflix-red:#E50914;
+      --netflix-black:#141414;
+      --netflix-dark:#0b0b0b;
+      --gold:#FFD700;
+      --green:#22c55e;
+      --ice:#B4E4FF;
     }
-    *{box-sizing:border-box}
+    
+    *{box-sizing:border-box; margin:0; padding:0;}
+    
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
-      color:var(--txt);
-      background:
-        radial-gradient(1200px 600px at 15% 8%, rgba(0,168,225,.22), transparent 55%),
-        radial-gradient(900px 500px at 80% 0%, rgba(229,9,20,.18), transparent 55%),
-        linear-gradient(180deg, #020713, #06122a 40%, #020713);
-      overflow-x:hidden;
+      font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--netflix-black);
+      color: #fff;
+      overflow-x: hidden;
     }
 
-    /* Falling snow */
-    .snow{
-      pointer-events:none;
-      position:fixed; inset:0; z-index:0;
-      background-image:
-        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.9), transparent 60%),
-        radial-gradient(2px 2px at 140px 90px, rgba(255,255,255,.7), transparent 60%),
-        radial-gradient(1px 1px at 60px 170px, rgba(255,255,255,.9), transparent 60%),
-        radial-gradient(1px 1px at 220px 220px, rgba(255,255,255,.65), transparent 60%),
-        radial-gradient(2px 2px at 260px 140px, rgba(255,255,255,.75), transparent 60%);
-      background-size: 280px 280px;
-      animation: snowMove 9s linear infinite;
-      opacity:.33;
+    /* ========== NIEVE CAYENDO ========== */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      z-index: 9999;
+      user-select: none;
+      cursor: default;
+      animation: snowfall linear infinite;
+      color: rgba(255,255,255,0.8);
+      font-size: 1em;
+      text-shadow: 0 0 5px rgba(255,255,255,0.8);
     }
-    @keyframes snowMove{
-      from{transform: translateY(-40px)}
-      to{transform: translateY(40px)}
-    }
-
-    /* Twinkle stars overlay */
-    .twinkle{
-      pointer-events:none;
-      position:fixed; inset:0; z-index:0;
-      background-image:
-        radial-gradient(2px 2px at 12% 18%, rgba(255,255,255,.35), transparent 60%),
-        radial-gradient(2px 2px at 70% 22%, rgba(255,255,255,.25), transparent 60%),
-        radial-gradient(2px 2px at 32% 62%, rgba(255,255,255,.28), transparent 60%),
-        radial-gradient(1px 1px at 86% 58%, rgba(255,255,255,.22), transparent 60%),
-        radial-gradient(1px 1px at 54% 44%, rgba(255,255,255,.18), transparent 60%);
-      animation: tw 3.8s ease-in-out infinite alternate;
-      opacity:.45;
-    }
-    @keyframes tw{
-      from{opacity:.25; filter: blur(0px);}
-      to{opacity:.55; filter: blur(0.4px);}
+    @keyframes snowfall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+      }
     }
 
-    /* Xmas lights string */
-    .lightsWrap{
-      position:fixed;
-      top:0; left:0; right:0;
-      z-index:10;
-      pointer-events:none;
-      height:54px;
+    /* ========== HEADER NETFLIX ========== */
+    .netflix-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+      padding: 15px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s;
     }
-    .wire{
-      position:absolute; left:-2%; right:-2%; top:22px;
-      height:2px;
-      background: rgba(255,255,255,.16);
-      border-radius:999px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      transform: rotate(-1deg);
-    }
-    .bulbs{
-      position:absolute; left:0; right:0; top:12px;
-      display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
-      padding:0 10px;
-    }
-    .bulb{
-      width:12px; height:16px;
-      border-radius: 8px 8px 10px 10px;
-      opacity:.9;
-      box-shadow: 0 8px 16px rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.12);
-      animation: blink 1.8s infinite;
-    }
-    .bulb:nth-child(4n+1){ background: rgba(229,9,20,.95); animation-delay: .1s;}
-    .bulb:nth-child(4n+2){ background: rgba(34,197,94,.95); animation-delay: .4s;}
-    .bulb:nth-child(4n+3){ background: rgba(0,168,225,.95); animation-delay: .7s;}
-    .bulb:nth-child(4n+4){ background: rgba(255,209,102,.95); animation-delay: 1.0s;}
-    @keyframes blink{
-      0%, 100%{ filter: brightness(0.65); transform: translateY(0); }
-      50%{ filter: brightness(1.35); transform: translateY(2px); }
-    }
-
-    /* Decorative trees */
-    .tree{
-      position:fixed;
-      z-index:2;
-      font-size:64px;
-      opacity:.22;
-      filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
-      pointer-events:none;
-    }
-    .tree.left{left:12px; bottom:12px; transform: rotate(-6deg);}
-    .tree.right{right:12px; bottom:12px; transform: rotate(6deg);}
-
-    header{
-      position:sticky; top:0; z-index:6;
+    .netflix-header.scrolled {
+      background: rgba(20,20,20,0.98);
       backdrop-filter: blur(10px);
-      background: rgba(0,0,0,.25);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      margin-top:54px; /* space for lights */
     }
-    .topbar{
-      max-width:1100px; margin:0 auto; padding:16px 18px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--netflix-red);
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      animation: glow 2s ease-in-out infinite alternate;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:900; letter-spacing:.4px;
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #E50914, 0 0 20px #E50914; }
+      to { text-shadow: 0 0 20px #E50914, 0 0 30px #E50914, 0 0 40px #E50914; }
     }
-    .brand .ring{
-      width:12px;height:12px;border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--prime));
-      box-shadow: 0 0 18px rgba(0,168,225,.55);
+    
+    .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
-    .brand span{color:var(--prime)}
-    .pill{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      padding:8px 12px;
-      border-radius:999px;
-      color:rgba(231,241,255,.8);
-      font-size:12px;
-      white-space:nowrap;
-      display:flex; align-items:center; gap:8px;
+    .nav-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
     }
-
-    .wrap{max-width:1100px; margin:0 auto; padding:26px 18px 56px; position:relative; z-index:3;}
-    .hero{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:26px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
-      box-shadow: var(--shadow);
-      overflow:hidden;
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
     }
-    .heroTop{
-      padding:26px 22px 18px;
-      background:
-        radial-gradient(900px 320px at 15% 0%, rgba(0,168,225,.28), transparent 65%),
-        radial-gradient(900px 320px at 85% 0%, rgba(229,9,20,.18), transparent 65%),
-        linear-gradient(180deg, rgba(255,255,255,.05), transparent);
-      border-bottom:1px solid rgba(255,255,255,.07);
+    .nav-btn.primary {
+      background: var(--netflix-red);
+      border: none;
     }
-    h1{margin:0 0 8px; font-size:34px; line-height:1.05;}
-    .sub{margin:0; color:var(--muted); line-height:1.45; font-size:14px;}
-    .row{
-      display:flex; flex-wrap:wrap; gap:10px;
-      margin-top:14px;
-      align-items:center;
-    }
-    .badge{
-      font-size:12px; color:rgba(231,241,255,.8);
-      padding:8px 10px; border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      display:flex; align-items:center; gap:8px;
-    }
-    .btn{
-      cursor:pointer;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.07);
-      color:var(--txt);
-      padding:10px 12px;
-      font-weight:900;
-    }
-    .btnPrimary{
-      border:0;
-      background: linear-gradient(90deg, var(--prime), var(--prime2));
-      color:#001018;
-      box-shadow: 0 12px 30px rgba(0,168,225,.18);
+    .nav-btn.primary:hover {
+      background: #f40612;
+      box-shadow: 0 0 20px rgba(229,9,20,0.5);
     }
 
-    .content{ padding:18px 22px 22px; }
-
-    .state{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      border-radius:18px;
-      padding:14px 14px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
+    /* ========== HERO BANNER ========== */
+    .hero-banner {
+      position: relative;
+      height: 80vh;
+      margin-top: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, #141414 100%),
+                  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23222"/><circle cx="20" cy="20" r="2" fill="%23FFD700" opacity="0.3"/><circle cx="60" cy="40" r="2" fill="%23E50914" opacity="0.3"/><circle cx="80" cy="70" r="2" fill="%2322c55e" opacity="0.3"/></svg>');
+      display: flex;
+      align-items: center;
+      padding: 0 50px;
+      overflow: hidden;
     }
-    .state.good{
-      border-color: rgba(34,197,94,.25);
-      background: rgba(34,197,94,.10);
-      color: rgba(231,255,245,.92);
+    
+    .hero-content {
+      max-width: 600px;
+      z-index: 2;
+      animation: slideInLeft 1s ease-out;
     }
-
-    /* Countdown */
-    .countBox{
-      margin-top:12px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      background:
-        radial-gradient(900px 260px at 0% 0%, rgba(229,9,20,.14), rgba(0,0,0,.12)),
-        radial-gradient(900px 260px at 100% 0%, rgba(0,168,225,.16), rgba(0,0,0,.12));
-      padding:14px 14px;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
-    .countTitle{ font-weight:1000; letter-spacing:.2px; }
-    .countHint{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:4px;
-      line-height:1.35;
+    
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+      line-height: 1.1;
     }
-    .clock{ display:flex; gap:8px; flex-wrap:wrap; }
-    .tile{
-      min-width:78px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      padding:10px 10px;
-      text-align:center;
-      position:relative;
-      overflow:hidden;
+    .hero-title .xmas {
+      color: var(--netflix-red);
+      animation: pulse 2s ease-in-out infinite;
     }
-    .tile::after{
-      content:"";
-      position:absolute; inset:-40px -60px;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,.10), transparent);
-      transform: translateX(-50%);
-      animation: shine 3.2s ease-in-out infinite;
-      opacity:.45;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    @keyframes shine{
-      0%{transform: translateX(-60%) rotate(10deg);}
-      50%{transform: translateX(10%) rotate(10deg);}
-      100%{transform: translateX(80%) rotate(10deg);}
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 30px;
+      line-height: 1.6;
     }
-    .num{ font-size:22px; font-weight:1000; position:relative; z-index:1; }
-    .lab{ margin-top:2px; font-size:11px; color:var(--muted); position:relative; z-index:1; }
-    .countText{
-      font-size:13px;
-      color:rgba(231,241,255,.9);
-      font-weight:800;
-      margin-top:6px;
+    
+    .hero-badges {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
     }
-
-    /* Winners list */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:12px;
-      margin-top:14px;
+    .badge {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 10px 18px;
+      border-radius: 25px;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    @media (max-width:840px){ .grid{grid-template-columns:1fr;} }
-
-    .winnerCard{
-      position:relative;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(700px 220px at 0% 0%, rgba(0,168,225,.18), rgba(0,0,0,.15)),
-        radial-gradient(700px 220px at 100% 0%, rgba(229,9,20,.14), rgba(0,0,0,.15));
-      box-shadow: 0 14px 40px rgba(0,0,0,.35);
-      overflow:hidden;
-      padding:16px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      transform: translateY(14px);
-      opacity:0;
+    
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
     }
-
-    /* Animation reveal */
-    .winnerCard.reveal{
-      animation: popIn .55s cubic-bezier(.2,.9,.2,1) forwards;
+    .hero-btn {
+      padding: 15px 35px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    @keyframes popIn{
-      from{ opacity:0; transform: translateY(18px) scale(.98); filter: blur(.5px); }
-      to{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); }
+    .hero-btn.play {
+      background: #fff;
+      color: #000;
+    }
+    .hero-btn.play:hover {
+      background: rgba(255,255,255,0.8);
+      transform: scale(1.05);
+    }
+    .hero-btn.info {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+    }
+    .hero-btn.info:hover {
+      background: rgba(109,109,110,0.9);
     }
 
-    .left{
-      display:flex; align-items:center; gap:12px;
-      min-width:0;
+    /* Decoración navideña flotante */
+    .floating-ornament {
+      position: absolute;
+      animation: float 4s ease-in-out infinite;
+      font-size: 3rem;
+      opacity: 0.6;
+      z-index: 1;
     }
-    .rank{
-      width:46px; height:46px;
-      border-radius:16px;
-      display:grid; place-items:center;
-      background: rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.12);
-      font-weight:1000;
-      letter-spacing:.2px;
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(10deg); }
     }
-    .rank.top{
-      background: linear-gradient(180deg, rgba(255,209,102,.28), rgba(255,255,255,.06));
-      border-color: rgba(255,209,102,.25);
+    .ornament-1 { top: 15%; right: 10%; animation-delay: 0s; }
+    .ornament-2 { top: 40%; right: 5%; animation-delay: 1s; }
+    .ornament-3 { bottom: 20%; left: 8%; animation-delay: 2s; }
+
+    /* ========== COUNTDOWN SECTION ========== */
+    .countdown-section {
+      padding: 60px 50px;
+      background: linear-gradient(180deg, #141414 0%, #0b0b0b 100%);
     }
-    .name{
-      font-weight:1000;
-      font-size:18px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:520px;
+    .countdown-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(229,9,20,0.15) 0%, rgba(255,215,0,0.1) 100%);
+      border-radius: 15px;
+      padding: 40px;
+      border: 2px solid rgba(255,215,0,0.3);
+      position: relative;
+      overflow: hidden;
     }
-    .meta{
-      margin-top:2px;
-      color:var(--muted);
-      font-size:12px;
-      display:flex; gap:10px; flex-wrap:wrap;
+    .countdown-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+      animation: rotate 10s linear infinite;
     }
-    .spark{
-      position:absolute;
-      right:-30px; top:-30px;
-      width:160px; height:160px;
-      background: radial-gradient(circle at 30% 30%, rgba(43,212,255,.55), transparent 60%);
-      opacity:.28;
-      transform: rotate(10deg);
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
-    /* tiny ornaments */
-    .ornaments{
-      position:absolute;
-      left:12px; top:10px;
-      display:flex; gap:6px;
-      opacity:.9;
+    
+    .countdown-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
     }
-    .ball{
-      width:10px;height:10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow: 0 8px 14px rgba(0,0,0,.30);
-      animation: swing 2.2s ease-in-out infinite;
-      transform-origin: 50% -10px;
+    .countdown-subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 2;
     }
-    .ball.red{background: rgba(229,9,20,.95)}
-    .ball.green{background: rgba(34,197,94,.95); animation-delay:.25s}
-    .ball.blue{background: rgba(0,168,225,.95); animation-delay:.45s}
-    .ball.gold{background: rgba(255,209,102,.95); animation-delay:.65s}
-    @keyframes swing{
-      0%,100%{transform: rotate(-6deg)}
-      50%{transform: rotate(6deg)}
+    
+    .countdown-display {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+    .time-unit {
+      text-align: center;
+      background: rgba(0,0,0,0.6);
+      padding: 25px 35px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.1);
+      min-width: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .time-unit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 3s ease-in-out infinite;
+    }
+    @keyframes shine {
+      to { left: 100%; }
+    }
+    .time-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+    .time-label {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 10px;
     }
 
-    footer{
-      max-width:1100px; margin:18px auto 0; padding:0 18px 20px;
-      color: rgba(231,241,255,.35);
-      font-size:12px;
-      text-align:center;
-      position:relative; z-index:3;
+    /* ========== WINNERS SECTION ========== */
+    .winners-section {
+      padding: 60px 50px 100px;
+      background: var(--netflix-dark);
     }
-    .note{ margin-top:10px; color: rgba(231,241,255,.55); }
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .section-subtitle {
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+    
+    .winners-grid {
+      display: grid;
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .winner-card {
+      background: linear-gradient(135deg, rgba(229,9,20,0.2) 0%, rgba(20,20,20,0.9) 100%);
+      border-radius: 12px;
+      padding: 30px;
+      border: 2px solid rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform: translateY(50px) scale(0.9);
+    }
+    .winner-card.reveal {
+      animation: revealCard 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes revealCard {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .winner-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--gold);
+      box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+    }
+    
+    /* Confeti explosivo al aparecer */
+    .winner-card::before {
+      content: '🎉';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 8rem;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: none;
+    }
+    .winner-card.reveal::before {
+      animation: confettiPop 1s ease-out;
+    }
+    @keyframes confettiPop {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+      }
+      50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(2) rotate(180deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3) rotate(360deg);
+      }
+    }
+    
+    .winner-content {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      position: relative;
+      z-index: 2;
+    }
+    .winner-rank {
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255,215,0,0.6);
+      min-width: 80px;
+      text-align: center;
+      animation: rankPulse 2s ease-in-out infinite;
+    }
+    @keyframes rankPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .winner-rank.top-1 {
+      font-size: 5rem;
+      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .winner-info {
+      flex: 1;
+    }
+    .winner-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .winner-details {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .winner-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .winner-icon {
+      font-size: 3rem;
+      opacity: 0.4;
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .winner-card:nth-child(1) .winner-icon { animation: spin 3s linear infinite; }
+    @keyframes spin {
+      from { transform: translateY(-50%) rotate(0deg); }
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    /* Estrellas brillantes */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      animation: sparkleAnim 1.5s ease-in-out infinite;
+    }
+    @keyframes sparkleAnim {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 60px;
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.6);
+    }
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid var(--netflix-red);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .netflix-header {
+        padding: 15px 20px;
+      }
+      .logo {
+        font-size: 1.8rem;
+      }
+      .hero-banner {
+        height: 70vh;
+        padding: 0 20px;
+      }
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      .countdown-section,
+      .winners-section {
+        padding: 40px 20px;
+      }
+      .winner-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      .winner-rank {
+        font-size: 3rem;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <!-- Decorations -->
-  <div class="lightsWrap">
-    <div class="wire"></div>
-    <div class="bulbs">
-      <!-- Enough bulbs to look full -->
-      <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-      <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-      <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-      <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-      <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-    </div>
-  </div>
-
-  <div class="snow"></div>
-  <div class="twinkle"></div>
-  <div class="tree left">🎄</div>
-  <div class="tree right">🎄</div>
-
-  <header>
-    <div class="topbar">
-      <div class="brand"><div class="ring"></div> SICCHA <span>Streaming</span></div>
-      <div class="pill">🎄 Ganadores • Prime Video • 20 días</div>
+  <!-- Header Netflix -->
+  <header class="netflix-header" id="header">
+    <div class="logo">SICCHA</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="location.href='index.html'">← Inicio</button>
+      <button class="nav-btn primary" onclick="location.reload()">🔄 Actualizar</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <div class="heroTop">
-        <h1>🎉 Ganadores del sorteo</h1>
-        <p class="sub">
-          Si el sorteo aún no ocurre, verás la <b>cuenta regresiva</b>. Después del sorteo, se publican los <b>5 ganadores</b>.
-        </p>
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="floating-ornament ornament-1">🎄</div>
+    <div class="floating-ornament ornament-2">⭐</div>
+    <div class="floating-ornament ornament-3">🎁</div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="xmas">🎉 Sorteo</span><br>
+        Navideño 2025
+      </h1>
+      <p class="hero-subtitle">
+        5 ganadores se llevarán acceso exclusivo a Prime Video por 20 días. 
+        ¡La suerte está echada!
+      </p>
+      
+      <div class="hero-badges">
+        <div class="badge">🏆 5 Ganadores</div>
+        <div class="badge">🎬 Prime Video</div>
+        <div class="badge">⏱️ 20 Días</div>
+        <div class="badge">✅ 1 Ticket por Celular</div>
+      </div>
+      
+      <div class="hero-buttons">
+        <button class="hero-btn play" onclick="scrollToWinners()">
+          ▶ Ver Ganadores
+        </button>
+        <button class="hero-btn info" onclick="scrollToCountdown()">
+          ℹ️ Más Info
+        </button>
+      </div>
+    </div>
+  </section>
 
-        <div class="row">
-          <div class="badge">🏆 5 perfiles • Prime Video</div>
-          <div class="badge">✅ 1 ticket por celular</div>
-          <div class="badge">🎁 Sorteo navideño</div>
-
-          <button class="btn" onclick="location.href='index.html'">⬅ Volver</button>
-          <button class="btn btnPrimary" onclick="location.reload()">🔄 Actualizar</button>
+  <!-- Countdown Section -->
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-container">
+      <h2 class="countdown-title">⏳ Cuenta Regresiva</h2>
+      <p class="countdown-subtitle" id="targetHint">🎄 El sorteo será hoy a las 5:00 PM</p>
+      
+      <div class="countdown-display">
+        <div class="time-unit">
+          <div class="time-number" id="d">0</div>
+          <div class="time-label">Días</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-number" id="h">00</div>
+          <div class="time-label">Horas</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-number" id="m">00</div>
+          <div class="time-label">Minutos</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-number" id="s">00</div>
+          <div class="time-label">Segundos</div>
         </div>
       </div>
+      
+      <p style="text-align:center; margin-top:30px; font-size:1.1rem; position:relative; z-index:2;" id="countText"></p>
+    </div>
+  </section>
 
-      <div class="content">
+  <!-- Winners Section -->
+  <section class="winners-section" id="winners">
+    <h2 class="section-title">🎊 Ganadores Oficiales</h2>
+    <p class="section-subtitle" id="state">Cargando ganadores...</p>
+    
+    <div class="winners-grid" id="grid"></div>
+  </section>
 
-        <!-- Countdown -->
-        <div class="countBox">
-          <div>
-            <div class="countTitle">⏳ Cuenta regresiva</div>
-            <div class="countHint" id="targetHint">🎄 El sorteo será en unas horas.</div>
-            <div class="countText" id="countText"></div>
-          </div>
-
-          <div class="clock">
-            <div class="tile">
-              <div class="num" id="d">0</div>
-              <div class="lab">Días</div>
-            </div>
-            <div class="tile">
-              <div class="num" id="h">00</div>
-              <div class="lab">Horas</div>
-            </div>
-            <div class="tile">
-              <div class="num" id="m">00</div>
-              <div class="lab">Min</div>
-            </div>
-            <div class="tile">
-              <div class="num" id="s">00</div>
-              <div class="lab">Seg</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="state" class="state" style="margin-top:12px;">Cargando ganadores...</div>
-
-        <div id="grid" class="grid" style="display:none;"></div>
-
-        <div class="note">
-          📌 Regla: si un número ganador <b>no está en el grupo de WhatsApp</b> o no valida con su ticket, se elige a otro ganador.
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    SICCHA Streaming © 2025 • Estilo inspirado en Prime Video (no afiliado).
-  </footer>
-
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // ✅ Tus datos de Supabase
-  const sb = window.supabase.createClient(
-    "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-    "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
-  );
+  <script>
+    // ✅ Mantener EXACTAMENTE tus APIs y conexiones
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3ZmRtdnV3amRxenBrZWF4Z2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5Nzc4MTgsImV4cCI6MjA1MDU1MzgxOH0.tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl5WvCAKn4RcQs"
+    );
 
-  const $ = (id) => document.getElementById(id);
-  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-  function pad2(n){ return String(n).padStart(2,"0"); }
+    const $ = (id) => document.getElementById(id);
+    function pad2(n){ return String(n).padStart(2,"0"); }
 
-  // ====== COUNTDOWN (HOY 5:00 PM) ======
-  function getTargetToday5pm(){
-    const now = new Date();
-    const t = new Date(now);
-    t.setHours(17,0,0,0); // 5:00 PM
-    return t;
-  }
-
-  function updateCountdown(){
-    const now = new Date();
-    const target = getTargetToday5pm();
-    let ms = target - now;
-    if(ms < 0) ms = 0;
-
-    const s = Math.floor(ms/1000);
-    const days = Math.floor(s/86400);
-    const hours = Math.floor((s%86400)/3600);
-    const mins = Math.floor((s%3600)/60);
-    const secs = s%60;
-
-    if($("d")) $("d").textContent = days;
-    if($("h")) $("h").textContent = pad2(hours);
-    if($("m")) $("m").textContent = pad2(mins);
-    if($("s")) $("s").textContent = pad2(secs);
-
-    if($("countText")){
-      $("countText").textContent = ms > 0
-        ? `Faltan ${days} día(s), ${hours} hora(s) y ${mins} min para las 5:00 PM.`
-        : "✅ El sorteo ya puede publicarse / ya ocurrió.";
+    // Nieve cayendo
+    function createSnowflakes() {
+      for(let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.textContent = '❄️';
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        snowflake.style.animationDelay = Math.random() * 5 + 's';
+        snowflake.style.fontSize = (Math.random() * 0.7 + 0.5) + 'em';
+        document.body.appendChild(snowflake);
+      }
     }
-    if($("targetHint")){
-      $("targetHint").textContent = ms > 0
-        ? "🎄 El sorteo será en unas horas."
-        : "🎉 Si ya se eligieron ganadores, aparecerán aquí.";
-    }
-  }
+    createSnowflakes();
 
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
-  // ====== WINNERS LOAD (ADAPTADO A TU TABLA: name, ticket, drawn_at) ======
-  async function loadWinners(){
-    const state = $("state");
-    const grid = $("grid");
-
-    if(grid){
-      grid.style.display = "none";
-      grid.innerHTML = "";
-    }
-    if(state){
-      state.className = "state";
-      state.textContent = "Cargando ganadores...";
-    }
-
-    // ✅ OJO: tu tabla tiene drawn_at (NO created_at) y NO tiene position
-    const { data, error } = await sb
-      .from("winners")
-      .select("id, name, ticket, drawn_at")
-      .order("drawn_at", { ascending: true });
-    if(error){
-      if(state) state.textContent = "❌ No se pudo cargar ganadores (revisa RLS/SELECT en winners).";
-      return;
-    }
-    if(!data || data.length === 0){
-      if(state) state.textContent = "⏳ Aún no hay ganadores publicados. Vuelve más tarde.";
-      return;
-    }
-    if(state){
-      state.className = "state good";
-      state.textContent = "✅ Ganadores publicados. ¡Felicidades!";
-    }
-    if(!grid) return;
-
-    grid.style.display = "grid";
-    data.forEach((w, idx) => {
-      const pos = idx + 1; // #1..#5 por orden de drawn_at
-      const isTop = pos === 1;
-      const d = w.drawn_at ? new Date(w.drawn_at) : null;
-      const stamp = d ? d.toLocaleString("es-PE") : "";
-      const card = document.createElement("div");
-      card.className = "winnerCard";
-      // Si tu CSS tiene animación con .reveal, la activamos con delay
-      card.innerHTML = `
-        <div class="spark"></div>
-        <div class="ornaments">
-          <div class="ball red"></div>
-          <div class="ball green"></div>
-          <div class="ball blue"></div>
-          <div class="ball gold"></div>
-        </div>
-        <div class="left">
-          <div class="rank ${isTop ? "top" : ""}">#${esc(pos)}</div>
-          <div style="min-width:0;">
-            <div class="name">${esc(w.name || "Ganador")}</div>
-            <div class="meta">
-              <span>🎁 Premio: Prime Video (20 días)</span>
-              ${stamp ? `<span>🕒 ${esc(stamp)}</span>` : ``}
-              <span>🎟️ Ticket: *****</span>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:right; color:rgba(231,241,255,.82); font-size:12px;">
-          ${isTop ? "👑 TOP 1" : "🏅"}
-        </div>
-      `;
-      grid.appendChild(card);
-
-      // reveal escalonado
-      setTimeout(() => {
-        card.classList.add("reveal");
-      }, 200 + idx * 260);
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 100) {
+        $('header').classList.add('scrolled');
+      } else {
+        $('header').classList.remove('scrolled');
+      }
     });
-  }
-  loadWinners();
-  setInterval(loadWinners, 15000);
-</script>
+
+    // Smooth scroll
+    function scrollToWinners() {
+      $('winners').scrollIntoView({ behavior: 'smooth' });
+    }
+    function scrollToCountdown() {
+      $('countdown').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Countdown - EXACTAMENTE como tu código
+    function getTargetToday5pm(){
+      const now = new Date();
+      const t = new Date(now);
+      t.setHours(17,0,0,0);
+      return t;
+    }
+
+    function updateCountdown(){
+      const now = new Date();
+      const target = getTargetToday5pm();
+      let ms = target - now;
+      if(ms < 0) ms = 0;
+
+      const s = Math.floor(ms/1000);
+      const days = Math.floor(s/86400);
+      const hours = Math.floor((s%86400)/3600);
+      const mins = Math.floor((s%3600)/60);
+      const secs = s%60;
+
+      if($("d")) $("d").textContent = days;
+      if($("h")) $("h").textContent = pad2(hours);
+      if($("m")) $("m").textContent = pad2(mins);
+      if($("s")) $("s").textContent = pad2(secs);
+
+      if($("countText")){
+        $("countText").textContent = ms > 0
+          ? `⏰ Faltan ${days} día(s), ${hours} hora(s) y ${mins} minuto(s) para el sorteo`
+          : "✅ ¡El sorteo ya puede publicarse!";
+      }
+      if($("targetHint")){
+        $("targetHint").textContent = ms > 0
+          ? "🎄 El sorteo será hoy a las 5:00 PM"
+          : "🎉 Si ya se eligieron ganadores, aparecerán abajo";
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Winners - EXACTAMENTE tu lógica de base de datos
+    async function loadWinners(){
+      const state = $("state");
+      const grid = $("grid");
+
+      if(grid) grid.innerHTML = "";
+
+      const { data, error } = await sb
+        .from("winners")
+        .select("id, name, ticket, drawn_at")
+        .order("drawn_at", { ascending: true });
+        
+      if(error){
+        if(state) state.textContent = "❌ No se pudo cargar ganadores";
+        return;
+      }
+      
+      if(!data || data.length === 0){
+        if(state) state.textContent = "⏳ Aún no hay ganadores. Vuelve después de las 5:00 PM";
+        return;
+      }
+      
+      if(state) state.textContent = "✅ ¡Los ganadores han sido revelados!";
+      if(!grid) return;
+
+      const icons = ['👑', '🏆', '🥇', '🎯', '⭐'];
+      
+      data.forEach((w, idx) => {
+        const pos = idx + 1;
+        const isTop = pos === 1;
+        const d = w.drawn_at ? new Date(w.drawn_at) : null;
+        const stamp = d ? d.toLocaleString("es-PE") : "";
+        
+        // Crear estrellas brillantes aleatorias
+        const sparkles = Array(5).fill(0).map((_, i) => {
+          const top = Math.random() * 100;
+          const left = Math.random() * 100;
+          const delay = Math.random() * 1.5;
+          return `<div class="sparkle" style="top:${top}%;left:${left}%;animation-delay:${delay}s"></div>`;
+        }).join('');
+        
+        const card = document.createElement("div");
+        card.className = "winner-card";
+        card.innerHTML = `
+          ${sparkles}
+          <div class="winner-content">
+            <div class="winner-rank ${isTop ? 'top-1' : ''}">#${pos}</div>
+            <div class="winner-info">
+              <div class="winner-name">${w.name || 'Ganador'}</div>
+              <div class="winner-details">
+                <div class="winner-detail">🎬 Prime Video 20 días</div>
+                ${stamp ? `<div class="winner-detail">🕒 ${stamp}</div>` : ''}
+                <div class="winner-detail">🎟️ Ticket verificado</div>
+              </div>
+            </div>
+            <div class="winner-icon">${icons[idx] || '🎁'}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        // Animación escalonada
+        setTimeout(() => {
+          card.classList.add('reveal');
+        }, 300 + idx * 400);
+      });
+    }
+
+    loadWinners();
+    setInterval(loadWinners, 15000);
+  </script>
 </body>
 </html>
-
-
