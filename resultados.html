@@ -1,503 +1,632 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SICCHA Streaming | Ganadores</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SICCHA Streaming | Ganadores 🎄</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-    :root{
-      --netflix-red:#E50914;
-      --netflix-black:#141414;
-      --netflix-dark:#0b0b0b; 
-      --gold:#FFD700;
-      --green:#22c55e;
-      --ice:#B4E4FF;
-    }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#141414;
+  color:#fff;
+  font-family:'Segoe UI',Arial,sans-serif;
+  overflow-x:hidden;
+  position:relative;
+}
 
-    *{box-sizing:border-box; margin:0; padding:0;}
+/* Fondo animado con partículas */
+.particles{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(229,9,20,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255,215,0,0.1) 0%, transparent 50%);
+  animation:bgShift 15s ease-in-out infinite;
+}
+@keyframes bgShift{
+  0%,100%{filter:hue-rotate(0deg)}
+  50%{filter:hue-rotate(20deg)}
+}
 
-    body{
-      font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background: var(--netflix-black);
-      color: #fff;
-      overflow-x: hidden;
-    }
+/* Header con efecto glassmorphism */
+header{
+  position:fixed;
+  top:0;left:0;right:0;
+  background:rgba(20,20,20,0.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:1000;
+  transition:all 0.3s;
+}
+header.scrolled{
+  background:rgba(20,20,20,0.95);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:40px;
+  font-weight:900;
+  color:#E50914;
+  letter-spacing:3px;
+  text-shadow:0 0 20px rgba(229,9,20,0.5);
+  animation:logoGlow 3s ease-in-out infinite;
+}
+@keyframes logoGlow{
+  0%,100%{text-shadow:0 0 20px rgba(229,9,20,0.5),0 0 40px rgba(229,9,20,0.3)}
+  50%{text-shadow:0 0 30px rgba(229,9,20,0.8),0 0 60px rgba(229,9,20,0.5)}
+}
+.btn{
+  background:linear-gradient(135deg,#E50914,#f40612);
+  border:none;
+  padding:12px 24px;
+  border-radius:8px;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.3s;
+  box-shadow:0 4px 15px rgba(229,9,20,0.4);
+  position:relative;
+  overflow:hidden;
+}
+.btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,0.3),transparent);
+  transform:translateX(-100%);
+  transition:0.5s;
+}
+.btn:hover::before{
+  transform:translateX(100%);
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(229,9,20,0.6);
+}
 
-    /* Nieve */
-    .snowflake {
-      position: fixed;
-      top: -10px;
-      z-index: 9999;
-      user-select: none;
-      cursor: default;
-      animation: snowfall linear infinite;
-      color: rgba(255,255,255,0.8);
-      font-size: 1em;
-      text-shadow: 0 0 5px rgba(255,255,255,0.8);
-      pointer-events:none;
-    }
-    @keyframes snowfall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
-    }
+/* Hero con parallax */
+.hero{
+  height:80vh;
+  display:flex;
+  align-items:center;
+  padding:0 40px;
+  background:linear-gradient(180deg,rgba(0,0,0,0.6),#141414),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="10" cy="10" r="1" fill="%23FFD700" opacity="0.3"/><circle cx="40" cy="30" r="1.5" fill="%23E50914" opacity="0.3"/><circle cx="70" cy="60" r="1" fill="%23fff" opacity="0.2"/><circle cx="90" cy="20" r="1" fill="%23FFD700" opacity="0.3"/></svg>');
+  background-size:100px 100px;
+  position:relative;
+  z-index:1;
+  animation:heroFloat 20s ease-in-out infinite;
+}
+@keyframes heroFloat{
+  0%,100%{background-position:0 0}
+  50%{background-position:50px 50px}
+}
+.hero-content{
+  animation:slideInUp 1s ease-out;
+}
+@keyframes slideInUp{
+  from{opacity:0;transform:translateY(50px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero h1{
+  font-size:4.5rem;
+  line-height:1.1;
+  font-weight:900;
+  background:linear-gradient(135deg,#fff,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:textShine 3s ease-in-out infinite;
+}
+@keyframes textShine{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.3)}
+}
+.hero p{
+  margin-top:15px;
+  font-size:1.3rem;
+  color:#ccc;
+  animation:fadeIn 1.5s ease-out;
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
 
-    /* Header */
-    .netflix-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-      padding: 15px 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: background 0.3s;
-    }
-    .netflix-header.scrolled {
-      background: rgba(20,20,20,0.98);
-      backdrop-filter: blur(10px);
-    }
+/* Decoración flotante */
+.float-ornament{
+  position:absolute;
+  font-size:60px;
+  opacity:0.3;
+  animation:float 6s ease-in-out infinite;
+  z-index:0;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-30px) rotate(10deg)}
+}
+.ornament-1{top:15%;right:10%;animation-delay:0s}
+.ornament-2{top:50%;left:5%;animation-delay:2s}
+.ornament-3{bottom:20%;right:15%;animation-delay:4s}
 
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--netflix-red);
-      letter-spacing: 3px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #E50914, 0 0 20px #E50914; }
-      to { text-shadow: 0 0 20px #E50914, 0 0 30px #E50914, 0 0 40px #E50914; }
-    }
+/* Countdown con efectos 3D */
+.countdown{
+  margin:60px auto;
+  max-width:1000px;
+  background:linear-gradient(135deg,rgba(229,9,20,0.15),rgba(11,11,11,0.9));
+  border:3px solid #FFD700;
+  border-radius:20px;
+  padding:40px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),inset 0 1px 1px rgba(255,255,255,0.1);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+  50%{transform:scale(1.02);box-shadow:0 25px 70px rgba(255,215,0,0.4)}
+}
+.countdown h2{
+  font-size:2.5rem;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,#FFD700,#FFA500);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.timer{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+.time{
+  background:rgba(0,0,0,0.8);
+  padding:25px 20px;
+  border-radius:15px;
+  min-width:130px;
+  border:2px solid rgba(255,215,0,0.3);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  transition:all 0.3s;
+}
+.time:hover{
+  transform:translateY(-5px) scale(1.05);
+  border-color:#FFD700;
+  box-shadow:0 15px 40px rgba(255,215,0,0.4);
+}
+.time::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg,transparent,rgba(255,215,0,0.1),transparent);
+  transform:rotate(45deg);
+  animation:shine 3s linear infinite;
+}
+@keyframes shine{
+  0%{transform:translateX(-100%) rotate(45deg)}
+  100%{transform:translateX(100%) rotate(45deg)}
+}
+.time span{
+  display:block;
+  font-size:3.5rem;
+  color:#FFD700;
+  font-weight:900;
+  text-shadow:0 0 20px rgba(255,215,0,0.6);
+  position:relative;
+  z-index:1;
+  animation:numberPulse 1s ease-in-out infinite;
+}
+@keyframes numberPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+.time label{
+  font-size:0.85rem;
+  letter-spacing:3px;
+  color:#aaa;
+  position:relative;
+  z-index:1;
+}
 
-    .nav-right { display:flex; gap:20px; align-items:center; }
-    .nav-btn{
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 8px 20px;
-      border-radius: 4px;
-      color:#fff;
-      font-size:14px;
-      cursor:pointer;
-      transition: all .3s;
-      font-weight: 500;
-    }
-    .nav-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
-    .nav-btn.primary { background: var(--netflix-red); border:none; }
-    .nav-btn.primary:hover { background:#f40612; box-shadow: 0 0 20px rgba(229,9,20,0.5); }
+/* Winners con animaciones espectaculares */
+.section{
+  padding:80px 30px;
+  background:#0b0b0b;
+  position:relative;
+  z-index:1;
+}
+.section h2{
+  font-size:3rem;
+  margin-bottom:15px;
+  text-align:center;
+  background:linear-gradient(135deg,#FFD700,#E50914);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleBounce 2s ease-in-out infinite;
+}
+@keyframes titleBounce{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+}
+.section p{
+  color:#aaa;
+  margin-bottom:50px;
+  text-align:center;
+  font-size:1.1rem;
+}
 
-    /* Hero */
-    .hero-banner {
-      position: relative;
-      height: 80vh;
-      margin-top: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, #141414 100%),
-                  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23222"/><circle cx="20" cy="20" r="2" fill="%23FFD700" opacity="0.3"/><circle cx="60" cy="40" r="2" fill="%23E50914" opacity="0.3"/><circle cx="80" cy="70" r="2" fill="%2322c55e" opacity="0.3"/></svg>');
-      display:flex;
-      align-items:center;
-      padding: 0 50px;
-      overflow:hidden;
-    }
-    .hero-content { max-width: 600px; z-index:2; animation: slideInLeft 1s ease-out; }
-    @keyframes slideInLeft { from{opacity:0; transform: translateX(-100px);} to{opacity:1; transform: translateX(0);} }
+.grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  gap:30px;
+}
 
-    .hero-title{
-      font-size:4rem;
-      font-weight:900;
-      margin-bottom:20px;
-      text-shadow:3px 3px 6px rgba(0,0,0,0.9);
-      line-height:1.1;
-    }
-    .hero-title .xmas { color: var(--netflix-red); animation:pulse 2s ease-in-out infinite; display:inline-block; }
-    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-    .hero-subtitle { font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom:30px; line-height:1.6; }
+.card{
+  background:linear-gradient(135deg,rgba(229,9,20,0.25),rgba(20,20,20,0.95));
+  border:2px solid rgba(255,215,0,0.3);
+  border-radius:20px;
+  padding:30px;
+  display:flex;
+  gap:30px;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(60px) scale(0.8);
+  box-shadow:0 15px 45px rgba(0,0,0,0.6);
+  transition:all 0.5s cubic-bezier(0.4,0,0.2,1);
+}
 
-    .hero-badges { display:flex; gap:15px; flex-wrap:wrap; margin-bottom:30px; }
-    .badge{
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      padding: 10px 18px;
-      border-radius: 25px;
-      font-size:14px;
-      border: 1px solid rgba(255,255,255,0.2);
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+/* Animación de entrada explosiva */
+.card.show{
+  animation:cardExplode 1s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes cardExplode{
+  0%{
+    opacity:0;
+    transform:translateY(60px) scale(0.8) rotate(-5deg);
+  }
+  60%{
+    opacity:1;
+    transform:translateY(-10px) scale(1.1) rotate(2deg);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0) scale(1) rotate(0deg);
+  }
+}
 
-    .hero-buttons{ display:flex; gap:15px; }
-    .hero-btn{
-      padding: 15px 35px;
-      font-size: 1.1rem;
-      font-weight:700;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      transition: all .3s;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .hero-btn.play { background:#fff; color:#000; }
-    .hero-btn.play:hover { background: rgba(255,255,255,0.8); transform: scale(1.05); }
-    .hero-btn.info { background: rgba(109,109,110,0.7); color:#fff; }
-    .hero-btn.info:hover { background: rgba(109,109,110,0.9); }
+/* Confeti explosivo */
+.card::before{
+  content:'🎉';
+  position:absolute;
+  top:50%;
+  left:50%;
+  font-size:100px;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;
+}
+.card.show::before{
+  animation:confetti 1.5s ease-out;
+}
+@keyframes confetti{
+  0%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(0) rotate(0deg);
+  }
+  50%{
+    opacity:0.8;
+    transform:translate(-50%,-50%) scale(2.5) rotate(180deg);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(4) rotate(360deg);
+  }
+}
 
-    .floating-ornament{ position:absolute; animation: float 4s ease-in-out infinite; font-size:3rem; opacity:.6; z-index:1; }
-    @keyframes float { 0%,100%{transform: translateY(0) rotate(0)} 50%{transform: translateY(-30px) rotate(10deg)} }
-    .ornament-1{ top:15%; right:10%; }
-    .ornament-2{ top:40%; right:5%; animation-delay:1s; }
-    .ornament-3{ bottom:20%; left:8%; animation-delay:2s; }
+/* Brillo de fondo */
+.card::after{
+  content:'';
+  position:absolute;
+  inset:-100%;
+  background:linear-gradient(45deg,transparent,rgba(255,215,0,0.3),transparent);
+  transform:translateX(-100%) rotate(45deg);
+}
+.card.show::after{
+  animation:shimmer 2s ease-in-out 0.5s;
+}
+@keyframes shimmer{
+  0%{transform:translateX(-100%) rotate(45deg)}
+  100%{transform:translateX(100%) rotate(45deg)}
+}
 
-    /* Countdown */
-    .countdown-section{ padding:60px 50px; background: linear-gradient(180deg, #141414 0%, #0b0b0b 100%); }
-    .countdown-container{
-      max-width:1200px; margin:0 auto;
-      background: linear-gradient(135deg, rgba(229,9,20,0.15) 0%, rgba(255,215,0,0.1) 100%);
-      border-radius:15px;
-      padding:40px;
-      border:2px solid rgba(255,215,0,0.3);
-      position:relative;
-      overflow:hidden;
-    }
-    .countdown-container::before{
-      content:'';
-      position:absolute;
-      top:-50%; left:-50%;
-      width:200%; height:200%;
-      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
-      animation: rotate 10s linear infinite;
-    }
-    @keyframes rotate{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
-    .countdown-title{ text-align:center; font-size:2.5rem; margin-bottom:15px; position:relative; z-index:2; }
-    .countdown-subtitle{ text-align:center; color:rgba(255,255,255,0.7); margin-bottom:40px; font-size:1.1rem; position:relative; z-index:2; }
+.card:hover{
+  transform:translateY(-12px) scale(1.03);
+  border-color:#FFD700;
+  box-shadow:0 25px 60px rgba(255,215,0,0.4);
+}
 
-    .countdown-display{ display:flex; justify-content:center; gap:30px; flex-wrap:wrap; position:relative; z-index:2; }
-    .time-unit{
-      text-align:center;
-      background: rgba(0,0,0,0.6);
-      padding:25px 35px;
-      border-radius:12px;
-      border:2px solid rgba(255,255,255,0.1);
-      min-width:120px;
-      position:relative;
-      overflow:hidden;
-    }
-    .time-unit::after{
-      content:'';
-      position:absolute;
-      top:0; left:-100%;
-      width:100%; height:100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      animation: shine 3s ease-in-out infinite;
-    }
-    @keyframes shine{ to{left:100%} }
-    .time-number{ font-size:3.5rem; font-weight:900; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.5); }
-    .time-label{ font-size:.9rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; margin-top:10px; }
+/* Estrellas flotantes en cada tarjeta */
+.sparkles{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.sparkle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#FFD700;
+  border-radius:50%;
+  box-shadow:0 0 10px #FFD700;
+  animation:sparkleFloat 3s ease-in-out infinite;
+}
+@keyframes sparkleFloat{
+  0%,100%{opacity:0;transform:translateY(0) scale(0)}
+  20%{opacity:1;transform:translateY(-20px) scale(1)}
+  80%{opacity:1;transform:translateY(-40px) scale(1)}
+  100%{opacity:0;transform:translateY(-60px) scale(0)}
+}
 
-    /* Winners */
-    .winners-section{ padding:60px 50px 100px; background: var(--netflix-dark); }
-    .section-title{ font-size:2.5rem; margin-bottom:10px; font-weight:700; }
-    .section-subtitle{ color:rgba(255,255,255,0.7); margin-bottom:40px; font-size:1.1rem; }
-    .winners-grid{ display:grid; gap:25px; max-width:1400px; margin:0 auto; }
+.rank{
+  font-size:4.5rem;
+  font-weight:900;
+  color:#FFD700;
+  min-width:100px;
+  text-align:center;
+  text-shadow:0 0 30px rgba(255,215,0,0.8),0 0 50px rgba(255,215,0,0.5);
+  animation:rankSpin 4s ease-in-out infinite;
+  position:relative;
+  z-index:2;
+}
+@keyframes rankSpin{
+  0%,100%{transform:rotate(0deg) scale(1)}
+  50%{transform:rotate(5deg) scale(1.15)}
+}
 
-    .winner-card{
-      background: linear-gradient(135deg, rgba(229,9,20,0.2) 0%, rgba(20,20,20,0.9) 100%);
-      border-radius:12px;
-      padding:30px;
-      border:2px solid rgba(255,255,255,0.1);
-      position:relative;
-      overflow:hidden;
-      transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
-      opacity:0;
-      transform: translateY(50px) scale(0.9);
-    }
-    .winner-card.reveal{ animation: revealCard 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
-    @keyframes revealCard { to{ opacity:1; transform: translateY(0) scale(1); } }
-    .winner-card:hover{
-      transform: translateY(-10px) scale(1.02);
-      border-color: var(--gold);
-      box-shadow: 0 20px 60px rgba(255,215,0,0.3);
-      opacity:1;
-    }
+.rank.top-1{
+  font-size:5.5rem;
+  background:linear-gradient(135deg,#FFD700,#FFA500,#FFD700);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:topRank 2s ease-in-out infinite;
+}
+@keyframes topRank{
+  0%,100%{transform:scale(1) rotate(0deg);filter:brightness(1)}
+  50%{transform:scale(1.2) rotate(-5deg);filter:brightness(1.5)}
+}
 
-    .winner-card::before{
-      content:'🎉';
-      position:absolute;
-      top:50%; left:50%;
-      font-size:8rem;
-      opacity:0;
-      transform: translate(-50%,-50%) scale(0);
-      pointer-events:none;
-    }
-    .winner-card.reveal::before{ animation: confettiPop 1s ease-out; }
-    @keyframes confettiPop{
-      0%{opacity:1; transform:translate(-50%,-50%) scale(0) rotate(0)}
-      50%{opacity:.8; transform:translate(-50%,-50%) scale(2) rotate(180deg)}
-      100%{opacity:0; transform:translate(-50%,-50%) scale(3) rotate(360deg)}
-    }
+.info{
+  flex:1;
+  position:relative;
+  z-index:2;
+}
+.name{
+  font-size:2rem;
+  font-weight:700;
+  margin-bottom:8px;
+  animation:nameGlow 2s ease-in-out infinite;
+}
+@keyframes nameGlow{
+  0%,100%{text-shadow:0 0 5px rgba(255,255,255,0.5)}
+  50%{text-shadow:0 0 15px rgba(255,255,255,0.8),0 0 25px rgba(255,215,0,0.5)}
+}
+.date{
+  font-size:0.95rem;
+  color:#bbb;
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
 
-    .winner-content{ display:flex; align-items:center; gap:25px; position:relative; z-index:2; }
-    .winner-rank{
-      font-size:4rem;
-      font-weight:900;
-      color: var(--gold);
-      text-shadow: 0 0 30px rgba(255,215,0,0.6);
-      min-width:80px;
-      text-align:center;
-      animation: rankPulse 2s ease-in-out infinite;
-    }
-    @keyframes rankPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
-    .winner-rank.top-1{
-      font-size:5rem;
-      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
+/* Icono decorativo animado */
+.card-icon{
+  position:absolute;
+  top:20px;
+  right:20px;
+  font-size:50px;
+  opacity:0.3;
+  animation:iconBounce 3s ease-in-out infinite;
+  z-index:1;
+}
+@keyframes iconBounce{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-15px) rotate(180deg)}
+}
 
-    .winner-info{ flex:1; }
-    .winner-name{ font-size:2rem; font-weight:700; margin-bottom:10px; color:#fff; }
-    .winner-details{ display:flex; gap:20px; flex-wrap:wrap; font-size:0.95rem; color:rgba(255,255,255,0.7); }
-    .winner-detail{ display:flex; align-items:center; gap:8px; }
+/* Snow mejorado */
+.snow{
+  position:fixed;
+  top:-10px;
+  animation:fall linear infinite;
+  opacity:0.8;
+  z-index:9999;
+  pointer-events:none;
+  filter:drop-shadow(0 0 3px rgba(255,255,255,0.8));
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
 
-    .winner-icon{ font-size:3rem; opacity:0.4; position:absolute; right:30px; top:50%; transform: translateY(-50%); }
+/* Loading mejorado */
+.loading{
+  display:inline-block;
+  width:20px;
+  height:20px;
+  border:3px solid rgba(255,215,0,0.3);
+  border-top-color:#FFD700;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 
-    @media (max-width: 768px) {
-      .netflix-header{ padding:15px 20px; }
-      .logo{ font-size:1.8rem; }
-      .hero-banner{ height:70vh; padding:0 20px; }
-      .hero-title{ font-size:2.5rem; }
-      .countdown-section, .winners-section{ padding:40px 20px; }
-      .winner-content{ flex-direction:column; text-align:center; }
-      .winner-rank{ font-size:3rem; }
-    }
-  </style>
+@media(max-width:768px){
+  .hero h1{font-size:2.8rem}
+  .card{flex-direction:column;text-align:center}
+  .rank{font-size:3rem}
+  .countdown{padding:25px}
+  .time{min-width:100px}
+  .time span{font-size:2.5rem}
+}
+</style>
 </head>
 
 <body>
-  <header class="netflix-header" id="header">
-    <div class="logo">SICCHA</div>
-    <div class="nav-right">
-      <button class="nav-btn" onclick="location.href='index.html'">← Inicio</button>
-      <button class="nav-btn primary" onclick="location.reload()">🔄 Actualizar</button>
-    </div>
-  </header>
+<div class="particles"></div>
 
-  <section class="hero-banner">
-    <div class="floating-ornament ornament-1">🎄</div>
-    <div class="floating-ornament ornament-2">⭐</div>
-    <div class="floating-ornament ornament-3">🎁</div>
+<header id="header">
+  <div class="logo">SICCHA 🎄</div>
+  <button class="btn" onclick="location.href='index.html'">🏠 Inicio</button>
+</header>
 
-    <div class="hero-content">
-      <h1 class="hero-title"><span class="xmas">🎉 Sorteo</span><br>Navideño 2025</h1>
-      <p class="hero-subtitle">
-        5 ganadores se llevarán acceso exclusivo a Prime Video por 20 días.
-        ¡La suerte está echada!
-      </p>
+<section class="hero">
+  <div class="float-ornament ornament-1">🎄</div>
+  <div class="float-ornament ornament-2">⭐</div>
+  <div class="float-ornament ornament-3">🎁</div>
+  
+  <div class="hero-content">
+    <h1>🎉 Ganadores Oficiales</h1>
+    <p>Prime Video GRATIS por 20 días para los afortunados ganadores</p>
+  </div>
+</section>
 
-      <div class="hero-badges">
-        <div class="badge">🏆 5 Ganadores</div>
-        <div class="badge">🎬 Prime Video</div>
-        <div class="badge">⏱️ 20 Días</div>
-        <div class="badge">✅ 1 Ticket por Celular</div>
-      </div>
+<section class="countdown">
+  <h2>⏳ Cuenta regresiva</h2>
+  <p id="msg">El sorteo fue hoy a las 5:00 PM</p>
+  <div class="timer">
+    <div class="time"><span id="d">0</span><label>DÍAS</label></div>
+    <div class="time"><span id="h">00</span><label>HORAS</label></div>
+    <div class="time"><span id="m">00</span><label>MINUTOS</label></div>
+    <div class="time"><span id="s">00</span><label>SEGUNDOS</label></div>
+  </div>
+</section>
 
-      <div class="hero-buttons">
-        <button class="hero-btn play" onclick="scrollToWinners()">▶ Ver Ganadores</button>
-        <button class="hero-btn info" onclick="scrollToCountdown()">ℹ️ Más Info</button>
-      </div>
-    </div>
-  </section>
+<section class="section">
+  <h2>🏆 Lista de ganadores</h2>
+  <p id="state">Cargando ganadores... <span class="loading"></span></p>
+  <div class="grid" id="grid"></div>
+</section>
 
-  <section class="countdown-section" id="countdown">
-    <div class="countdown-container">
-      <h2 class="countdown-title">⏳ Cuenta Regresiva</h2>
-      <p class="countdown-subtitle" id="targetHint">🎄 El sorteo será hoy a las 5:00 PM</p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ✅ TUS APIs SIN CAMBIOS
+const sb = window.supabase.createClient(
+  "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+  "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+);
 
-      <div class="countdown-display">
-        <div class="time-unit"><div class="time-number" id="d">0</div><div class="time-label">Días</div></div>
-        <div class="time-unit"><div class="time-number" id="h">00</div><div class="time-label">Horas</div></div>
-        <div class="time-unit"><div class="time-number" id="m">00</div><div class="time-label">Minutos</div></div>
-        <div class="time-unit"><div class="time-number" id="s">00</div><div class="time-label">Segundos</div></div>
-      </div>
+const $=id=>document.getElementById(id);
 
-      <p style="text-align:center; margin-top:30px; font-size:1.1rem; position:relative; z-index:2;" id="countText"></p>
-    </div>
-  </section>
+// Header scroll effect
+window.addEventListener('scroll',()=>{
+  $('header').classList.toggle('scrolled',window.scrollY>100);
+});
 
-  <section class="winners-section" id="winners">
-    <h2 class="section-title">🎊 Ganadores Oficiales</h2>
-    <p class="section-subtitle" id="state">Cargando ganadores...</p>
-    <div class="winners-grid" id="grid"></div>
-  </section>
+// Countdown (EXACTO A TU CÓDIGO)
+function updateCountdown(){
+  const now=new Date();
+  const t=new Date();
+  t.setHours(17,0,0,0);
+  let ms=t-now;
+  if(ms<0)ms=0;
+  const s=Math.floor(ms/1000);
+  $("d").textContent=Math.floor(s/86400);
+  $("h").textContent=String(Math.floor((s%86400)/3600)).padStart(2,"0");
+  $("m").textContent=String(Math.floor((s%3600)/60)).padStart(2,"0");
+  $("s").textContent=String(s%60).padStart(2,"0");
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // Supabase (tus datos)
-    const sb = window.supabase.createClient(
-      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3ZmRtdnV3amRxenBrZWF4Z2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5Nzc4MTgsImV4cCI6MjA1MDU1MzgxOH0.tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl5WvCAKn4RcQs"
-    );
+// Load winners (EXACTO A TU CÓDIGO)
+async function loadWinners(){
+  const {data,error}=await sb
+    .from("winners")
+    .select("id,name,created_at")
+    .order("created_at",{ascending:true});
 
-    const $ = (id) => document.getElementById(id);
-    function pad2(n){ return String(n).padStart(2,"0"); }
+  if(error){
+    $("state").textContent="❌ No se pudo cargar ganadores";
+    return;
+  }
+  if(!data||!data.length){
+    $("state").textContent="⏳ Aún no hay ganadores";
+    return;
+  }
 
-    // nieve
-    function createSnowflakes() {
-      for(let i = 0; i < 50; i++) {
-        const s = document.createElement('div');
-        s.className = 'snowflake';
-        s.textContent = '❄️';
-        s.style.left = Math.random() * 100 + '%';
-        s.style.animationDuration = (Math.random() * 3 + 5) + 's';
-        s.style.animationDelay = Math.random() * 5 + 's';
-        s.style.fontSize = (Math.random() * 0.7 + 0.5) + 'em';
-        document.body.appendChild(s);
-      }
-    }
-    createSnowflakes();
-
-    // scroll header (FIX: era $('header') pero tu id es "header")
-    window.addEventListener('scroll', () => {
-      const el = $("header");
-      if(!el) return;
-      if(window.scrollY > 100) el.classList.add('scrolled');
-      else el.classList.remove('scrolled');
-    });
-
-    function scrollToWinners(){ $("winners").scrollIntoView({ behavior: 'smooth' }); }
-    function scrollToCountdown(){ $("countdown").scrollIntoView({ behavior: 'smooth' }); }
-
-    // countdown hoy 5pm
-    function getTargetToday5pm(){
-      const now = new Date();
-      const t = new Date(now);
-      t.setHours(17,0,0,0);
-      return t;
-    }
-
-    function updateCountdown(){
-      const now = new Date();
-      const target = getTargetToday5pm();
-      let ms = target - now;
-      if(ms < 0) ms = 0;
-
-      const totalS = Math.floor(ms/1000);
-      const days = Math.floor(totalS/86400);
-      const hours = Math.floor((totalS%86400)/3600);
-      const mins = Math.floor((totalS%3600)/60);
-      const secs = totalS%60;
-
-      $("d").textContent = days;
-      $("h").textContent = pad2(hours);
-      $("m").textContent = pad2(mins);
-      $("s").textContent = pad2(secs);
-
-      $("countText").textContent = ms > 0
-        ? `⏰ Faltan ${days} día(s), ${hours} hora(s) y ${mins} minuto(s) para el sorteo`
-        : "✅ ¡El sorteo ya puede publicarse!";
-
-      $("targetHint").textContent = ms > 0
-        ? "🎄 El sorteo será hoy a las 5:00 PM"
-        : "🎉 Si ya se eligieron ganadores, aparecerán abajo";
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // ---------- GANADORES ----------
-    function safeDateLabel(row){
-      // Intentamos: drawn_at -> created_at -> nada
-      const d = w.created_at ? new Date(w.created_at) : null;
-      if(!stamp) return "";
-      const d = new Date(stamp);
-      if(String(d) === "Invalid Date") return "";
-      return d.toLocaleString("es-PE");
-    }
-
-    async function loadWinners(){
-      const state = $("state");
-      const grid = $("grid");
-      grid.innerHTML = "";
-
-      // 1) Probamos con drawn_at
-      let q = sb.from("winners").select("id,name,ticket,drawn_at,created_at");
-      // 2) Orden estable: si hay drawn_at ordena por eso; si no, por created_at
-      //    (PostgREST igual puede ordenar aunque haya nulls)
-      q = q.order("drawn_at", { ascending: true, nullsFirst: false })
-           .order("created_at", { ascending: true, nullsFirst: false });
-
-      const { data, error } = await sb
-  .from("winners")
-  .select("id, name, ticket, created_at")
-  .order("created_at", { ascending: true });
-
-          if(error) {
-            state.textContent = "❌ Error: " + (error.message || JSON.stringify(error));
-            console.error(error);
-            return;
-          }
-          renderWinners(data2);
-          return;
-        }
-
-        state.textContent = "❌ No se pudo cargar ganadores (revisa RLS/columnas).";
-        console.error(error);
-        return;
-      }
-
-      renderWinners(data);
-    }
-
-    function renderWinners(data){
-      const state = $("state");
-      const grid = $("grid");
-
-      if(!data || data.length === 0){
-        state.textContent = "⏳ Aún no hay ganadores. Vuelve después de las 5:00 PM";
-        return;
-      }
-
-      state.textContent = "✅ ¡Los ganadores han sido revelados!";
-
-      const icons = ['👑','🏆','🥇','🎯','⭐'];
-
-      data.slice(0,5).forEach((w, idx) => {
-        const pos = idx + 1;
-        const top = pos === 1;
-        const stamp = safeDateLabel(w);
-
-        const card = document.createElement("div");
-        card.className = "winner-card";
-        card.innerHTML = `
-          <div class="winner-content">
-            <div class="winner-rank ${top ? "top-1" : ""}">${pos}</div>
-            <div class="winner-info">
-              <div class="winner-name">${w.name || "Ganador"}</div>
-              <div class="winner-details">
-                <div class="winner-detail">🎫 Ticket: <b>${w.ticket || "—"}</b></div>
-                ${stamp ? `<div class="winner-detail">🕒 ${stamp}</div>` : ""}
-              </div>
-            </div>
-            <div class="winner-icon">${icons[idx] || "🎁"}</div>
+  $("state").textContent="🎉 ¡Estos son los ganadores!";
+  
+  const icons=['👑','🏆','🥇','🎯','⭐','💎','🌟','🎪'];
+  
+  $("grid").innerHTML=data.map((w,i)=>{
+    // Crear estrellas aleatorias para cada tarjeta
+    const sparkles=Array(6).fill(0).map((_,j)=>{
+      const left=Math.random()*100;
+      const delay=Math.random()*3;
+      return `<div class="sparkle" style="left:${left}%;animation-delay:${delay}s"></div>`;
+    }).join('');
+    
+    return `
+      <div class="card" style="animation-delay:${i*0.3}s">
+        <div class="sparkles">${sparkles}</div>
+        <div class="card-icon">${icons[i]||'🎁'}</div>
+        <div class="rank ${i===0?'top-1':''}">#${i+1}</div>
+        <div class="info">
+          <div class="name">${w.name}</div>
+          <div class="date">
+            🎬 Prime Video 20 días
+            <span style="margin-left:10px">🕒 ${new Date(w.created_at).toLocaleString("es-PE")}</span>
           </div>
-        `;
+        </div>
+      </div>
+    `;
+  }).join("");
+  
+  // Activar animaciones escalonadas
+  setTimeout(()=>{
+    document.querySelectorAll('.card').forEach((card,i)=>{
+      setTimeout(()=>{
+        card.classList.add('show');
+      },i*400);
+    });
+  },100);
+}
+loadWinners();
 
-        grid.appendChild(card);
-
-        // reveal anim con delay
-        setTimeout(() => card.classList.add("reveal"), 350 + idx * 250);
-      });
-    }
-
-    loadWinners();
-  </script>
+// Snow mejorado
+for(let i=0;i<50;i++){
+  const s=document.createElement("div");
+  s.className="snow";
+  s.textContent="❄️";
+  s.style.left=Math.random()*100+"%";
+  s.style.animationDuration=(Math.random()*5+8)+"s";
+  s.style.animationDelay=Math.random()*5+"s";
+  s.style.fontSize=(Math.random()*12+8)+"px";
+  document.body.appendChild(s);
+}
+</script>
 </body>
 </html>
-
