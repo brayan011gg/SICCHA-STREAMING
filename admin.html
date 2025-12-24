@@ -5,481 +5,136 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SICCHA Streaming | Admin Sorteo 🎄</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:#141414;color:#fff;overflow-x:hidden;position:relative;min-height:100vh;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;
+      background:
+        radial-gradient(ellipse at top, rgba(197,34,34,.08), transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(34,139,34,.06), transparent 50%);
+      pointer-events:none;z-index:0;
+    }
+    .header{
+      background: linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,0) 100%);
+      padding:20px 0;position:sticky;top:0;z-index:100;backdrop-filter: blur(10px);
+    }
+    .header-content{
+      max-width:1200px;margin:0 auto;padding:0 24px;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .logo{
+      font-size:32px;font-weight:900;color:#e50914;
+      text-shadow:2px 2px 4px rgba(0,0,0,.5);letter-spacing:-1px;position:relative;
+    }
+    .logo::after{
+      content:'🎄';position:absolute;top:-8px;right:-30px;font-size:24px;
+      animation:swing 3s ease-in-out infinite;
+    }
+    @keyframes swing{0%,100%{transform:rotate(0)}25%{transform:rotate(5deg)}75%{transform:rotate(-5deg)}}
+
+    .wrap{max-width:1200px;margin:0 auto;padding:40px 24px;position:relative;z-index:1;}
+    .hero{
+      text-align:center;padding:60px 20px;
+      background: linear-gradient(135deg, rgba(229,9,20,.15) 0%, rgba(20,20,20,.6) 100%);
+      border-radius:24px;margin-bottom:40px;border:1px solid rgba(229,9,20,.2);
+      backdrop-filter: blur(10px);position:relative;overflow:hidden;
+    }
+    .hero::before{content:'❄️';position:absolute;top:20px;left:30px;font-size:40px;opacity:.3;animation:float 6s ease-in-out infinite;}
+    .hero::after{content:'🎁';position:absolute;bottom:20px;right:30px;font-size:40px;opacity:.3;animation:float 6s ease-in-out infinite reverse;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    .hero h1{
+      font-size:48px;margin-bottom:12px;font-weight:900;
+      background: linear-gradient(90deg,#fff 0%,#e50914 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero p{color:#b3b3b3;font-size:18px}
+    .card{
+      background: rgba(20,20,20,.95);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:20px;padding:32px;margin:24px 0;backdrop-filter: blur(20px);
+      transition:.3s ease;position:relative;overflow:hidden;
+    }
+    .card::before{
+      content:'';position:absolute;top:0;left:0;width:100%;height:3px;
+      background: linear-gradient(90deg,#e50914,#c5221f,#e50914);
+      background-size:200% 100%;animation:gradientShift 3s ease infinite;
+    }
+    @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .card:hover{transform:translateY(-5px);border-color:rgba(229,9,20,.3);box-shadow:0 20px 60px rgba(229,9,20,.2)}
+    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+    .card-title{font-size:28px;font-weight:700;margin-bottom:8px}
+    .card-subtitle{color:#b3b3b3;font-size:14px}
+
+    input{
+      width:100%;padding:16px 20px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      background: rgba(30,30,30,.9);color:#fff;font-size:16px;transition:.3s ease;
+    }
+    input:focus{outline:none;border-color:#e50914;background: rgba(40,40,40,.9);box-shadow:0 0 20px rgba(229,9,20,.2)}
+
+    button{
+      padding:16px 32px;border-radius:12px;border:none;cursor:pointer;
+      font-weight:700;font-size:16px;transition:.3s ease;position:relative;overflow:hidden;
+    }
+    button span{position:relative;z-index:1}
+    .btn{
+      background: linear-gradient(135deg,#e50914 0%,#c5221f 100%);
+      color:#fff;box-shadow:0 8px 20px rgba(229,9,20,.3);
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(229,9,20,.4)}
+    .btn2{
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+      padding:14px 18px;border-radius:12px;cursor:pointer;
+    }
+    .btn2:hover{background: rgba(255,255,255,.15);border-color: rgba(255,255,255,.3)}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0}
+    @media(max-width:700px){.row{grid-template-columns:1fr}.hero h1{font-size:32px}.card{padding:20px}}
+
+    .input-group{margin-bottom:16px}
+    .label{
+      display:block;margin-bottom:8px;color:#b3b3b3;font-size:14px;font-weight:600;
+      text-transform:uppercase;letter-spacing:1px;
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #141414;
-      color: #fff;
-      overflow-x: hidden;
-      position: relative;
-      min-height: 100vh;
-    }
+    .ok{background: rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);padding:16px 20px;border-radius:12px;color:#22c55e}
+    .err{background: rgba(229,9,20,.15);border:1px solid rgba(229,9,20,.3);padding:16px 20px;border-radius:12px;color:#e50914}
 
-    /* Fondo navideño sutil */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(ellipse at top, rgba(197, 34, 34, 0.08), transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(34, 139, 34, 0.06), transparent 50%);
-      pointer-events: none;
-      z-index: 0;
+    .list{margin-top:24px}
+    .item{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:20px;border-radius:16px;background: rgba(30,30,30,.8);
+      border:1px solid rgba(255,255,255,.08);margin:12px 0;transition:.3s ease;
     }
+    .item:hover{background: rgba(40,40,40,.9);border-color: rgba(229,9,20,.3);transform: translateX(10px)}
+    .item-number{
+      background: linear-gradient(135deg,#e50914 0%,#c5221f 100%);
+      color:#fff;width:40px;height:40px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0;
+    }
+    .item-info{flex:1}
+    .item-name{font-size:18px;font-weight:700;margin-bottom:4px}
+    .item-date{color:#b3b3b3;font-size:13px}
 
-    /* Header estilo Netflix */
-    .header {
-      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-      padding: 20px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 32px;
-      font-weight: 900;
-      color: #e50914;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-      letter-spacing: -1px;
-      position: relative;
-    }
-
-    .logo::after {
-      content: '🎄';
-      position: absolute;
-      top: -8px;
-      right: -30px;
-      font-size: 24px;
-      animation: swing 3s ease-in-out infinite;
-    }
-
-    @keyframes swing {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      75% { transform: rotate(-5deg); }
-    }
-
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, rgba(229,9,20,0.15) 0%, rgba(20,20,20,0.6) 100%);
-      border-radius: 24px;
-      margin-bottom: 40px;
-      border: 1px solid rgba(229,9,20,0.2);
-      backdrop-filter: blur(10px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '❄️';
-      position: absolute;
-      top: 20px;
-      left: 30px;
-      font-size: 40px;
-      opacity: 0.3;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .hero::after {
-      content: '🎁';
-      position: absolute;
-      bottom: 20px;
-      right: 30px;
-      font-size: 40px;
-      opacity: 0.3;
-      animation: float 6s ease-in-out infinite reverse;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
-
-    .hero h1 {
-      font-size: 48px;
-      margin-bottom: 12px;
-      font-weight: 900;
-      background: linear-gradient(90deg, #fff 0%, #e50914 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      color: #b3b3b3;
-      font-size: 18px;
-    }
-
-    .card {
-      background: rgba(20,20,20,0.95);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 32px;
-      margin: 24px 0;
-      backdrop-filter: blur(20px);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, #e50914, #c5221f, #e50914);
-      background-size: 200% 100%;
-      animation: gradientShift 3s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(229,9,20,0.3);
-      box-shadow: 0 20px 60px rgba(229,9,20,0.2);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .card-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .card-subtitle {
-      color: #b3b3b3;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(30,30,30,0.9);
-      color: #fff;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #e50914;
-      background: rgba(40,40,40,0.9);
-      box-shadow: 0 0 20px rgba(229,9,20,0.2);
-    }
-
-    button {
-      padding: 16px 32px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    button::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    button:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    button span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn {
-      background: linear-gradient(135deg, #e50914 0%, #c5221f 100%);
-      color: #fff;
-      box-shadow: 0 8px 20px rgba(229,9,20,0.3);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(229,9,20,0.4);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn2 {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #fff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn2:hover {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.3);
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin: 16px 0;
-    }
-
-    @media(max-width: 700px) {
-      .row { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 32px; }
-      .card { padding: 20px; }
-    }
-
-    .input-group {
-      margin-bottom: 16px;
-    }
-
-    .label {
-      display: block;
-      margin-bottom: 8px;
-      color: #b3b3b3;
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .ok {
-      background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.3);
-      padding: 16px 20px;
-      border-radius: 12px;
-      color: #22c55e;
-      animation: slideIn 0.3s ease;
-    }
-
-    .err {
-      background: rgba(229,9,20,0.15);
-      border: 1px solid rgba(229,9,20,0.3);
-      padding: 16px 20px;
-      border-radius: 12px;
-      color: #e50914;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { 
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .list {
-      margin-top: 24px;
-    }
-
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      padding: 20px;
-      border-radius: 16px;
-      background: rgba(30,30,30,0.8);
-      border: 1px solid rgba(255,255,255,0.08);
-      margin: 12px 0;
-      transition: all 0.3s ease;
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from { 
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to { 
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .item:hover {
-      background: rgba(40,40,40,0.9);
-      border-color: rgba(229,9,20,0.3);
-      transform: translateX(10px);
-    }
-
-    .item-number {
-      background: linear-gradient(135deg, #e50914 0%, #c5221f 100%);
-      color: #fff;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .item-info {
-      flex: 1;
-    }
-
-    .item-name {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .item-date {
-      color: #b3b3b3;
-      font-size: 13px;
-    }
-
-    /* Copos de nieve */
-    .snowflake {
-      position: fixed;
-      top: -10px;
-      z-index: 9999;
-      user-select: none;
-      cursor: default;
-      animation: fall linear infinite;
-      color: rgba(255,255,255,0.6);
-      font-size: 20px;
-    }
-
-    @keyframes fall {
-      to {
-        transform: translateY(100vh);
-      }
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .small-text {
-      color: #b3b3b3;
-      font-size: 14px;
-      margin-top: 12px;
-    }
-
-    /* Luces navideñas decorativas */
-    .lights {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      pointer-events: none;
-      z-index: 9999;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .light {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      animation: blink 2s infinite;
-    }
-
-    .light:nth-child(odd) {
-      background: #e50914;
-      box-shadow: 0 0 10px #e50914;
-    }
-
-    .light:nth-child(even) {
-      background: #22c55e;
-      box-shadow: 0 0 10px #22c55e;
-      animation-delay: 1s;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    .lights{position:fixed;top:0;left:0;width:100%;height:60px;pointer-events:none;z-index:9999;display:flex;justify-content:space-around;align-items:center}
+    .light{width:12px;height:12px;border-radius:50%;animation:blink 2s infinite}
+    .light:nth-child(odd){background:#e50914;box-shadow:0 0 10px #e50914}
+    .light:nth-child(even){background:#22c55e;box-shadow:0 0 10px #22c55e;animation-delay:1s}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
   </style>
 </head>
+
 <body>
-  <!-- Luces navideñas -->
   <div class="lights">
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
   </div>
 
-  <!-- Header estilo Netflix -->
   <div class="header">
     <div class="header-content">
       <div class="logo">SICCHA</div>
@@ -487,13 +142,11 @@
   </div>
 
   <div class="wrap">
-    <!-- Hero Section -->
     <div class="hero" id="heroSection">
       <h1>Panel de Sorteo Navideño</h1>
-      <p>Administra los ganadores del sorteo de temporada</p>
+      <p>Administra los ganadores del sorteo</p>
     </div>
 
-    <!-- Login Card -->
     <div class="card" id="loginCard">
       <div class="card-header">
         <div>
@@ -513,37 +166,25 @@
         </div>
       </div>
 
-      <button class="btn" id="loginBtn">
-        <span>🎄 Iniciar Sesión</span>
-      </button>
-
-      <div id="loginMsg" class="small-text"></div>
+      <button class="btn" id="loginBtn"><span>🎄 Iniciar Sesión</span></button>
+      <div id="loginMsg" style="margin-top:12px;"></div>
     </div>
 
-    <!-- Admin Panel -->
     <div class="card" id="adminCard" style="display:none;">
       <div class="card-header">
         <div>
           <div class="card-title">🎁 Panel de Control</div>
           <div class="card-subtitle">Gestiona los ganadores del sorteo navideño</div>
         </div>
-        <div class="button-group">
-          <button class="btn2" id="logoutBtn">
-            <span>👋 Salir</span>
-          </button>
-          <a class="btn2" href="resultados.html">
-            <span>🎉 Ver Resultados</span>
-          </a>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn2" id="logoutBtn"><span>👋 Salir</span></button>
+          <a class="btn2" href="resultados.html"><span>🏆 Ver ganadores</span></a>
         </div>
       </div>
 
       <div class="row">
-        <button class="btn" id="drawBtn">
-          <span>🎲 Elegir 5 Ganadores</span>
-        </button>
-        <button class="btn2" id="clearBtn">
-          <span>🧹 Borrar Ganadores</span>
-        </button>
+        <button class="btn" id="drawBtn"><span>🎲 Elegir 5 Ganadores</span></button>
+        <button class="btn2" id="clearBtn"><span>🧹 Borrar Ganadores</span></button>
       </div>
 
       <div id="adminMsg" style="margin-top:16px;"></div>
@@ -557,76 +198,47 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Supabase setup
+    // ✅ USA LA MISMA KEY QUE TUS OTRAS PÁGINAS
     const sb = window.supabase.createClient(
       "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3ZmRtdnV3amRxenBrZWF4Z2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5MzI2NzYsImV4cCI6MjA1MDUwODY3Nn0.tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
     );
 
     const $ = (id) => document.getElementById(id);
 
-    // Crear copos de nieve
-    function createSnowflakes() {
-      const snowflakes = ['❄', '❅', '❆'];
-      for(let i = 0; i < 30; i++) {
-        setTimeout(() => {
-          const snowflake = document.createElement('div');
-          snowflake.className = 'snowflake';
-          snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
-          snowflake.style.left = Math.random() * 100 + '%';
-          snowflake.style.animationDuration = (Math.random() * 3 + 5) + 's';
-          snowflake.style.opacity = Math.random() * 0.6 + 0.2;
-          snowflake.style.fontSize = (Math.random() * 10 + 15) + 'px';
-          document.body.appendChild(snowflake);
-
-          setTimeout(() => snowflake.remove(), 8000);
-        }, i * 200);
-      }
-    }
-
-    // Iniciar copos de nieve
-    createSnowflakes();
-    setInterval(createSnowflakes, 6000);
-
     function maskName(fullName) {
-      const parts = fullName.trim().split(/\s+/);
+      const parts = String(fullName||"").trim().split(/\s+/);
       const first = parts[0] || "";
       const last = parts[1] || "";
       const initial = last ? (last[0].toUpperCase() + ".") : "";
       return (first + (initial ? (" " + initial) : "")).trim();
     }
 
-    function setMsg(el, html) { 
-      el.innerHTML = html; 
-    }
+    function setMsg(el, html) { el.innerHTML = html; }
 
     async function refreshWinners() {
       const { data, error } = await sb
         .from("winners")
-        .select("name,ticket,drawn_at")
-        .order("drawn_at", { ascending: false });
+        .select("id,name,position,created_at")
+        .order("position", { ascending: true });
 
-      if(error) {
-        $("winnersList").innerHTML = `<div class="small-text">Error cargando ganadores: ${error.message}</div>`;
+      if (error) {
+        $("winnersList").innerHTML = `<div class="err">❌ Error cargando ganadores: ${error.message}</div>`;
         return;
       }
-      if(!data || data.length === 0) {
-        $("winnersList").innerHTML = `<div class="small-text">🎄 Aún no hay ganadores. ¡Realiza el sorteo navideño!</div>`;
+      if (!data || data.length === 0) {
+        $("winnersList").innerHTML = `<div class="small-text">🎄 Aún no hay ganadores. ¡Realiza el sorteo!</div>`;
         return;
       }
 
       $("winnersList").innerHTML = data.map((w, i) => `
         <div class="item">
-          <div class="item-number">#${i + 1}</div>
+          <div class="item-number">#${w.position ?? (i+1)}</div>
           <div class="item-info">
             <div class="item-name">🎁 ${maskName(w.name)}</div>
-            <div class="item-date">${new Date(w.drawn_at).toLocaleString('es-ES', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}</div>
+            <div class="item-date">${w.created_at ? new Date(w.created_at).toLocaleString('es-PE', {
+              day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+            }) : ''}</div>
           </div>
         </div>
       `).join("");
@@ -638,31 +250,39 @@
       $("loginCard").style.display = isLogged ? "none" : "block";
       $("adminCard").style.display = isLogged ? "block" : "none";
       $("heroSection").style.display = isLogged ? "none" : "block";
-      if(isLogged) refreshWinners();
+      if (isLogged) refreshWinners();
     }
 
+    // Enter para loguear
+    $("password").addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("loginBtn").click(); });
+    $("email").addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("loginBtn").click(); });
+
     $("loginBtn").onclick = async () => {
-      $("loginMsg").textContent = "🎄 Verificando credenciales...";
+      setMsg($("loginMsg"), `<div class="small-text">🎄 Verificando credenciales...</div>`);
       const email = $("email").value.trim();
       const password = $("password").value;
 
       const { error } = await sb.auth.signInWithPassword({ email, password });
-      if(error) {
+
+      if (error) {
+        // 👇 Aquí verás el motivo real
         setMsg($("loginMsg"), `<div class="err">❌ ${error.message}</div>`);
         return;
       }
-      setMsg($("loginMsg"), `<div class="ok">✅ ¡Bienvenido de vuelta!</div>`);
-      setTimeout(updateUI, 1000);
+
+      setMsg($("loginMsg"), `<div class="ok">✅ ¡Bienvenido!</div>`);
+      updateUI();
     };
 
     $("logoutBtn").onclick = async () => {
       await sb.auth.signOut();
+      setMsg($("adminMsg"), ``);
       updateUI();
     };
 
     function pickRandomUnique(arr, k) {
       const copy = [...arr];
-      for(let i = copy.length - 1; i > 0; i--) {
+      for (let i = copy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [copy[i], copy[j]] = [copy[j], copy[i]];
       }
@@ -676,39 +296,46 @@
         .from("participants")
         .select("name,ticket,created_at");
 
-      if(pErr) {
+      if (pErr) {
         setMsg($("adminMsg"), `<div class="err">❌ Error leyendo participantes: ${pErr.message}</div>`);
         return;
       }
-      if(!participants || participants.length < 5) {
-        setMsg($("adminMsg"), `<div class="err">❌ Se necesitan al menos 5 participantes. Actualmente hay: ${participants?.length || 0}</div>`);
+      if (!participants || participants.length < 5) {
+        setMsg($("adminMsg"), `<div class="err">❌ Se necesitan al menos 5 participantes. Actualmente: ${participants?.length || 0}</div>`);
         return;
       }
 
       const chosen = pickRandomUnique(participants, 5);
 
+      // Limpiar ganadores
       const { error: delErr } = await sb.from("winners").delete().neq("id", -1);
-      if(delErr) {
+      if (delErr) {
         setMsg($("adminMsg"), `<div class="err">❌ No se pudieron limpiar ganadores anteriores: ${delErr.message}</div>`);
         return;
       }
 
-      const rows = chosen.map(x => ({ name: x.name, ticket: x.ticket }));
+      // Guardar con posición
+      const rows = chosen.map((x, idx) => ({
+        name: x.name,
+        ticket: x.ticket,
+        position: idx + 1
+      }));
+
       const { error: insErr } = await sb.from("winners").insert(rows);
-      if(insErr) {
+      if (insErr) {
         setMsg($("adminMsg"), `<div class="err">❌ Error guardando ganadores: ${insErr.message}</div>`);
         return;
       }
 
-      setMsg($("adminMsg"), `<div class="ok">🎉 ¡Ganadores seleccionados! Ya están disponibles en la página de resultados.</div>`);
+      setMsg($("adminMsg"), `<div class="ok">🎉 ¡Ganadores seleccionados y guardados! Ya aparecen en “Ver ganadores”.</div>`);
       refreshWinners();
     };
 
     $("clearBtn").onclick = async () => {
-      if(!confirm('¿Estás seguro de borrar todos los ganadores?')) return;
-      
+      if (!confirm("¿Seguro que quieres borrar TODOS los ganadores?")) return;
+
       const { error } = await sb.from("winners").delete().neq("id", -1);
-      if(error) {
+      if (error) {
         setMsg($("adminMsg"), `<div class="err">❌ Error borrando: ${error.message}</div>`);
         return;
       }
