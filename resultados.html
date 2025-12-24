@@ -11,7 +11,7 @@
     :root{
       --netflix-red:#E50914;
       --netflix-black:#141414;
-      --netflix-dark:#0b0b0b;
+      --netflix-dark:#0b0b0b; 
       --gold:#FFD700;
       --green:#22c55e;
       --ice:#B4E4FF;
@@ -414,7 +414,7 @@
     // ---------- GANADORES ----------
     function safeDateLabel(row){
       // Intentamos: drawn_at -> created_at -> nada
-      const stamp = row.drawn_at || row.created_at || null;
+      const d = w.created_at ? new Date(w.created_at) : null;
       if(!stamp) return "";
       const d = new Date(stamp);
       if(String(d) === "Invalid Date") return "";
@@ -433,16 +433,10 @@
       q = q.order("drawn_at", { ascending: true, nullsFirst: false })
            .order("created_at", { ascending: true, nullsFirst: false });
 
-      const { data, error } = await q;
-
-      if(error){
-        // Si falla por "drawn_at does not exist", intentamos sin drawn_at
-        const msg = (error.message || "").toLowerCase();
-        if(msg.includes("drawn_at") && msg.includes("does not exist")){
-          const { data: data2, error: error2 } = await sb
-            .from("winners")
-            .select("id,name,ticket,created_at")
-            .order("created_at", { ascending: true });
+      const { data, error } = await sb
+  .from("winners")
+  .select("id, name, ticket, created_at")
+  .order("created_at", { ascending: true });
 
           if(error) {
             state.textContent = "❌ Error: " + (error.message || JSON.stringify(error));
@@ -506,3 +500,4 @@
   </script>
 </body>
 </html>
+
