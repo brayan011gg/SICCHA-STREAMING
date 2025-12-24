@@ -1,349 +1,234 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SICCHA Streaming | Admin Sorteo 🎄</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:#141414;color:#fff;overflow-x:hidden;position:relative;min-height:100vh;
-    }
-    body::before{
-      content:'';position:fixed;inset:0;
-      background:
-        radial-gradient(ellipse at top, rgba(197,34,34,.08), transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(34,139,34,.06), transparent 50%);
-      pointer-events:none;z-index:0;
-    }
-    .header{
-      background: linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,0) 100%);
-      padding:20px 0;position:sticky;top:0;z-index:100;backdrop-filter: blur(10px);
-    }
-    .header-content{
-      max-width:1200px;margin:0 auto;padding:0 24px;
-      display:flex;justify-content:space-between;align-items:center;
-    }
-    .logo{
-      font-size:32px;font-weight:900;color:#e50914;
-      text-shadow:2px 2px 4px rgba(0,0,0,.5);letter-spacing:-1px;position:relative;
-    }
-    .logo::after{
-      content:'🎄';position:absolute;top:-8px;right:-30px;font-size:24px;
-      animation:swing 3s ease-in-out infinite;
-    }
-    @keyframes swing{0%,100%{transform:rotate(0)}25%{transform:rotate(5deg)}75%{transform:rotate(-5deg)}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · SICCHA Streaming 🎄</title>
 
-    .wrap{max-width:1200px;margin:0 auto;padding:40px 24px;position:relative;z-index:1;}
-    .hero{
-      text-align:center;padding:60px 20px;
-      background: linear-gradient(135deg, rgba(229,9,20,.15) 0%, rgba(20,20,20,.6) 100%);
-      border-radius:24px;margin-bottom:40px;border:1px solid rgba(229,9,20,.2);
-      backdrop-filter: blur(10px);position:relative;overflow:hidden;
-    }
-    .hero::before{content:'❄️';position:absolute;top:20px;left:30px;font-size:40px;opacity:.3;animation:float 6s ease-in-out infinite;}
-    .hero::after{content:'🎁';position:absolute;bottom:20px;right:30px;font-size:40px;opacity:.3;animation:float 6s ease-in-out infinite reverse;}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-    .hero h1{
-      font-size:48px;margin-bottom:12px;font-weight:900;
-      background: linear-gradient(90deg,#fff 0%,#e50914 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .hero p{color:#b3b3b3;font-size:18px}
-    .card{
-      background: rgba(20,20,20,.95);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:20px;padding:32px;margin:24px 0;backdrop-filter: blur(20px);
-      transition:.3s ease;position:relative;overflow:hidden;
-    }
-    .card::before{
-      content:'';position:absolute;top:0;left:0;width:100%;height:3px;
-      background: linear-gradient(90deg,#e50914,#c5221f,#e50914);
-      background-size:200% 100%;animation:gradientShift 3s ease infinite;
-    }
-    @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-    .card:hover{transform:translateY(-5px);border-color:rgba(229,9,20,.3);box-shadow:0 20px 60px rgba(229,9,20,.2)}
-    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px}
-    .card-title{font-size:28px;font-weight:700;margin-bottom:8px}
-    .card-subtitle{color:#b3b3b3;font-size:14px}
-
-    input{
-      width:100%;padding:16px 20px;border-radius:12px;
-      border:1px solid rgba(255,255,255,.2);
-      background: rgba(30,30,30,.9);color:#fff;font-size:16px;transition:.3s ease;
-    }
-    input:focus{outline:none;border-color:#e50914;background: rgba(40,40,40,.9);box-shadow:0 0 20px rgba(229,9,20,.2)}
-
-    button{
-      padding:16px 32px;border-radius:12px;border:none;cursor:pointer;
-      font-weight:700;font-size:16px;transition:.3s ease;position:relative;overflow:hidden;
-    }
-    button span{position:relative;z-index:1}
-    .btn{
-      background: linear-gradient(135deg,#e50914 0%,#c5221f 100%);
-      color:#fff;box-shadow:0 8px 20px rgba(229,9,20,.3);
-    }
-    .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(229,9,20,.4)}
-    .btn2{
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.2);
-      color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
-      padding:14px 18px;border-radius:12px;cursor:pointer;
-    }
-    .btn2:hover{background: rgba(255,255,255,.15);border-color: rgba(255,255,255,.3)}
-
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0}
-    @media(max-width:700px){.row{grid-template-columns:1fr}.hero h1{font-size:32px}.card{padding:20px}}
-
-    .input-group{margin-bottom:16px}
-    .label{
-      display:block;margin-bottom:8px;color:#b3b3b3;font-size:14px;font-weight:600;
-      text-transform:uppercase;letter-spacing:1px;
-    }
-
-    .ok{background: rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);padding:16px 20px;border-radius:12px;color:#22c55e}
-    .err{background: rgba(229,9,20,.15);border:1px solid rgba(229,9,20,.3);padding:16px 20px;border-radius:12px;color:#e50914}
-
-    .list{margin-top:24px}
-    .item{
-      display:flex;justify-content:space-between;align-items:center;gap:16px;
-      padding:20px;border-radius:16px;background: rgba(30,30,30,.8);
-      border:1px solid rgba(255,255,255,.08);margin:12px 0;transition:.3s ease;
-    }
-    .item:hover{background: rgba(40,40,40,.9);border-color: rgba(229,9,20,.3);transform: translateX(10px)}
-    .item-number{
-      background: linear-gradient(135deg,#e50914 0%,#c5221f 100%);
-      color:#fff;width:40px;height:40px;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0;
-    }
-    .item-info{flex:1}
-    .item-name{font-size:18px;font-weight:700;margin-bottom:4px}
-    .item-date{color:#b3b3b3;font-size:13px}
-
-    .lights{position:fixed;top:0;left:0;width:100%;height:60px;pointer-events:none;z-index:9999;display:flex;justify-content:space-around;align-items:center}
-    .light{width:12px;height:12px;border-radius:50%;animation:blink 2s infinite}
-    .light:nth-child(odd){background:#e50914;box-shadow:0 0 10px #e50914}
-    .light:nth-child(even){background:#22c55e;box-shadow:0 0 10px #22c55e;animation-delay:1s}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI,Arial;
+  background:#141414;
+  color:#fff;
+}
+.header{
+  padding:20px;
+  font-size:28px;
+  font-weight:900;
+  color:#e50914;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+.card{
+  background:#1f1f1f;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:24px;
+}
+input,button{
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  font-size:16px;
+}
+input{
+  width:100%;
+  margin-bottom:12px;
+  background:#2a2a2a;
+  color:#fff;
+}
+button{
+  cursor:pointer;
+}
+.btn{
+  background:#e50914;
+  color:#fff;
+  font-weight:700;
+}
+.btn2{
+  background:#333;
+  color:#fff;
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.list .item{
+  background:#2a2a2a;
+  border-radius:12px;
+  padding:14px;
+  margin:10px 0;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.num{
+  background:#e50914;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+.ok{
+  background:#163;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+}
+.err{
+  background:#511;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+}
+.small{
+  color:#aaa;
+}
+</style>
 </head>
 
 <body>
-  <div class="lights">
-    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
-    <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+
+<div class="header">SICCHA Streaming 🎄</div>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div class="card" id="loginCard">
+  <h2>Acceso Administrador</h2>
+  <input id="email" type="email" placeholder="admin@email.com">
+  <input id="password" type="password" placeholder="Contraseña">
+  <button class="btn" id="loginBtn">Iniciar sesión</button>
+  <div id="loginMsg"></div>
+</div>
+
+<!-- ADMIN -->
+<div class="card" id="adminCard" style="display:none;">
+  <h2>Panel del sorteo</h2>
+
+  <div class="row">
+    <button class="btn" id="drawBtn">🎲 Elegir 5 ganadores</button>
+    <button class="btn2" id="clearBtn">🧹 Borrar ganadores</button>
   </div>
 
-  <div class="header">
-    <div class="header-content">
-      <div class="logo">SICCHA</div>
+  <div id="adminMsg"></div>
+
+  <h3 style="margin-top:30px;">🏆 Ganadores guardados</h3>
+  <div class="list" id="winnersList"></div>
+
+  <button class="btn2" id="logoutBtn" style="margin-top:20px;">Salir</button>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = supabase.createClient(
+  "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+  "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+);
+
+const $ = id => document.getElementById(id);
+
+async function updateUI(){
+  const { data } = await sb.auth.getUser();
+  const logged = !!data.user;
+  $("loginCard").style.display = logged ? "none" : "block";
+  $("adminCard").style.display = logged ? "block" : "none";
+  if(logged) loadWinners();
+}
+
+$("loginBtn").onclick = async ()=>{
+  $("loginMsg").innerHTML = "⏳ Verificando...";
+  const { error } = await sb.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+  });
+  if(error){
+    $("loginMsg").innerHTML = `<div class="err">${error.message}</div>`;
+    return;
+  }
+  $("loginMsg").innerHTML = `<div class="ok">Bienvenido</div>`;
+  updateUI();
+};
+
+$("logoutBtn").onclick = async ()=>{
+  await sb.auth.signOut();
+  updateUI();
+};
+
+async function loadWinners(){
+  const { data, error } = await sb
+    .from("winners")
+    .select("name, created_at")
+    .order("created_at", { ascending:true });
+
+  if(error){
+    $("winnersList").innerHTML = `<div class="err">${error.message}</div>`;
+    return;
+  }
+
+  if(!data.length){
+    $("winnersList").innerHTML = `<div class="small">Aún no hay ganadores</div>`;
+    return;
+  }
+
+  $("winnersList").innerHTML = data.map((w,i)=>`
+    <div class="item">
+      <div class="num">${i+1}</div>
+      <div>
+        <b>${w.name}</b><br>
+        <span class="small">${new Date(w.created_at).toLocaleString("es-PE")}</span>
+      </div>
     </div>
-  </div>
+  `).join("");
+}
 
-  <div class="wrap">
-    <div class="hero" id="heroSection">
-      <h1>Panel de Sorteo Navideño</h1>
-      <p>Administra los ganadores del sorteo</p>
-    </div>
+$("drawBtn").onclick = async ()=>{
+  $("adminMsg").innerHTML = "🎲 Sorteando...";
 
-    <div class="card" id="loginCard">
-      <div class="card-header">
-        <div>
-          <div class="card-title">🎅 Acceso Administrativo</div>
-          <div class="card-subtitle">Inicia sesión para gestionar el sorteo</div>
-        </div>
-      </div>
+  const { data: participants, error } = await sb
+    .from("participants")
+    .select("name, ticket");
 
-      <div class="row">
-        <div class="input-group">
-          <label class="label" for="email">Email</label>
-          <input id="email" type="email" placeholder="admin@siccha.com" />
-        </div>
-        <div class="input-group">
-          <label class="label" for="password">Contraseña</label>
-          <input id="password" type="password" placeholder="••••••••" />
-        </div>
-      </div>
+  if(error || participants.length < 5){
+    $("adminMsg").innerHTML = `<div class="err">Necesitas al menos 5 participantes</div>`;
+    return;
+  }
 
-      <button class="btn" id="loginBtn"><span>🎄 Iniciar Sesión</span></button>
-      <div id="loginMsg" style="margin-top:12px;"></div>
-    </div>
+  const shuffled = [...participants].sort(()=>Math.random()-0.5).slice(0,5);
 
-    <div class="card" id="adminCard" style="display:none;">
-      <div class="card-header">
-        <div>
-          <div class="card-title">🎁 Panel de Control</div>
-          <div class="card-subtitle">Gestiona los ganadores del sorteo navideño</div>
-        </div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <button class="btn2" id="logoutBtn"><span>👋 Salir</span></button>
-          <a class="btn2" href="resultados.html"><span>🏆 Ver ganadores</span></a>
-        </div>
-      </div>
+  await sb.from("winners").delete().neq("id",-1);
 
-      <div class="row">
-        <button class="btn" id="drawBtn"><span>🎲 Elegir 5 Ganadores</span></button>
-        <button class="btn2" id="clearBtn"><span>🧹 Borrar Ganadores</span></button>
-      </div>
+  const { error: insErr } = await sb
+    .from("winners")
+    .insert(shuffled.map(p=>({name:p.name, ticket:p.ticket})));
 
-      <div id="adminMsg" style="margin-top:16px;"></div>
+  if(insErr){
+    $("adminMsg").innerHTML = `<div class="err">${insErr.message}</div>`;
+    return;
+  }
 
-      <div style="margin-top: 40px;">
-        <div class="card-title" style="margin-bottom: 20px;">🏆 Ganadores Guardados</div>
-        <div class="list" id="winnersList"></div>
-      </div>
-    </div>
-  </div>
+  $("adminMsg").innerHTML = `<div class="ok">Ganadores guardados</div>`;
+  loadWinners();
+};
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // ✅ USA LA MISMA KEY QUE TUS OTRAS PÁGINAS
-    const sb = window.supabase.createClient(
-      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
-    );
+$("clearBtn").onclick = async ()=>{
+  if(!confirm("¿Borrar ganadores?")) return;
+  await sb.from("winners").delete().neq("id",-1);
+  loadWinners();
+};
 
-    const $ = (id) => document.getElementById(id);
+updateUI();
+</script>
 
-    function maskName(fullName) {
-      const parts = String(fullName||"").trim().split(/\s+/);
-      const first = parts[0] || "";
-      const last = parts[1] || "";
-      const initial = last ? (last[0].toUpperCase() + ".") : "";
-      return (first + (initial ? (" " + initial) : "")).trim();
-    }
-
-    function setMsg(el, html) { el.innerHTML = html; }
-
-    async function refreshWinners() {
-      const { data, error } = await sb
-        .from("winners")
-        .select("id,name,position,created_at")
-        .order("position", { ascending: true });
-
-      if (error) {
-        $("winnersList").innerHTML = `<div class="err">❌ Error cargando ganadores: ${error.message}</div>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        $("winnersList").innerHTML = `<div class="small-text">🎄 Aún no hay ganadores. ¡Realiza el sorteo!</div>`;
-        return;
-      }
-
-      $("winnersList").innerHTML = data.map((w, i) => `
-        <div class="item">
-          <div class="item-number">#${w.position ?? (i+1)}</div>
-          <div class="item-info">
-            <div class="item-name">🎁 ${maskName(w.name)}</div>
-            <div class="item-date">${w.created_at ? new Date(w.created_at).toLocaleString('es-PE', {
-              day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
-            }) : ''}</div>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    async function updateUI() {
-      const { data } = await sb.auth.getUser();
-      const isLogged = !!data?.user;
-      $("loginCard").style.display = isLogged ? "none" : "block";
-      $("adminCard").style.display = isLogged ? "block" : "none";
-      $("heroSection").style.display = isLogged ? "none" : "block";
-      if (isLogged) refreshWinners();
-    }
-
-    // Enter para loguear
-    $("password").addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("loginBtn").click(); });
-    $("email").addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("loginBtn").click(); });
-
-    $("loginBtn").onclick = async () => {
-      setMsg($("loginMsg"), `<div class="small-text">🎄 Verificando credenciales...</div>`);
-      const email = $("email").value.trim();
-      const password = $("password").value;
-
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        // 👇 Aquí verás el motivo real
-        setMsg($("loginMsg"), `<div class="err">❌ ${error.message}</div>`);
-        return;
-      }
-
-      setMsg($("loginMsg"), `<div class="ok">✅ ¡Bienvenido!</div>`);
-      updateUI();
-    };
-
-    $("logoutBtn").onclick = async () => {
-      await sb.auth.signOut();
-      setMsg($("adminMsg"), ``);
-      updateUI();
-    };
-
-    function pickRandomUnique(arr, k) {
-      const copy = [...arr];
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy.slice(0, k);
-    }
-
-    $("drawBtn").onclick = async () => {
-      setMsg($("adminMsg"), `<div class="small-text">🎲 Realizando sorteo...</div>`);
-
-      const { data: participants, error: pErr } = await sb
-        .from("participants")
-        .select("name,ticket,created_at");
-
-      if (pErr) {
-        setMsg($("adminMsg"), `<div class="err">❌ Error leyendo participantes: ${pErr.message}</div>`);
-        return;
-      }
-      if (!participants || participants.length < 5) {
-        setMsg($("adminMsg"), `<div class="err">❌ Se necesitan al menos 5 participantes. Actualmente: ${participants?.length || 0}</div>`);
-        return;
-      }
-
-      const chosen = pickRandomUnique(participants, 5);
-
-      // Limpiar ganadores
-      const { error: delErr } = await sb.from("winners").delete().neq("id", -1);
-      if (delErr) {
-        setMsg($("adminMsg"), `<div class="err">❌ No se pudieron limpiar ganadores anteriores: ${delErr.message}</div>`);
-        return;
-      }
-
-      // Guardar con posición
-      const rows = chosen.map((x, idx) => ({
-        name: x.name,
-        ticket: x.ticket,
-        position: idx + 1
-      }));
-
-      const { error: insErr } = await sb.from("winners").insert(rows);
-      if (insErr) {
-        setMsg($("adminMsg"), `<div class="err">❌ Error guardando ganadores: ${insErr.message}</div>`);
-        return;
-      }
-
-      setMsg($("adminMsg"), `<div class="ok">🎉 ¡Ganadores seleccionados y guardados! Ya aparecen en “Ver ganadores”.</div>`);
-      refreshWinners();
-    };
-
-    $("clearBtn").onclick = async () => {
-      if (!confirm("¿Seguro que quieres borrar TODOS los ganadores?")) return;
-
-      const { error } = await sb.from("winners").delete().neq("id", -1);
-      if (error) {
-        setMsg($("adminMsg"), `<div class="err">❌ Error borrando: ${error.message}</div>`);
-        return;
-      }
-      setMsg($("adminMsg"), `<div class="ok">✅ Ganadores borrados correctamente.</div>`);
-      refreshWinners();
-    };
-
-    updateUI();
-  </script>
 </body>
 </html>
