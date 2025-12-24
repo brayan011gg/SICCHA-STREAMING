@@ -3,533 +3,506 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SICCHA Streaming | Ruleta</title>
+  <title>SICCHA Streaming | Ganadores</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
     :root{
-      --bg:#070707;
-      --panel: rgba(20,20,20,.78);
-      --border: rgba(255,255,255,.10);
-      --red:#e50914;
-      --muted:#b3b3b3;
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --good:#22c55e;
+      --netflix-red:#E50914;
+      --netflix-black:#141414;
+      --netflix-dark:#0b0b0b;
+      --gold:#FFD700;
+      --green:#22c55e;
+      --ice:#B4E4FF;
     }
-    *{box-sizing:border-box}
+
+    *{box-sizing:border-box; margin:0; padding:0;}
+
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
-      color:#fff;
-      background:
-        radial-gradient(900px 500px at 15% 10%, rgba(229,9,20,.20), transparent 55%),
-        radial-gradient(900px 500px at 85% 0%, rgba(255,255,255,.06), transparent 50%),
-        linear-gradient(180deg, #050505, #0b0b0b 40%, #050505);
-      overflow-x:hidden;
+      font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--netflix-black);
+      color: #fff;
+      overflow-x: hidden;
     }
 
-    /* Snowflakes */
-    .snowflake{
-      position:fixed;
-      top:-40px;
-      z-index:0;
-      user-select:none;
+    /* Nieve */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      z-index: 9999;
+      user-select: none;
+      cursor: default;
+      animation: snowfall linear infinite;
+      color: rgba(255,255,255,0.8);
+      font-size: 1em;
+      text-shadow: 0 0 5px rgba(255,255,255,0.8);
       pointer-events:none;
-      opacity:.65;
-      animation-name: fall;
-      animation-timing-function: linear;
     }
-    @keyframes fall{
-      to{ transform: translateY(110vh); }
+    @keyframes snowfall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
     }
 
-    header{
-      position:sticky; top:0; z-index:5;
+    /* Header */
+    .netflix-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+      padding: 15px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s;
+    }
+    .netflix-header.scrolled {
+      background: rgba(20,20,20,0.98);
       backdrop-filter: blur(10px);
-      background: rgba(0,0,0,.35);
-      border-bottom: 1px solid rgba(255,255,255,.06);
     }
-    .topbar{
-      max-width:1100px; margin:0 auto; padding:16px 18px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--netflix-red);
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      animation: glow 2s ease-in-out infinite alternate;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:900; letter-spacing:.4px;
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #E50914, 0 0 20px #E50914; }
+      to { text-shadow: 0 0 20px #E50914, 0 0 30px #E50914, 0 0 40px #E50914; }
     }
-    .brand .dot{
-      width:10px; height:10px; border-radius:999px; background:var(--red);
-      box-shadow: 0 0 18px rgba(229,9,20,.8);
+
+    .nav-right { display:flex; gap:20px; align-items:center; }
+    .nav-btn{
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 4px;
+      color:#fff;
+      font-size:14px;
+      cursor:pointer;
+      transition: all .3s;
+      font-weight: 500;
     }
-    .brand span{color:var(--red)}
-    .pill{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      padding:8px 12px;
-      border-radius:999px;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
+    .nav-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+    .nav-btn.primary { background: var(--netflix-red); border:none; }
+    .nav-btn.primary:hover { background:#f40612; box-shadow: 0 0 20px rgba(229,9,20,0.5); }
+
+    /* Hero */
+    .hero-banner {
+      position: relative;
+      height: 80vh;
+      margin-top: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, #141414 100%),
+                  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23222"/><circle cx="20" cy="20" r="2" fill="%23FFD700" opacity="0.3"/><circle cx="60" cy="40" r="2" fill="%23E50914" opacity="0.3"/><circle cx="80" cy="70" r="2" fill="%2322c55e" opacity="0.3"/></svg>');
+      display:flex;
+      align-items:center;
+      padding: 0 50px;
+      overflow:hidden;
+    }
+    .hero-content { max-width: 600px; z-index:2; animation: slideInLeft 1s ease-out; }
+    @keyframes slideInLeft { from{opacity:0; transform: translateX(-100px);} to{opacity:1; transform: translateX(0);} }
+
+    .hero-title{
+      font-size:4rem;
+      font-weight:900;
+      margin-bottom:20px;
+      text-shadow:3px 3px 6px rgba(0,0,0,0.9);
+      line-height:1.1;
+    }
+    .hero-title .xmas { color: var(--netflix-red); animation:pulse 2s ease-in-out infinite; display:inline-block; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+    .hero-subtitle { font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom:30px; line-height:1.6; }
+
+    .hero-badges { display:flex; gap:15px; flex-wrap:wrap; margin-bottom:30px; }
+    .badge{
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 10px 18px;
+      border-radius: 25px;
+      font-size:14px;
+      border: 1px solid rgba(255,255,255,0.2);
       display:flex;
       align-items:center;
       gap:8px;
     }
 
-    .wrap{max-width:1100px; margin:0 auto; padding:26px 18px 56px; position:relative; z-index:1;}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      align-items:start;
+    .hero-buttons{ display:flex; gap:15px; }
+    .hero-btn{
+      padding: 15px 35px;
+      font-size: 1.1rem;
+      font-weight:700;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      transition: all .3s;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
-    @media (max-width:980px){
-      .grid{grid-template-columns:1fr;}
-    }
+    .hero-btn.play { background:#fff; color:#000; }
+    .hero-btn.play:hover { background: rgba(255,255,255,0.8); transform: scale(1.05); }
+    .hero-btn.info { background: rgba(109,109,110,0.7); color:#fff; }
+    .hero-btn.info:hover { background: rgba(109,109,110,0.9); }
 
-    .card{
-      border:1px solid var(--border);
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      border-radius:22px;
-      overflow:hidden;
-    }
-    .head{
-      padding:18px 18px 14px;
-      background:
-        radial-gradient(600px 220px at 10% 0%, rgba(229,9,20,.20), transparent 65%),
-        linear-gradient(180deg, rgba(255,255,255,.06), transparent);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    h1{margin:0 0 6px; font-size:24px; line-height:1.1;}
-    .sub{margin:0; color:var(--muted); font-size:13px; line-height:1.45;}
-
-    .pad{padding:16px 18px 18px;}
-    .mini{font-size:12px; color:var(--muted);}
+    .floating-ornament{ position:absolute; animation: float 4s ease-in-out infinite; font-size:3rem; opacity:.6; z-index:1; }
+    @keyframes float { 0%,100%{transform: translateY(0) rotate(0)} 50%{transform: translateY(-30px) rotate(10deg)} }
+    .ornament-1{ top:15%; right:10%; }
+    .ornament-2{ top:40%; right:5%; animation-delay:1s; }
+    .ornament-3{ bottom:20%; left:8%; animation-delay:2s; }
 
     /* Countdown */
-    .countBox{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      border-radius:18px;
-      padding:12px 12px;
-      margin-top:10px;
+    .countdown-section{ padding:60px 50px; background: linear-gradient(180deg, #141414 0%, #0b0b0b 100%); }
+    .countdown-container{
+      max-width:1200px; margin:0 auto;
+      background: linear-gradient(135deg, rgba(229,9,20,0.15) 0%, rgba(255,215,0,0.1) 100%);
+      border-radius:15px;
+      padding:40px;
+      border:2px solid rgba(255,215,0,0.3);
+      position:relative;
+      overflow:hidden;
     }
-    .clock{
-      display:flex; gap:8px; flex-wrap:wrap;
+    .countdown-container::before{
+      content:'';
+      position:absolute;
+      top:-50%; left:-50%;
+      width:200%; height:200%;
+      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+      animation: rotate 10s linear infinite;
     }
-    .tile{
-      min-width:70px;
-      padding:10px 10px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      text-align:center;
-    }
-    .num{font-size:20px; font-weight:1000;}
-    .lab{font-size:11px; color:var(--muted); margin-top:2px;}
-    .countText{font-size:13px; font-weight:900; margin-top:6px;}
+    @keyframes rotate{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .countdown-title{ text-align:center; font-size:2.5rem; margin-bottom:15px; position:relative; z-index:2; }
+    .countdown-subtitle{ text-align:center; color:rgba(255,255,255,0.7); margin-bottom:40px; font-size:1.1rem; position:relative; z-index:2; }
 
-    /* Search + list */
-    .tools{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
+    .countdown-display{ display:flex; justify-content:center; gap:30px; flex-wrap:wrap; position:relative; z-index:2; }
+    .time-unit{
+      text-align:center;
+      background: rgba(0,0,0,0.6);
+      padding:25px 35px;
+      border-radius:12px;
+      border:2px solid rgba(255,255,255,0.1);
+      min-width:120px;
+      position:relative;
+      overflow:hidden;
     }
-    .tools input, .tools select{
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.35);
-      color:#fff;
-      outline:none;
+    .time-unit::after{
+      content:'';
+      position:absolute;
+      top:0; left:-100%;
+      width:100%; height:100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 3s ease-in-out infinite;
     }
-    .tools input{flex:1; min-width:220px;}
-    .tools select{min-width:190px;}
-    .list{
-      display:grid;
-      gap:10px;
-      max-height:420px;
-      overflow:auto;
-      padding-right:6px;
+    @keyframes shine{ to{left:100%} }
+    .time-number{ font-size:3.5rem; font-weight:900; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+    .time-label{ font-size:.9rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; margin-top:10px; }
+
+    /* Winners */
+    .winners-section{ padding:60px 50px 100px; background: var(--netflix-dark); }
+    .section-title{ font-size:2.5rem; margin-bottom:10px; font-weight:700; }
+    .section-subtitle{ color:rgba(255,255,255,0.7); margin-bottom:40px; font-size:1.1rem; }
+    .winners-grid{ display:grid; gap:25px; max-width:1400px; margin:0 auto; }
+
+    .winner-card{
+      background: linear-gradient(135deg, rgba(229,9,20,0.2) 0%, rgba(20,20,20,0.9) 100%);
+      border-radius:12px;
+      padding:30px;
+      border:2px solid rgba(255,255,255,0.1);
+      position:relative;
+      overflow:hidden;
+      transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+      opacity:0;
+      transform: translateY(50px) scale(0.9);
     }
-    .item{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius:18px;
-      padding:12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+    .winner-card.reveal{ animation: revealCard 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes revealCard { to{ opacity:1; transform: translateY(0) scale(1); } }
+    .winner-card:hover{
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--gold);
+      box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+      opacity:1;
     }
-    .item.me{
-      border-color: rgba(34,197,94,.26);
-      background: rgba(34,197,94,.10);
+
+    .winner-card::before{
+      content:'🎉';
+      position:absolute;
+      top:50%; left:50%;
+      font-size:8rem;
+      opacity:0;
+      transform: translate(-50%,-50%) scale(0);
+      pointer-events:none;
     }
-    .pillMe{
-      margin-left:10px;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:11px;
+    .winner-card.reveal::before{ animation: confettiPop 1s ease-out; }
+    @keyframes confettiPop{
+      0%{opacity:1; transform:translate(-50%,-50%) scale(0) rotate(0)}
+      50%{opacity:.8; transform:translate(-50%,-50%) scale(2) rotate(180deg)}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(3) rotate(360deg)}
+    }
+
+    .winner-content{ display:flex; align-items:center; gap:25px; position:relative; z-index:2; }
+    .winner-rank{
+      font-size:4rem;
       font-weight:900;
-      background: rgba(34,197,94,.18);
-      border:1px solid rgba(34,197,94,.28);
-      color:#d1fae5;
-    }
-
-    /* Wheel */
-    .canvasWrap{
-      display:flex;
-      justify-content:center;
-      padding:14px 0 8px;
-    }
-    canvas{
-      width:100%;
-      max-width:520px;
-      aspect-ratio:1/1;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.25);
-    }
-
-    .rowBtns{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .btn{
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.07);
-      color:#fff;
-      font-weight:1000;
-      cursor:pointer;
-    }
-    .btnPrimary{
-      border:0;
-      background: linear-gradient(90deg, #ff0a16, #c9000a);
-      box-shadow: 0 12px 30px rgba(229,9,20,.22);
-    }
-
-    footer{
-      max-width:1100px; margin:18px auto 0; padding:0 18px 20px;
-      color:rgba(255,255,255,.35); font-size:12px;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255,215,0,0.6);
+      min-width:80px;
       text-align:center;
+      animation: rankPulse 2s ease-in-out infinite;
+    }
+    @keyframes rankPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+    .winner-rank.top-1{
+      font-size:5rem;
+      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    .winner-info{ flex:1; }
+    .winner-name{ font-size:2rem; font-weight:700; margin-bottom:10px; color:#fff; }
+    .winner-details{ display:flex; gap:20px; flex-wrap:wrap; font-size:0.95rem; color:rgba(255,255,255,0.7); }
+    .winner-detail{ display:flex; align-items:center; gap:8px; }
+
+    .winner-icon{ font-size:3rem; opacity:0.4; position:absolute; right:30px; top:50%; transform: translateY(-50%); }
+
+    @media (max-width: 768px) {
+      .netflix-header{ padding:15px 20px; }
+      .logo{ font-size:1.8rem; }
+      .hero-banner{ height:70vh; padding:0 20px; }
+      .hero-title{ font-size:2.5rem; }
+      .countdown-section, .winners-section{ padding:40px 20px; }
+      .winner-content{ flex-direction:column; text-align:center; }
+      .winner-rank{ font-size:3rem; }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="topbar">
-      <div class="brand"><div class="dot"></div> SICCHA <span>Streaming</span></div>
-      <div class="pill">🎄 Ruleta • Nombres registrados</div>
+  <header class="netflix-header" id="header">
+    <div class="logo">SICCHA</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="location.href='index.html'">← Inicio</button>
+      <button class="nav-btn primary" onclick="location.reload()">🔄 Actualizar</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <div class="grid">
+  <section class="hero-banner">
+    <div class="floating-ornament ornament-1">🎄</div>
+    <div class="floating-ornament ornament-2">⭐</div>
+    <div class="floating-ornament ornament-3">🎁</div>
 
-      <!-- LEFT: Wheel -->
-      <section class="card">
-        <div class="head">
-          <h1>🎡 Ruleta navideña</h1>
-          <p class="sub">
-            La ruleta se llena sola con los nombres registrados. (Solo nombres, sin celulares).
-          </p>
+    <div class="hero-content">
+      <h1 class="hero-title"><span class="xmas">🎉 Sorteo</span><br>Navideño 2025</h1>
+      <p class="hero-subtitle">
+        5 ganadores se llevarán acceso exclusivo a Prime Video por 20 días.
+        ¡La suerte está echada!
+      </p>
 
-          <div class="countBox">
-            <div>
-              <div style="font-weight:1000;">⏳ Cuenta regresiva</div>
-              <div class="mini" id="countHint">El sorteo será en unas horas.</div>
-              <div class="countText" id="countText"></div>
-            </div>
-            <div class="clock">
-              <div class="tile"><div class="num" id="d">0</div><div class="lab">Días</div></div>
-              <div class="tile"><div class="num" id="h">00</div><div class="lab">Horas</div></div>
-              <div class="tile"><div class="num" id="m">00</div><div class="lab">Min</div></div>
-              <div class="tile"><div class="num" id="s">00</div><div class="lab">Seg</div></div>
-            </div>
-          </div>
-        </div>
+      <div class="hero-badges">
+        <div class="badge">🏆 5 Ganadores</div>
+        <div class="badge">🎬 Prime Video</div>
+        <div class="badge">⏱️ 20 Días</div>
+        <div class="badge">✅ 1 Ticket por Celular</div>
+      </div>
 
-        <div class="pad">
-          <div class="canvasWrap">
-            <canvas id="wheel" width="800" height="800"></canvas>
-          </div>
-
-          <div class="rowBtns">
-            <button class="btn" onclick="location.href='index.html'">⬅ Volver</button>
-            <button class="btn" id="refreshBtn">🔄 Actualizar nombres</button>
-            <button class="btn btnPrimary" onclick="location.href='resultados.html'">🏆 Ver ganadores</button>
-          </div>
-
-          <div class="mini" style="margin-top:10px;">
-            Tip: si ya te registraste desde esta misma PC/celular, tu nombre se marcará como <b>TÚ</b>.
-          </div>
-
-          <div class="mini" id="pickMsg" style="margin-top:10px;"></div>
-        </div>
-      </section>
-
-      <!-- RIGHT: List -->
-      <section class="card">
-        <div class="head">
-          <h1>👥 Nombres registrados</h1>
-          <p class="sub" id="count">Total: 0 participantes</p>
-          <p class="mini" id="myMark" style="margin-top:6px;"></p>
-        </div>
-
-        <div class="pad">
-          <div class="tools">
-            <input id="searchName" placeholder="🔎 Buscar nombre...">
-            <select id="sortNames">
-              <option value="recent">🕒 Más recientes</option>
-              <option value="az">🔤 A - Z</option>
-            </select>
-          </div>
-
-          <div class="list" id="list"></div>
-          <div class="mini" id="err" style="margin-top:12px;"></div>
-        </div>
-      </section>
-
+      <div class="hero-buttons">
+        <button class="hero-btn play" onclick="scrollToWinners()">▶ Ver Ganadores</button>
+        <button class="hero-btn info" onclick="scrollToCountdown()">ℹ️ Más Info</button>
+      </div>
     </div>
-  </main>
+  </section>
 
-  <footer>
-    SICCHA Streaming © 2025 • Sorteo navideño promocional
-  </footer>
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-container">
+      <h2 class="countdown-title">⏳ Cuenta Regresiva</h2>
+      <p class="countdown-subtitle" id="targetHint">🎄 El sorteo será hoy a las 5:00 PM</p>
+
+      <div class="countdown-display">
+        <div class="time-unit"><div class="time-number" id="d">0</div><div class="time-label">Días</div></div>
+        <div class="time-unit"><div class="time-number" id="h">00</div><div class="time-label">Horas</div></div>
+        <div class="time-unit"><div class="time-number" id="m">00</div><div class="time-label">Minutos</div></div>
+        <div class="time-unit"><div class="time-number" id="s">00</div><div class="time-label">Segundos</div></div>
+      </div>
+
+      <p style="text-align:center; margin-top:30px; font-size:1.1rem; position:relative; z-index:2;" id="countText"></p>
+    </div>
+  </section>
+
+  <section class="winners-section" id="winners">
+    <h2 class="section-title">🎊 Ganadores Oficiales</h2>
+    <p class="section-subtitle" id="state">Cargando ganadores...</p>
+    <div class="winners-grid" id="grid"></div>
+  </section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ❄️ Snowflakes floating
+    // Supabase (tus datos)
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3ZmRtdnV3amRxenBrZWF4Z2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5Nzc4MTgsImV4cCI6MjA1MDU1MzgxOH0.tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl5WvCAKn4RcQs"
+    );
+
+    const $ = (id) => document.getElementById(id);
+    function pad2(n){ return String(n).padStart(2,"0"); }
+
+    // nieve
     function createSnowflakes() {
-      const snowflakes = ['❄', '❅', '❆'];
-      for(let i = 0; i < 18; i++) {
-        setTimeout(() => {
-          const snowflake = document.createElement('div');
-          snowflake.className = 'snowflake';
-          snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
-          snowflake.style.left = Math.random() * 100 + '%';
-          snowflake.style.animationDuration = (Math.random() * 4 + 6) + 's';
-          snowflake.style.fontSize = (Math.random() * 12 + 16) + 'px';
-          snowflake.style.opacity = Math.random() * 0.6 + 0.3;
-          document.body.appendChild(snowflake);
-          setTimeout(() => snowflake.remove(), 10000);
-        }, i * 260);
+      for(let i = 0; i < 50; i++) {
+        const s = document.createElement('div');
+        s.className = 'snowflake';
+        s.textContent = '❄️';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        s.style.animationDelay = Math.random() * 5 + 's';
+        s.style.fontSize = (Math.random() * 0.7 + 0.5) + 'em';
+        document.body.appendChild(s);
       }
     }
     createSnowflakes();
-    setInterval(createSnowflakes, 6500);
 
-    // Supabase (publishable)
-    const sb = window.supabase.createClient(
-      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
-    );
+    // scroll header (FIX: era $('header') pero tu id es "header")
+    window.addEventListener('scroll', () => {
+      const el = $("header");
+      if(!el) return;
+      if(window.scrollY > 100) el.classList.add('scrolled');
+      else el.classList.remove('scrolled');
+    });
 
-    const $ = (id)=>document.getElementById(id);
+    function scrollToWinners(){ $("winners").scrollIntoView({ behavior: 'smooth' }); }
+    function scrollToCountdown(){ $("countdown").scrollIntoView({ behavior: 'smooth' }); }
 
-    // ===== COUNTDOWN (HOY 5:00 PM) =====
-    function pad2(n){ return String(n).padStart(2, "0"); }
-    function getTarget(){
+    // countdown hoy 5pm
+    function getTargetToday5pm(){
       const now = new Date();
       const t = new Date(now);
-      t.setHours(17,0,0,0); // 5:00 PM hoy
+      t.setHours(17,0,0,0);
       return t;
     }
-    function tick(){
+
+    function updateCountdown(){
       const now = new Date();
-      const target = getTarget();
-      let diff = target - now;
-      if(diff < 0) diff = 0;
+      const target = getTargetToday5pm();
+      let ms = target - now;
+      if(ms < 0) ms = 0;
 
-      const sec = Math.floor(diff/1000);
-      const days = Math.floor(sec/86400);
-      const hrs  = Math.floor((sec%86400)/3600);
-      const mins = Math.floor((sec%3600)/60);
-      const secs = sec%60;
+      const totalS = Math.floor(ms/1000);
+      const days = Math.floor(totalS/86400);
+      const hours = Math.floor((totalS%86400)/3600);
+      const mins = Math.floor((totalS%3600)/60);
+      const secs = totalS%60;
 
-      $("d").textContent = String(days);
-      $("h").textContent = pad2(hrs);
+      $("d").textContent = days;
+      $("h").textContent = pad2(hours);
       $("m").textContent = pad2(mins);
       $("s").textContent = pad2(secs);
 
-      if(diff > 0){
-        $("countHint").textContent = "🎄 El sorteo será en unas horas.";
-        $("countText").textContent = `Faltan ${days} día(s), ${hrs} hora(s) y ${mins} min para las 5:00 PM.`;
-      }else{
-        $("countHint").textContent = "🎉 Ya es hora (o ya pasó). Revisa Ganadores.";
-        $("countText").textContent = "✅ Cuenta regresiva finalizada.";
-      }
-    }
-    setInterval(tick, 1000); tick();
+      $("countText").textContent = ms > 0
+        ? `⏰ Faltan ${days} día(s), ${hours} hora(s) y ${mins} minuto(s) para el sorteo`
+        : "✅ ¡El sorteo ya puede publicarse!";
 
-    // Mask name (solo nombre + inicial apellido)
-    function maskName(fullName){
-      const parts = String(fullName||"").trim().split(/\s+/);
-      const first = parts[0] || "";
-      const last  = parts[1] || "";
-      const initial = last ? (last[0].toUpperCase() + ".") : "";
-      return (first + (initial ? (" " + initial) : "")).trim();
+      $("targetHint").textContent = ms > 0
+        ? "🎄 El sorteo será hoy a las 5:00 PM"
+        : "🎉 Si ya se eligieron ganadores, aparecerán abajo";
     }
 
-    // ===== Load participants (SOLO name,created_at) =====
-    let participants = [];
-    async function loadParticipants(){
-      $("err").textContent = "";
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-      const { data, error } = await sb
-        .from("participants")
-        .select("name,created_at")
-        .order("created_at", { ascending:false });
+    // ---------- GANADORES ----------
+    function safeDateLabel(row){
+      // Intentamos: drawn_at -> created_at -> nada
+      const stamp = row.drawn_at || row.created_at || null;
+      if(!stamp) return "";
+      const d = new Date(stamp);
+      if(String(d) === "Invalid Date") return "";
+      return d.toLocaleString("es-PE");
+    }
+
+    async function loadWinners(){
+      const state = $("state");
+      const grid = $("grid");
+      grid.innerHTML = "";
+
+      // 1) Probamos con drawn_at
+      let q = sb.from("winners").select("id,name,ticket,drawn_at,created_at");
+      // 2) Orden estable: si hay drawn_at ordena por eso; si no, por created_at
+      //    (PostgREST igual puede ordenar aunque haya nulls)
+      q = q.order("drawn_at", { ascending: true, nullsFirst: false })
+           .order("created_at", { ascending: true, nullsFirst: false });
+
+      const { data, error } = await q;
 
       if(error){
-        $("err").textContent = "❌ Error cargando participantes: " + error.message;
+        // Si falla por "drawn_at does not exist", intentamos sin drawn_at
+        const msg = (error.message || "").toLowerCase();
+        if(msg.includes("drawn_at") && msg.includes("does not exist")){
+          const { data: data2, error: error2 } = await sb
+            .from("winners")
+            .select("id,name,ticket,created_at")
+            .order("created_at", { ascending: true });
+
+          if(error) {
+            state.textContent = "❌ Error: " + (error.message || JSON.stringify(error));
+            console.error(error);
+            return;
+          }
+          renderWinners(data2);
+          return;
+        }
+
+        state.textContent = "❌ No se pudo cargar ganadores (revisa RLS/columnas).";
+        console.error(error);
         return;
       }
 
-      participants = data || [];
-      renderList();
-      drawWheel();
+      renderWinners(data);
     }
 
-    function renderList(){
-      const myName = (localStorage.getItem("myName") || "").trim().toLowerCase();
-      const q = ($("searchName").value || "").trim().toLowerCase();
-      const sortMode = $("sortNames").value || "recent";
+    function renderWinners(data){
+      const state = $("state");
+      const grid = $("grid");
 
-      let listData = [...participants];
-
-      // sort
-      if(sortMode === "az"){
-        listData.sort((a,b)=> maskName(a.name).localeCompare(maskName(b.name), "es"));
-      }else{
-        listData.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
+      if(!data || data.length === 0){
+        state.textContent = "⏳ Aún no hay ganadores. Vuelve después de las 5:00 PM";
+        return;
       }
 
-      // filter
-      if(q){
-        listData = listData.filter(p => maskName(p.name).toLowerCase().includes(q));
-      }
+      state.textContent = "✅ ¡Los ganadores han sido revelados!";
 
-      $("count").textContent = `Total: ${participants.length} participantes • Mostrando: ${listData.length}`;
+      const icons = ['👑','🏆','🥇','🎯','⭐'];
 
-      $("list").innerHTML = listData.map(p=>{
-        const show = maskName(p.name);
-        const isMe = myName && String(p.name||"").trim().toLowerCase() === myName;
+      data.slice(0,5).forEach((w, idx) => {
+        const pos = idx + 1;
+        const top = pos === 1;
+        const stamp = safeDateLabel(w);
 
-        const stamp = p.created_at ? new Date(p.created_at).toLocaleString("es-PE",{
-          day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"
-        }) : "";
-
-        return `
-          <div class="item ${isMe ? "me" : ""}">
-            <div style="min-width:0;">
-              <b>${show}</b>
-              ${isMe ? `<span class="pillMe">TÚ</span>` : ``}
-              <div class="mini">${stamp}</div>
+        const card = document.createElement("div");
+        card.className = "winner-card";
+        card.innerHTML = `
+          <div class="winner-content">
+            <div class="winner-rank ${top ? "top-1" : ""}">${pos}</div>
+            <div class="winner-info">
+              <div class="winner-name">${w.name || "Ganador"}</div>
+              <div class="winner-details">
+                <div class="winner-detail">🎫 Ticket: <b>${w.ticket || "—"}</b></div>
+                ${stamp ? `<div class="winner-detail">🕒 ${stamp}</div>` : ""}
+              </div>
             </div>
+            <div class="winner-icon">${icons[idx] || "🎁"}</div>
           </div>
         `;
-      }).join("") || `<div class="mini">Aún no hay participantes.</div>`;
 
-      if(myName){
-        $("myMark").textContent = `✅ Este navegador reconoce tu registro: se marcará como "TÚ".`;
-      }else{
-        $("myMark").textContent = `💡 Si te registras, aquí se marcará tu nombre como "TÚ".`;
-      }
+        grid.appendChild(card);
+
+        // reveal anim con delay
+        setTimeout(() => card.classList.add("reveal"), 350 + idx * 250);
+      });
     }
 
-    $("searchName").addEventListener("input", renderList);
-    $("sortNames").addEventListener("change", renderList);
-    $("refreshBtn").onclick = loadParticipants;
-
-    // ===== Wheel (canvas) =====
-    const canvas = $("wheel");
-    const ctx = canvas.getContext("2d");
-    let angle = 0;
-
-    function drawWheel(){
-      const names = participants.map(p => maskName(p.name));
-      const n = Math.max(names.length, 1);
-
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-
-      const cx = canvas.width/2, cy = canvas.height/2;
-      const radius = canvas.width * 0.44;
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-
-      for(let i=0;i<n;i++){
-        const start = (i * 2*Math.PI)/n;
-        const end   = ((i+1) * 2*Math.PI)/n;
-
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.arc(0,0,radius,start,end);
-        ctx.closePath();
-        ctx.fillStyle = (i%2===0) ? "rgba(229,9,20,.88)" : "rgba(34,197,94,.82)";
-        ctx.fill();
-
-        ctx.strokeStyle = "rgba(255,255,255,.22)";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        const mid = (start+end)/2;
-        ctx.save();
-        ctx.rotate(mid);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "rgba(255,255,255,.98)";
-        ctx.font = "bold 28px ui-sans-serif, system-ui";
-        ctx.shadowColor = "rgba(0,0,0,0.45)";
-        ctx.shadowBlur = 4;
-
-        const label = names[i] || "—";
-        ctx.fillText(label.length>14 ? label.slice(0,14)+"…" : label, radius - 18, 10);
-        ctx.restore();
-      }
-
-      // center cap
-      ctx.beginPath();
-      ctx.arc(0,0, radius*0.18, 0, 2*Math.PI);
-      ctx.fillStyle = "rgba(0,0,0,.60)";
-      ctx.fill();
-      ctx.lineWidth = 6;
-      ctx.strokeStyle = "rgba(255,255,255,.20)";
-      ctx.stroke();
-
-      ctx.shadowColor = "transparent";
-      ctx.fillStyle = "rgba(255,255,255,.95)";
-      ctx.font = "900 24px ui-sans-serif, system-ui";
-      ctx.textAlign = "center";
-      ctx.fillText("SICCHA", 0, -6);
-      ctx.fillStyle = "rgba(229,9,20,.95)";
-      ctx.fillText("Streaming", 0, 22);
-
-      ctx.restore();
-    }
-
-    function animate(){
-      requestAnimationFrame(animate);
-      angle += 0.0012;
-      drawWheel();
-    }
-
-    loadParticipants();
-    setInterval(loadParticipants, 9000);
-    drawWheel();
-    animate();
+    loadWinners();
   </script>
 </body>
 </html>
