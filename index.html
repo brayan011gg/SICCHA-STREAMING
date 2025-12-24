@@ -114,6 +114,7 @@
       outline:none;
     }
     input:focus{border-color: rgba(229,9,20,.65); box-shadow: 0 0 0 4px rgba(229,9,20,.12);}
+
     .btn{
       width:100%;
       padding:12px 14px;
@@ -201,6 +202,7 @@
     footer{
       max-width:1100px; margin:22px auto 0; padding:0 18px;
       color:rgba(255,255,255,.35); font-size:12px;
+      text-align:center;
     }
     .badges{
       display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
@@ -211,6 +213,28 @@
       background: rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.10);
     }
+
+    /* Admin modal */
+    .adminWrap{
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.72);
+      z-index:60;
+      padding:16px;
+    }
+    .adminModal{
+      width:min(420px, 100%);
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,15,15,.94);
+      box-shadow: 0 30px 90px rgba(0,0,0,.75);
+      overflow:hidden;
+    }
+    .adminBody{padding:16px;}
+    .adminGrid{display:grid; gap:10px;}
+    .adminBtnRow{display:flex; gap:10px; margin-top:12px;}
+    .adminBtnRow .btn{flex:1;}
+    @media (max-width:520px){ .adminBtnRow{flex-direction:column;} }
   </style>
 </head>
 
@@ -263,17 +287,18 @@
       <div class="card">
         <div class="headline">
           <h1 style="font-size:26px;margin-bottom:6px;">¿Cómo funciona?</h1>
-          <p class="sub">Participas hoy y mañana se publican resultados.</p>
+          <p class="sub">Participas hoy y luego se publican resultados.</p>
         </div>
         <div class="cardPad">
           <p class="mini">1) Te registras</p>
           <p class="mini">2) Se genera tu ticket único</p>
           <p class="mini">3) Tu nombre entra a la ruleta</p>
-          <p class="mini">4) Mañana 5:00 PM se muestran ganadores</p>
+          <p class="mini">4) Se muestran los ganadores en Resultados</p>
           <p class="mini" style="margin-top:12px;color:#fff;">
             👇 Luego entra a la ruleta para ver tu nombre dentro.
           </p>
           <button class="btn btnGhost" onclick="location.href='ruleta.html'">Ver ruleta</button>
+          <button class="btn btnGhost" style="margin-top:10px;" onclick="location.href='resultados.html'">Ver resultados</button>
         </div>
       </div>
     </section>
@@ -281,6 +306,11 @@
 
   <footer>
     SICCHA Streaming © 2025 • Sorteo promocional (no afiliado a Prime Video).
+    <div style="margin-top:14px;">
+      <button id="openAdmin" class="btn btnGhost" style="max-width:320px;">
+        🔐 Iniciar sesión administrador
+      </button>
+    </div>
   </footer>
 
   <!-- Ticket Modal -->
@@ -308,6 +338,33 @@
     </div>
   </div>
 
+  <!-- Admin Login Modal -->
+  <div class="adminWrap" id="adminWrap">
+    <div class="adminModal">
+      <div class="modalTop">
+        <div style="font-weight:900;">🔐 Admin • SICCHA Streaming</div>
+        <button class="x" id="closeAdmin">✕</button>
+      </div>
+      <div class="adminBody">
+        <div class="adminGrid">
+          <div>
+            <label>Email</label>
+            <input id="adminEmail" placeholder="admin@email.com">
+          </div>
+          <div>
+            <label>Contraseña</label>
+            <input id="adminPass" type="password" placeholder="••••••••">
+          </div>
+          <button id="adminLoginBtn" class="btn btnPrimary">Entrar</button>
+          <div id="adminMsg" class="mini"></div>
+          <button class="btn btnGhost" onclick="location.href='admin.html'">
+            Ir al panel (si ya iniciaste sesión)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const sb = window.supabase.createClient(
@@ -325,15 +382,15 @@
     }
     function limpiarTelefono(t){ return (t||"").replace(/\D/g,"").trim(); }
 
-    function openModal(ticket){
+    function openTicketModal(ticket){
       localStorage.setItem("myTicket", ticket);
       $("ticketCode").textContent = ticket;
       $("modalWrap").style.display = "flex";
     }
-    function closeModal(){ $("modalWrap").style.display = "none"; $("copyMsg").textContent=""; }
+    function closeTicketModal(){ $("modalWrap").style.display = "none"; $("copyMsg").textContent=""; }
 
-    $("closeModal").onclick = closeModal;
-    $("modalWrap").addEventListener("click", (e)=>{ if(e.target.id==="modalWrap") closeModal(); });
+    $("closeModal").onclick = closeTicketModal;
+    $("modalWrap").addEventListener("click", (e)=>{ if(e.target.id==="modalWrap") closeTicketModal(); });
 
     $("copyBtn").onclick = async () => {
       const t = $("ticketCode").textContent;
@@ -356,7 +413,6 @@
       $("btn").disabled = true;
       $("btn").textContent = "Registrando...";
 
-      // Si ya existe, mostrar ticket anterior
       const { data: exists, error: selErr } = await sb
         .from("participants")
         .select("ticket,name")
@@ -375,11 +431,10 @@
         $("msg").textContent = "✅ Ya estabas registrado. Te mostramos tu ticket.";
         $("btn").disabled = false;
         $("btn").textContent = "Participar";
-        openModal(exists.ticket);
+        openTicketModal(exists.ticket);
         return;
       }
 
-      // Insert nuevo
       let ticket = generarTicket();
       for(let tries=0; tries<4; tries++){
         const { error: insErr } = await sb.from("participants").insert([{ name, phone, ticket }]);
@@ -399,7 +454,31 @@
 
       $("btn").disabled = false;
       $("btn").textContent = "Participar";
-      openModal(ticket);
+      openTicketModal(ticket);
+    };
+
+    // ----- Admin modal -----
+    function openAdmin(){ $("adminWrap").style.display = "flex"; $("adminMsg").textContent = ""; }
+    function closeAdmin(){ $("adminWrap").style.display = "none"; $("adminMsg").textContent = ""; }
+
+    $("openAdmin").onclick = openAdmin;
+    $("closeAdmin").onclick = closeAdmin;
+    $("adminWrap").addEventListener("click", (e)=>{ if(e.target.id==="adminWrap") closeAdmin(); });
+
+    $("adminLoginBtn").onclick = async () => {
+      const email = ($("adminEmail").value||"").trim();
+      const password = $("adminPass").value || "";
+      $("adminMsg").textContent = "Ingresando...";
+
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+
+      if(error){
+        $("adminMsg").textContent = "❌ Email o contraseña incorrectos.";
+        return;
+      }
+
+      $("adminMsg").textContent = "✅ Sesión iniciada. Redirigiendo al panel...";
+      setTimeout(()=>{ location.href = "admin.html"; }, 600);
     };
   </script>
 </body>
