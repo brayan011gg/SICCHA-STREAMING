@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>SICCHA Streaming | Sorteo Prime Video</title>
+  <title>SICCHA Streaming | Sorteo Cerrado 🔒</title>
 
   <style>
     :root{
@@ -143,20 +143,20 @@
       text-shadow: 0 0 15px rgba(229,9,20,0.6);
     }
     .pill{
-      border:1px solid rgba(255,255,255,.15);
-      background: linear-gradient(135deg, rgba(229,9,20,.15), rgba(34,197,94,.1));
+      border:1px solid rgba(229,9,20,.3);
+      background: linear-gradient(135deg, rgba(229,9,20,.25), rgba(139,0,0,.2));
       padding:10px 16px;
       border-radius:999px;
       color:#fff;
       font-size:13px;
       white-space:nowrap;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(229,9,20,0.3);
+      animation: pulseRed 2s ease-in-out infinite;
     }
-    .pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(229,9,20,0.3);
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 4px 15px rgba(229,9,20,0.3); }
+      50% { box-shadow: 0 6px 25px rgba(229,9,20,0.5); }
     }
 
     .wrap{
@@ -194,7 +194,7 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #e50914, #22c55e, #fbbf24, #e50914);
+      background: linear-gradient(90deg, #e50914, #8b0000, #e50914);
       background-size: 200% 100%;
       animation: shimmer 3s linear infinite;
     }
@@ -202,35 +202,31 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-    .card:hover{
-      transform: translateY(-8px);
-      box-shadow: 0 25px 70px rgba(229,9,20,.25), 0 10px 40px rgba(0,0,0,.4);
-      border-color: rgba(229,9,20,.3);
-    }
     
     .cardPad{padding:20px 20px 18px;}
     .headline{
       padding:26px 24px 20px;
       background:
         radial-gradient(600px 220px at 10% 0%, rgba(229,9,20,.35), transparent 70%),
-        radial-gradient(400px 200px at 90% 100%, rgba(34,197,94,.15), transparent 60%),
+        radial-gradient(400px 200px at 90% 100%, rgba(139,0,0,.25), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.08), transparent);
       border-bottom:1px solid rgba(255,255,255,.08);
       position: relative;
       overflow: hidden;
     }
     .headline::after {
-      content: '❄️';
+      content: '🔒';
       position: absolute;
       top: 15px;
       right: 20px;
       font-size: 32px;
-      opacity: 0.2;
-      animation: spin 20s linear infinite;
+      opacity: 0.3;
+      animation: lockShake 3s ease-in-out infinite;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    @keyframes lockShake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
     }
     
     h1{
@@ -250,42 +246,131 @@
       font-size: 15px;
     }
 
-    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-    @media (max-width:560px){ .grid2{grid-template-columns:1fr;} }
-
-    label{
-      display:block; 
-      font-size:13px; 
-      color:#9ca3af; 
-      margin:12px 0 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    /* CANDADO GIGANTE ANIMADO */
+    .locked-container {
+      position: relative;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: 
+        radial-gradient(circle at 50% 50%, rgba(229,9,20,0.15), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+      border-radius: 20px;
+      padding: 40px 20px;
+      overflow: hidden;
     }
-    input{
-      width:100%;
-      padding:14px 16px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.15);
-      background: rgba(10,10,10,.6);
-      color:#fff;
-      outline:none;
-      font-size: 15px;
-      transition: all 0.3s ease;
+    
+    .locked-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(229,9,20,0.05) 10px,
+          rgba(229,9,20,0.05) 20px
+        );
+      animation: stripeMove 20s linear infinite;
     }
-    input:focus{
-      border-color: rgba(229,9,20,.7); 
-      box-shadow: 0 0 0 4px rgba(229,9,20,.15);
-      background: rgba(15,15,15,.8);
-      transform: translateY(-2px);
+    @keyframes stripeMove {
+      0% { transform: translateX(0) translateY(0); }
+      100% { transform: translateX(20px) translateY(20px); }
     }
-    input::placeholder {
-      color: rgba(255,255,255,0.3);
+    
+    .giant-lock {
+      font-size: 150px;
+      animation: lockBounce 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(229,9,20,0.6));
+      position: relative;
+      z-index: 2;
     }
+    @keyframes lockBounce {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        filter: drop-shadow(0 0 30px rgba(229,9,20,0.6));
+      }
+      25% { 
+        transform: scale(1.1) rotate(-5deg);
+        filter: drop-shadow(0 0 50px rgba(229,9,20,0.8));
+      }
+      75% { 
+        transform: scale(1.1) rotate(5deg);
+        filter: drop-shadow(0 0 50px rgba(229,9,20,0.8));
+      }
+    }
+    
+    .locked-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin: 20px 0 15px;
+      background: linear-gradient(135deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: titleGlow 2s ease-in-out infinite;
+    }
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+    
+    .locked-message {
+      font-size: 1.1rem;
+      color: #d1d5db;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0 auto 30px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .locked-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* Partículas flotantes alrededor del candado */
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #e50914;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(229,9,20,0.8);
+      animation: particleFloat 4s ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes particleFloat {
+      0%, 100% { 
+        opacity: 0;
+        transform: translateY(0) scale(0);
+      }
+      50% { 
+        opacity: 1;
+        transform: translateY(-80px) scale(1.5);
+      }
+    }
+    .particle:nth-child(1) { left: 30%; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 45%; animation-delay: 0.5s; }
+    .particle:nth-child(3) { left: 55%; animation-delay: 1s; }
+    .particle:nth-child(4) { left: 70%; animation-delay: 1.5s; }
+    .particle:nth-child(5) { left: 40%; animation-delay: 2s; }
+    .particle:nth-child(6) { left: 60%; animation-delay: 2.5s; }
 
     .btn{
-      width:100%;
-      padding:14px 18px;
+      padding:14px 24px;
       border-radius:16px;
       border:0;
       cursor:pointer;
@@ -326,14 +411,6 @@
       transform: translateY(-3px);
       box-shadow: 0 15px 40px rgba(229,9,20,.45);
     }
-    .btnPrimary:active {
-      transform: translateY(-1px);
-    }
-    .btnPrimary:disabled{
-      opacity:.6; 
-      cursor:not-allowed;
-      transform: none;
-    }
     .btnGhost{
       background: rgba(255,255,255,.1);
       color:#fff;
@@ -347,108 +424,6 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
 
-    .mini{font-size:13px; color:var(--muted); line-height: 1.6;}
-    .ok{
-      color:#d1fae5;
-      background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(34,197,94,.08));
-      border: 1px solid rgba(34,197,94,.3);
-      padding:14px 16px;
-      border-radius:16px;
-      margin-top:14px;
-      box-shadow: 0 4px 15px rgba(34,197,94,.1);
-    }
-
-    /* Ticket modal */
-    .modalWrap{
-      position:fixed; inset:0;
-      display:none; align-items:center; justify-content:center;
-      background: rgba(0,0,0,.75);
-      backdrop-filter: blur(8px);
-      z-index:100;
-      padding:16px;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .modal{
-      width:min(580px, 100%);
-      border-radius:24px;
-      border:1px solid rgba(229,9,20,.3);
-      background: linear-gradient(180deg, rgba(20,20,20,.98), rgba(15,15,15,.98));
-      box-shadow: 0 30px 90px rgba(0,0,0,.8), 0 0 60px rgba(229,9,20,.2);
-      overflow:hidden;
-      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    @keyframes slideUp {
-      from { 
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-    .modalTop{
-      padding:18px 20px 14px;
-      background: linear-gradient(135deg, rgba(229,9,20,.2), rgba(229,9,20,.05));
-      border-bottom:1px solid rgba(255,255,255,.1);
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-    }
-    .x{
-      background: rgba(255,255,255,.1);
-      border:1px solid rgba(255,255,255,.15);
-      color:#fff;
-      border-radius:12px;
-      padding:8px 12px;
-      cursor:pointer;
-      font-weight:900;
-      transition: all 0.3s ease;
-    }
-    .x:hover {
-      background: rgba(255,255,255,.15);
-      transform: rotate(90deg);
-    }
-    .modalBody{padding:20px;}
-    .ticketBox{
-      border-radius:20px;
-      border:2px dashed rgba(229,9,20,.4);
-      background: 
-        radial-gradient(500px 200px at 0% 0%, rgba(229,9,20,.25), rgba(0,0,0,.3)),
-        radial-gradient(400px 300px at 100% 100%, rgba(34,197,94,.15), transparent);
-      padding:20px 18px;
-      box-shadow: inset 0 2px 20px rgba(0,0,0,0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    .ticketBox::before {
-      content: '🎄';
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 60px;
-      opacity: 0.1;
-    }
-    .ticketCode{
-      font-size:32px;
-      font-weight:1000;
-      letter-spacing:2px;
-      margin:8px 0;
-      color: #fff;
-      text-shadow: 0 0 20px rgba(229,9,20,0.5);
-    }
-    .hint{
-      margin:12px 0 0;
-      color: #d1d5db;
-      line-height:1.45;
-      font-size:14px;
-    }
-    .actions{display:flex; gap:12px; margin-top:16px;}
-    .actions .btn{flex:1;}
-    @media (max-width:520px){ .actions{flex-direction:column;} }
-
     footer{
       max-width:1100px; 
       margin:auto auto 0; 
@@ -458,7 +433,7 @@
       text-align:center;
     }
     .badges{
-      display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content: center;
     }
     .badge{
       font-size:13px; 
@@ -495,13 +470,66 @@
       overflow:hidden;
       animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
     .adminBody{padding:20px;}
     .adminGrid{display:grid; gap:12px;}
-    .adminBtnRow{display:flex; gap:12px; margin-top:14px;}
-    .adminBtnRow .btn{flex:1;}
-    @media (max-width:520px){ .adminBtnRow{flex-direction:column;} }
+    .modalTop{
+      padding:18px 20px 14px;
+      background: linear-gradient(135deg, rgba(229,9,20,.2), rgba(229,9,20,.05));
+      border-bottom:1px solid rgba(255,255,255,.1);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .x{
+      background: rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.15);
+      color:#fff;
+      border-radius:12px;
+      padding:8px 12px;
+      cursor:pointer;
+      font-weight:900;
+      transition: all 0.3s ease;
+    }
+    .x:hover {
+      background: rgba(255,255,255,.15);
+      transform: rotate(90deg);
+    }
+    label{
+      display:block; 
+      font-size:13px; 
+      color:#9ca3af; 
+      margin:12px 0 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input{
+      width:100%;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(10,10,10,.6);
+      color:#fff;
+      outline:none;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    input:focus{
+      border-color: rgba(229,9,20,.7); 
+      box-shadow: 0 0 0 4px rgba(229,9,20,.15);
+      background: rgba(15,15,15,.8);
+      transform: translateY(-2px);
+    }
+    .mini{font-size:13px; color:var(--muted); line-height: 1.6;}
 
-    /* Decoración adicional */
     .santa-hat {
       position: fixed;
       top: 80px;
@@ -514,6 +542,14 @@
     @keyframes sway {
       0%, 100% { transform: rotate(-5deg); }
       50% { transform: rotate(5deg); }
+    }
+
+    @media (max-width: 768px) {
+      .giant-lock { font-size: 100px; }
+      .locked-title { font-size: 1.8rem; }
+      .locked-message { font-size: 1rem; }
+      .locked-buttons { flex-direction: column; width: 100%; }
+      .locked-buttons .btn { width: 100%; }
     }
   </style>
 </head>
@@ -541,7 +577,7 @@
   <header>
     <div class="topbar">
       <div class="brand"><div class="dot"></div> SICCHA <span>Streaming</span></div>
-      <div class="pill">🎄 Sorteo Prime Video • 5 ganadores • 20 días</div>
+      <div class="pill">🔒 SORTEO CERRADO</div>
     </div>
   </header>
 
@@ -549,53 +585,75 @@
     <section class="hero">
       <div class="card">
         <div class="headline">
-          <h1>Sorteo navideño 🎁</h1>
+          <h1>Sorteo cerrado 🔒</h1>
           <p class="sub">
-            Regístrate con tu nombre y celular. Te damos un <b>ticket único</b> y tu nombre aparecerá en la ruleta.
+            El periodo de inscripciones ha finalizado. Ya no es posible registrarse para participar en este sorteo.
           </p>
           <div class="badges">
-            <div class="badge">✅ 1 ticket por celular</div>
-            <div class="badge">🔒 Tickets únicos</div>
-            <div class="badge">🎡 Ruleta con participantes</div>
+            <div class="badge">✅ Inscripciones finalizadas</div>
+            <div class="badge">🎯 Ganadores próximamente</div>
           </div>
         </div>
 
         <div class="cardPad">
-          <div class="grid2">
-            <div>
-              <label>Nombre</label>
-              <input id="name" placeholder="Ej: Brayan">
+          <div class="locked-container">
+            <!-- Partículas flotantes -->
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            
+            <div class="giant-lock">🔒</div>
+            <h2 class="locked-title">Registro Bloqueado</h2>
+            <p class="locked-message">
+              El sorteo ha sido cerrado oficialmente. Si ya te registraste, 
+              puedes ver tu nombre en la ruleta y estar atento a los resultados.
+            </p>
+            
+            <div class="locked-buttons">
+              <button class="btn btnPrimary" onclick="location.href='ruleta.html'">
+                <span>🎡 Ver Ruleta</span>
+              </button>
+              <button class="btn btnGhost" onclick="location.href='resultados.html'">
+                <span>🏆 Ver Resultados</span>
+              </button>
             </div>
-            <div>
-              <label>Celular (WhatsApp)</label>
-              <input id="phone" placeholder="Ej: 987654321" inputmode="numeric">
-            </div>
-          </div>
-
-          <button id="btn" class="btn btnPrimary" style="margin-top:14px;">Participar</button>
-          <div id="msg" class="mini" style="margin-top:12px;"></div>
-
-          <div class="ok" style="margin-top:16px;">
-            Tip: usa tu <b>número real</b>. Si intentas registrarte otra vez con el mismo celular, te mostrará tu ticket anterior.
           </div>
         </div>
       </div>
 
       <div class="card">
         <div class="headline">
-          <h1 style="font-size:28px;margin-bottom:8px;">¿Cómo funciona?</h1>
-          <p class="sub">Participas hoy y luego se publican resultados.</p>
+          <h1 style="font-size:28px;margin-bottom:8px;">Estado del sorteo</h1>
+          <p class="sub">El sorteo ha cerrado pero aún puedes consultar información.</p>
         </div>
         <div class="cardPad">
-          <p class="mini" style="margin-bottom: 8px;">1) Te registras</p>
-          <p class="mini" style="margin-bottom: 8px;">2) Se genera tu ticket único</p>
-          <p class="mini" style="margin-bottom: 8px;">3) Tu nombre entra a la ruleta</p>
-          <p class="mini" style="margin-bottom: 12px;">4) Se muestran los ganadores en Resultados</p>
-          <p class="mini" style="margin-top:14px;color:#fff;font-weight:600;">
-            👇 Luego entra a la ruleta para ver tu nombre dentro.
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#e50914;">✕</strong> Ya no puedes registrarte
           </p>
-          <button class="btn btnGhost" style="margin-top: 12px;" onclick="location.href='ruleta.html'">Ver ruleta</button>
-          <button class="btn btnGhost" style="margin-top:10px;" onclick="location.href='resultados.html'">Ver resultados</button>
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#22c55e;">✓</strong> Puedes ver la ruleta con todos los participantes
+          </p>
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#22c55e;">✓</strong> Puedes verificar los resultados
+          </p>
+          <p class="mini" style="margin-bottom: 20px;">
+            <strong style="color:#22c55e;">✓</strong> Si ganaste, podrás reclamar con tu ticket
+          </p>
+          
+          <div style="background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); border-radius: 16px; padding: 16px; margin-top: 20px;">
+            <p style="margin: 0; color: #fff; font-size: 14px; line-height: 1.6;">
+              <strong>💡 Importante:</strong> Si te registraste antes del cierre, 
+              tu ticket sigue siendo válido. Revisa los resultados para ver si fuiste 
+              uno de los 5 ganadores.
+            </p>
+          </div>
+
+          <button class="btn btnPrimary" style="margin-top: 20px; width: 100%;" onclick="location.href='resultados.html'">
+            <span>🎊 Ir a Resultados</span>
+          </button>
         </div>
       </div>
     </section>
@@ -609,31 +667,6 @@
       </button>
     </div>
   </footer>
-
-  <!-- Ticket Modal -->
-  <div class="modalWrap" id="modalWrap">
-    <div class="modal">
-      <div class="modalTop">
-        <div style="font-weight:900;font-size:16px;">🎟️ Tu ticket de participación</div>
-        <button class="x" id="closeModal">✕</button>
-      </div>
-      <div class="modalBody">
-        <div class="ticketBox">
-          <div class="mini">Tu ticket único:</div>
-          <div class="ticketCode" id="ticketCode">SS-XXXXXX</div>
-          <div class="hint">
-            ✅ <b>Toma captura</b> de este ticket para reclamar si eres uno de los <b>5 ganadores</b>.<br>
-            (Guárdalo también en tus notas por si cambias de celular.)
-          </div>
-        </div>
-        <div class="actions">
-          <button class="btn btnGhost" id="copyBtn">Copiar ticket</button>
-          <button class="btn btnPrimary" onclick="location.href='ruleta.html'">Ver ruleta</button>
-        </div>
-        <div class="mini" id="copyMsg" style="margin-top:12px;"></div>
-      </div>
-    </div>
-  </div>
 
   <!-- Admin Login Modal -->
   <div class="adminWrap" id="adminWrap">
@@ -691,112 +724,65 @@
 
     const $ = (id) => document.getElementById(id);
 
-    function generarTicket(){
-      const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let t="SS-";
-      for(let i=0;i<6;i++) t+=c[Math.floor(Math.random()*c.length)];
-      return t;
+    // Admin modal functions
+    function openAdmin(){ 
+      $("adminWrap").style.display = "flex"; 
+      if($("adminMsg")) $("adminMsg").textContent = ""; 
     }
-    function limpiarTelefono(t){ return (t||"").replace(/\D/g,"").trim(); }
-
-    function openTicketModal(ticket){
-      localStorage.setItem("myTicket", ticket);
-      $("ticketCode").textContent = ticket;
-      $("modalWrap").style.display = "flex";
+    
+    function closeAdmin(){ 
+      $("adminWrap").style.display = "none"; 
+      if($("adminMsg")) $("adminMsg").textContent = ""; 
     }
-    function closeTicketModal(){ $("modalWrap").style.display = "none"; $("copyMsg").textContent=""; }
 
-    $("closeModal").onclick = closeTicketModal;
-    $("modalWrap").addEventListener("click", (e)=>{ if(e.target.id==="modalWrap") closeTicketModal(); });
+    // Event listeners
+    if($("openAdmin")) {
+      $("openAdmin").addEventListener("click", openAdmin);
+    }
+    
+    if($("closeAdmin")) {
+      $("closeAdmin").addEventListener("click", closeAdmin);
+    }
+    
+    if($("adminWrap")) {
+      $("adminWrap").addEventListener("click", (e) => { 
+        if(e.target.id === "adminWrap") closeAdmin(); 
+      });
+    }
 
-    $("copyBtn").onclick = async () => {
-      const t = $("ticketCode").textContent;
-      try{
-        await navigator.clipboard.writeText(t);
-        $("copyMsg").textContent = "✅ Ticket copiado. Toma captura también.";
-      }catch{
-        $("copyMsg").textContent = "Copia manual: " + t;
-      }
-    };
-
-    $("btn").onclick = async () => {
-      const name = ($("name").value||"").trim();
-      const phone = limpiarTelefono($("phone").value);
-      $("msg").textContent = "";
-
-      if(name.length < 2){ $("msg").textContent="❌ Escribe un nombre válido."; return; }
-      if(phone.length < 8){ $("msg").textContent="❌ Escribe un celular válido (solo números)."; return; }
-
-      $("btn").disabled = true;
-      $("btn").textContent = "Registrando...";
-
-      const { data: exists, error: selErr } = await sb
-        .from("participants")
-        .select("ticket,name")
-        .eq("phone", phone)
-        .maybeSingle();
-
-      if(selErr){
-        $("msg").textContent = "❌ Error: revisa permisos/URL/key.";
-        $("btn").disabled = false;
-        $("btn").textContent = "Participar";
-        return;
-      }
-
-      if(exists){
-        localStorage.setItem("myName", exists.name);
-        $("msg").textContent = "✅ Ya estabas registrado. Te mostramos tu ticket.";
-        $("btn").disabled = false;
-        $("btn").textContent = "Participar";
-        openTicketModal(exists.ticket);
-        return;
-      }
-
-      let ticket = generarTicket();
-      for(let tries=0; tries<4; tries++){
-        const { error: insErr } = await sb.from("participants").insert([{ name, phone, ticket }]);
-        if(!insErr){
-          localStorage.setItem("myName", name);
-          $("msg").textContent = "✅ Registro listo. Te mostramos tu ticket.";
-          break;
-        }
-        ticket = generarTicket();
-        if(tries===3){
-          $("msg").textContent = "❌ No se pudo registrar. Intenta otra vez.";
-          $("btn").disabled = false;
-          $("btn").textContent = "Participar";
+    // Login handler
+    if($("adminLoginBtn")) {
+      $("adminLoginBtn").addEventListener("click", async () => {
+        const email = ($("adminEmail").value || "").trim();
+        const password = $("adminPass").value || "";
+        
+        if(!email || !password) {
+          if($("adminMsg")) $("adminMsg").textContent = "❌ Por favor ingresa email y contraseña.";
           return;
         }
-      }
+        
+        if($("adminMsg")) $("adminMsg").textContent = "Ingresando...";
 
-      $("btn").disabled = false;
-      $("btn").textContent = "Participar";
-      openTicketModal(ticket);
-    };
+        try {
+          const { data, error } = await sb.auth.signInWithPassword({ 
+            email: email, 
+            password: password 
+          });
 
-    // ----- Admin modal -----
-    function openAdmin(){ $("adminWrap").style.display = "flex"; $("adminMsg").textContent = ""; }
-    function closeAdmin(){ $("adminWrap").style.display = "none"; $("adminMsg").textContent = ""; }
+          if(error){
+            console.error("Error de login:", error);
+            if($("adminMsg")) $("adminMsg").textContent = "❌ Email o contraseña incorrectos.";
+            return;
+          }
 
-    $("openAdmin").onclick = openAdmin;
-    $("closeAdmin").onclick = closeAdmin;
-    $("adminWrap").addEventListener("click", (e)=>{ if(e.target.id==="adminWrap") closeAdmin(); });
-
-    $("adminLoginBtn").onclick = async () => {
-      const email = ($("adminEmail").value||"").trim();
-      const password = $("adminPass").value || "";
-      $("adminMsg").textContent = "Ingresando...";
-
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-
-      if(error){
-        $("adminMsg").textContent = "❌ Email o contraseña incorrectos.";
-        return;
-      }
-
-      $("adminMsg").textContent = "✅ Sesión iniciada. Redirigiendo al panel...";
-      setTimeout(()=>{ location.href = "admin.html"; }, 600);
-    };
+          if($("adminMsg")) $("adminMsg").textContent = "✅ Sesión iniciada. Redirigiendo al panel...";
+          setTimeout(() => { 
+            window.location.href = "admin.html"; 
+          }, 600);
+        } catch(err) {
+          console.error("Error inesperado:", err);
+          if($("adminMsg")) $("adminMsg").textContent = "❌ Error al iniciar sesión.";
+        }
+      });
+    }
   </script>
-</body>
-</html>
