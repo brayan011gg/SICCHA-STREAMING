@@ -68,13 +68,12 @@
 
     // mañana 5:00 PM
     function getTarget(){
-      const now = new Date();
-      const t = new Date(now);
-      t.setDate(now.getDate() + 1);
-      t.setHours(17,0,0,0);
-      return t;
-    }
-    const target = getTarget();
+  const now = new Date();
+  const target = new Date(now);
+  target.setHours(17, 0, 0, 0); // hoy 5:00 PM
+  return target;
+}
+   const target = getTarget();
 
     function tick(){
       const now = new Date();
@@ -130,3 +129,4 @@
   </script>
 </body>
 </html>
+
