@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SICCHA Streaming | Ruleta</title>
+
+  <style>
+    :root{
+      --bg:#070707; --panel:rgba(20,20,20,.78); --border:rgba(255,255,255,.10);
+      --red:#e50914; --muted:#b3b3b3; --shadow:0 18px 60px rgba(0,0,0,.55);
+      --green:#22c55e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+      color:#fff;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(229,9,20,.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 0%, rgba(34,197,94,.18), transparent 55%),
+        linear-gradient(180deg, #050505, #0b0b0b 40%, #050505);
+      overflow-x:hidden;
+    }
+    .snow{
+      pointer-events:none; position:fixed; inset:0; z-index:0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(2px 2px at 120px 80px, rgba(255,255,255,.7), transparent 60%),
+        radial-gradient(1px 1px at 60px 140px, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 180px 200px, rgba(255,255,255,.65), transparent 60%),
+        radial-gradient(2px 2px at 240px 120px, rgba(255,255,255,.75), transparent 60%);
+      background-size: 260px 260px;
+      animation: snowMove 10s linear infinite;
+      opacity:.35;
+    }
+    @keyframes snowMove{from{transform:translateY(-40px)}to{transform:translateY(40px)}}
+
+    header{
+      position:sticky; top:0; z-index:5;
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.35);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .topbar{
+      max-width:1200px; margin:0 auto; padding:16px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.4px;}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--red);box-shadow:0 0 18px rgba(229,9,20,.8);}
+    .brand span{color:var(--red)}
+    .pill{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      padding:8px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    a{color:#fff; text-decoration:none}
+    .wrap{max-width:1200px; margin:0 auto; padding:26px 18px 56px; position:relative; z-index:1;}
+
+    .layout{
+      display:grid; grid-template-columns: 1.05fr .95fr; gap:18px;
+      align-items:start;
+    }
+    @media (max-width:980px){ .layout{grid-template-columns:1fr;} }
+
+    .card{
+      border:1px solid var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      border-radius:22px;
+      overflow:hidden;
+    }
+    .head{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .title{font-weight:1000}
+    .mini{font-size:12px; color:var(--muted)}
+    .pad{padding:16px}
+    .countdown{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    .cdBox{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
+      min-width:92px;
+      text-align:center;
+    }
+    .cdNum{font-size:22px; font-weight:1000; letter-spacing:.5px}
+    .cdLbl{font-size:11px; color:var(--muted)}
+    .note{
+      margin-top:10px; padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(34,197,94,.25);
+      background: rgba(34,197,94,.10);
+      color:#d1fae5;
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    .wheelWrap{display:grid; gap:12px; align-items:center; justify-items:center;}
+    canvas{
+      width:min(520px, 100%);
+      height:auto;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), rgba(0,0,0,.35));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 20px 70px rgba(0,0,0,.6);
+    }
+    .pointer{
+      width:0;height:0;
+      border-left:14px solid transparent;
+      border-right:14px solid transparent;
+      border-top:22px solid #fff;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.55));
+      margin-bottom:-8px;
+    }
+    .myTicket{margin-top:8px;font-size:12px;color:var(--muted);}
+
+    .list{max-height:520px; overflow:auto; padding-right:6px;}
+    .item{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.28);
+      margin:8px 0;
+    }
+    .me{
+      border-color: rgba(229,9,20,.65);
+      box-shadow: 0 0 0 2px rgba(229,9,20,.12) inset;
+    }
+    .pillMe{
+      font-size:11px;
+      padding:3px 10px;
+      border-radius:999px;
+      background: rgba(229,9,20,.15);
+      border:1px solid rgba(229,9,20,.35);
+      margin-left:8px;
+      color:#fff;
+    }
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    .btn{
+      padding:10px 12px; border-radius:14px; border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.08); color:#fff; cursor:pointer; font-weight:900;
+    }
+    .btnPrimary{border:0;background: linear-gradient(90deg, #ff0a16, #c9000a);}
+    .adminTag{
+      font-size:11px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="snow"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand"><div class="dot"></div> SICCHA <span>Streaming</span></div>
+      <div class="pill"><a href="index.html">← Volver al registro</a></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="layout">
+      <!-- Wheel card -->
+      <section class="card">
+        <div class="head">
+          <div>
+            <div class="title">🎡 Ruleta navideña</div>
+            <div class="mini" id="modeLabel">Modo público • Solo nombres</div>
+          </div>
+          <div id="adminBadge" class="adminTag" style="display:none;">ADMIN</div>
+        </div>
+
+        <div class="pad">
+          <div class="countdown">
+            <div class="cdBox"><div class="cdNum" id="d">--</div><div class="cdLbl">DÍAS</div></div>
+            <div class="cdBox"><div class="cdNum" id="h">--</div><div class="cdLbl">HORAS</div></div>
+            <div class="cdBox"><div class="cdNum" id="m">--</div><div class="cdLbl">MIN</div></div>
+            <div class="cdBox"><div class="cdNum" id="s">--</div><div class="cdLbl">SEG</div></div>
+          </div>
+
+          <div class="note">
+            ⏳ Resultados: <b>mañana a las 5:00 PM</b>. Contador en retroceso en tiempo real.
+          </div>
+
+          <div class="wheelWrap" style="margin-top:14px;">
+            <div class="pointer"></div>
+            <canvas id="wheel" width="900" height="900"></canvas>
+            <div class="myTicket" id="myTicket"></div>
+
+            <div class="btnRow">
+              <button class="btn btnPrimary" id="spinBtn" style="display:none;">Girar (solo admin)</button>
+              <button class="btn" id="refreshBtn">Actualizar lista</button>
+            </div>
+            <div class="mini" id="pickMsg" style="margin-top:10px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- List card -->
+      <section class="card">
+        <div class="head">
+          <div>
+            <div class="title">📋 Participantes</div>
+            <div class="mini" id="count">Cargando...</div>
+          </div>
+        </div>
+        <div class="pad">
+          <div class="list" id="list"></div>
+          <div class="mini" id="err" style="margin-top:10px;"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ✅ Supabase
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+    );
+
+    const $ = (id)=>document.getElementById(id);
+
+    // ✅ ADMIN por URL: ruleta.html?admin=SICCHA2025
+    const ADMIN_CODE = "SICCHA2025"; // cambia esto si quieres
+    const params = new URLSearchParams(location.search);
+    const isAdmin = params.get("admin") === ADMIN_CODE;
+
+    if(isAdmin){
+      $("spinBtn").style.display = "inline-block";
+      $("adminBadge").style.display = "inline-block";
+      $("modeLabel").textContent = "Modo admin • Puedes girar la ruleta";
+    }else{
+      $("modeLabel").textContent = "Modo público • Ruleta solo nombres";
+      $("pickMsg").textContent = "🔒 El giro está desactivado para público.";
+    }
+
+    // ---- Countdown: mañana 5:00 PM (hora local del PC) ----
+    function getTarget(){
+      const now = new Date();
+      const target = new Date(now);
+      target.setDate(now.getDate() + 1);
+      target.setHours(17, 0, 0, 0);
+      return target;
+    }
+    const target = getTarget();
+
+    function tick(){
+      const now = new Date();
+      let diff = target - now;
+      if(diff <= 0){
+        $("d").textContent="0"; $("h").textContent="0"; $("m").textContent="0"; $("s").textContent="0";
+        if(isAdmin) $("pickMsg").textContent = "✅ Ya es hora de resultados (5:00 PM).";
+        return;
+      }
+      const sec = Math.floor(diff/1000);
+      const days = Math.floor(sec/86400);
+      const hrs  = Math.floor((sec%86400)/3600);
+      const mins = Math.floor((sec%3600)/60);
+      const secs = sec%60;
+
+      $("d").textContent = String(days);
+      $("h").textContent = String(hrs).padStart(2,"0");
+      $("m").textContent = String(mins).padStart(2,"0");
+      $("s").textContent = String(secs).padStart(2,"0");
+    }
+    setInterval(tick, 1000); tick();
+
+    // ---- Mask name (solo nombres) ----
+    function maskName(fullName){
+      const parts = fullName.trim().split(/\s+/);
+      const first = parts[0] || "";
+      const last  = parts[1] || "";
+      const initial = last ? (last[0].toUpperCase() + ".") : "";
+      return (first + (initial ? (" " + initial) : "")).trim();
+    }
+
+    // ---- Load participants ----
+    let participants = [];
+    async function loadParticipants(){
+      $("err").textContent = "";
+      const { data, error } = await sb
+        .from("participants")
+        .select("name,ticket,created_at")
+        .order("created_at", { ascending:false });
+
+      if(error){
+        $("err").textContent = "❌ Error cargando participantes: " + error.message;
+        return;
+      }
+      participants = data || [];
+      renderList();
+      drawWheel();
+    }
+
+    function renderList(){
+      const myTicket = localStorage.getItem("myTicket");
+      $("count").textContent = `Total: ${participants.length} participantes`;
+
+      // ✅ SOLO NOMBRES (sin ticket)
+      $("list").innerHTML = participants.map(p=>{
+        const isMe = myTicket && p.ticket === myTicket;
+        return `
+          <div class="item ${isMe ? "me" : ""}">
+            <div>
+              <b>${maskName(p.name)}</b>
+              ${isMe ? `<span class="pillMe">TÚ</span>` : ``}
+              <div class="mini">${new Date(p.created_at).toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      }).join("") || `<div class="mini">Aún no hay participantes.</div>`;
+
+      if(myTicket){
+        $("myTicket").textContent = `✅ Tu ticket está guardado en este navegador (no se muestra al público).`;
+      }else{
+        $("myTicket").textContent = `Tip: regístrate para que se marque tu nombre como “TÚ”.`;
+      }
+    }
+
+    // ---- Wheel (canvas) ----
+    const canvas = $("wheel");
+    const ctx = canvas.getContext("2d");
+    let angle = 0;
+    let spinning = false;
+    let spinVel = 0;
+
+    function drawWheel(){
+      const names = participants.map(p => maskName(p.name));
+      const n = Math.max(names.length, 1);
+
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      const cx = canvas.width/2, cy = canvas.height/2;
+      const radius = canvas.width * 0.44;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+
+      for(let i=0;i<n;i++){
+        const start = (i * 2*Math.PI)/n;
+        const end   = ((i+1) * 2*Math.PI)/n;
+
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.arc(0,0,radius,start,end);
+        ctx.closePath();
+        ctx.fillStyle = (i%2===0) ? "rgba(229,9,20,.85)" : "rgba(34,197,94,.75)";
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,.20)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        const mid = (start+end)/2;
+        ctx.save();
+        ctx.rotate(mid);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "rgba(255,255,255,.95)";
+        ctx.font = "bold 28px ui-sans-serif, system-ui";
+        const label = names[i] || "—";
+        ctx.fillText(label.length>14 ? label.slice(0,14)+"…" : label, radius - 18, 10);
+        ctx.restore();
+      }
+
+      // center cap
+      ctx.beginPath();
+      ctx.arc(0,0, radius*0.18, 0, 2*Math.PI);
+      ctx.fillStyle = "rgba(0,0,0,.55)";
+      ctx.fill();
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = "rgba(255,255,255,.18)";
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,.95)";
+      ctx.font = "900 24px ui-sans-serif, system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText("SICCHA", 0, -6);
+      ctx.fillStyle = "rgba(229,9,20,.95)";
+      ctx.fillText("Streaming", 0, 22);
+
+      ctx.restore();
+    }
+
+    function animate(){
+      requestAnimationFrame(animate);
+
+      if(!spinning){
+        angle += 0.0012;
+        drawWheel();
+        return;
+      }
+
+      angle += spinVel;
+      spinVel *= 0.985;
+
+      if(spinVel < 0.002){
+        spinning = false;
+        spinVel = 0;
+
+        // Solo admin ve el seleccionado
+        if(isAdmin){
+          const n = Math.max(participants.length, 1);
+          const normalized = (2*Math.PI - (angle % (2*Math.PI))) % (2*Math.PI);
+          const index = Math.floor((normalized / (2*Math.PI)) * n) % n;
+          const picked = participants[index] ? maskName(participants[index].name) : "—";
+          $("pickMsg").textContent = `🎉 Seleccionado (demo): ${picked}`;
+        }
+      }
+      drawWheel();
+    }
+
+    $("spinBtn").onclick = ()=>{
+      if(!isAdmin) return;
+      if(participants.length < 2){
+        $("pickMsg").textContent = "Agrega más participantes para que se vea mejor.";
+        return;
+      }
+      if(spinning) return;
+      $("pickMsg").textContent = "Girando...";
+      spinning = true;
+      spinVel = 0.35 + Math.random()*0.25;
+    };
+
+    $("refreshBtn").onclick = loadParticipants;
+
+    loadParticipants();
+    setInterval(loadParticipants, 6000);
+    drawWheel();
+    animate();
+  </script>
+</body>
+</html>

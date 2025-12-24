@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SICCHA Streaming | Admin Sorteo</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:#070707;color:#fff}
+    .wrap{max-width:900px;margin:auto;padding:24px}
+    .card{background:rgba(20,20,20,.85);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:16px;margin:12px 0}
+    input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:#0f0f0f;color:#fff}
+    button{padding:12px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:900}
+    .btn{background:#e50914;color:#fff}
+    .btn2{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:700px){.row{grid-template-columns:1fr}}
+    .small{font-size:12px;color:#b3b3b3}
+    .ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);padding:10px 12px;border-radius:12px}
+    .err{background:rgba(229,9,20,.12);border:1px solid rgba(229,9,20,.25);padding:10px 12px;border-radius:12px}
+    .list .item{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:#0f0f0f;border:1px solid rgba(255,255,255,.10);margin:8px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 style="margin:0 0 6px;">Admin • SICCHA Streaming</h1>
+    <div class="small">Aquí haces el sorteo y guardas los 5 ganadores en Supabase.</div>
+
+    <div class="card" id="loginCard">
+      <h3 style="margin:0 0 10px;">Iniciar sesión (admin)</h3>
+      <div class="row">
+        <div>
+          <div class="small">Email</div>
+          <input id="email" placeholder="tuemail@gmail.com" />
+        </div>
+        <div>
+          <div class="small">Password</div>
+          <input id="password" type="password" placeholder="********" />
+        </div>
+      </div>
+      <button class="btn" id="loginBtn" style="margin-top:10px;">Entrar</button>
+      <div id="loginMsg" class="small" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card" id="adminCard" style="display:none;">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;">
+        <div>
+          <h3 style="margin:0;">Panel del sorteo</h3>
+          <div class="small">Botón para elegir 5 ganadores aleatorios (sin repetir).</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn2" id="logoutBtn">Salir</button>
+          <a class="btn2" href="resultados.html" style="text-decoration:none;display:inline-flex;align-items:center;">Ver resultados</a>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <button class="btn" id="drawBtn">🎉 Elegir 5 ganadores y guardar</button>
+        <button class="btn2" id="clearBtn">🧹 Borrar ganadores (reset)</button>
+      </div>
+
+      <div id="adminMsg" style="margin-top:12px;"></div>
+
+      <h3 style="margin:16px 0 8px;">Ganadores guardados</h3>
+      <div class="list" id="winnersList"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+    );
+    const $ = (id)=>document.getElementById(id);
+
+    function maskName(fullName){
+      const parts = fullName.trim().split(/\s+/);
+      const first = parts[0] || "";
+      const last  = parts[1] || "";
+      const initial = last ? (last[0].toUpperCase() + ".") : "";
+      return (first + (initial ? (" " + initial) : "")).trim();
+    }
+
+    function setMsg(el, html){ el.innerHTML = html; }
+
+    async function refreshWinners(){
+      const { data, error } = await sb
+        .from("winners")
+        .select("name,ticket,drawn_at")
+        .order("drawn_at", { ascending:false });
+
+      if(error){
+        $("winnersList").innerHTML = `<div class="small">Error cargando ganadores: ${error.message}</div>`;
+        return;
+      }
+      if(!data || data.length===0){
+        $("winnersList").innerHTML = `<div class="small">Aún no hay ganadores guardados.</div>`;
+        return;
+      }
+      $("winnersList").innerHTML = data.map((w,i)=>`
+        <div class="item">
+          <div><b>#${i+1}</b> ${maskName(w.name)}</div>
+          <div class="small">${new Date(w.drawn_at).toLocaleString()}</div>
+        </div>
+      `).join("");
+    }
+
+    async function updateUI(){
+      const { data } = await sb.auth.getUser();
+      const isLogged = !!data?.user;
+      $("loginCard").style.display = isLogged ? "none" : "block";
+      $("adminCard").style.display = isLogged ? "block" : "none";
+      if(isLogged) refreshWinners();
+    }
+
+    $("loginBtn").onclick = async ()=>{
+      $("loginMsg").textContent = "Ingresando...";
+      const email = $("email").value.trim();
+      const password = $("password").value;
+
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if(error){
+        $("loginMsg").textContent = "❌ " + error.message;
+        return;
+      }
+      $("loginMsg").textContent = "✅ Sesión iniciada.";
+      updateUI();
+    };
+
+    $("logoutBtn").onclick = async ()=>{
+      await sb.auth.signOut();
+      updateUI();
+    };
+
+    function pickRandomUnique(arr, k){
+      const copy = [...arr];
+      // Fisher-Yates shuffle
+      for(let i=copy.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [copy[i],copy[j]] = [copy[j],copy[i]];
+      }
+      return copy.slice(0, k);
+    }
+
+    $("drawBtn").onclick = async ()=>{
+      setMsg($("adminMsg"), `<div class="small">Cargando participantes...</div>`);
+
+      // 1) leer participantes
+      const { data: participants, error: pErr } = await sb
+        .from("participants")
+        .select("name,ticket,created_at");
+
+      if(pErr){
+        setMsg($("adminMsg"), `<div class="err">❌ Error leyendo participantes: ${pErr.message}</div>`);
+        return;
+      }
+      if(!participants || participants.length < 5){
+        setMsg($("adminMsg"), `<div class="err">❌ Necesitas al menos 5 participantes. Actualmente: ${participants?.length || 0}</div>`);
+        return;
+      }
+
+      // 2) elegir 5 ganadores sin repetir
+      const chosen = pickRandomUnique(participants, 5);
+
+      // 3) borrar ganadores anteriores (opcional pero recomendado)
+      const { error: delErr } = await sb.from("winners").delete().neq("id", -1);
+      if(delErr){
+        setMsg($("adminMsg"), `<div class="err">❌ No pude limpiar ganadores antiguos: ${delErr.message}</div>`);
+        return;
+      }
+
+      // 4) guardar ganadores nuevos
+      const rows = chosen.map(x => ({ name: x.name, ticket: x.ticket }));
+      const { error: insErr } = await sb.from("winners").insert(rows);
+      if(insErr){
+        setMsg($("adminMsg"), `<div class="err">❌ Error guardando ganadores: ${insErr.message}</div>`);
+        return;
+      }
+
+      setMsg($("adminMsg"), `<div class="ok">✅ Ganadores guardados. Ya se verán en <b>resultados.html</b>.</div>`);
+      refreshWinners();
+    };
+
+    $("clearBtn").onclick = async ()=>{
+      const { error } = await sb.from("winners").delete().neq("id", -1);
+      if(error){
+        setMsg($("adminMsg"), `<div class="err">❌ Error borrando: ${error.message}</div>`);
+        return;
+      }
+      setMsg($("adminMsg"), `<div class="ok">✅ Ganadores borrados.</div>`);
+      refreshWinners();
+    };
+
+    updateUI();
+  </script>
+</body>
+</html>

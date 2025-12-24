@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SICCHA Streaming | Sorteo Prime Video</title>
+
+  <style>
+    :root{
+      --bg:#070707;
+      --panel: rgba(20,20,20,.78);
+      --border: rgba(255,255,255,.10);
+      --red:#e50914;
+      --muted:#b3b3b3;
+      --good:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+      color:#fff;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(229,9,20,.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 0%, rgba(255,255,255,.08), transparent 50%),
+        linear-gradient(180deg, #050505, #0b0b0b 40%, #050505);
+      overflow-x:hidden;
+    }
+
+    /* Snow (simple) */
+    .snow {
+      pointer-events:none;
+      position:fixed; inset:0; z-index:0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(2px 2px at 120px 80px, rgba(255,255,255,.7), transparent 60%),
+        radial-gradient(1px 1px at 60px 140px, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 180px 200px, rgba(255,255,255,.65), transparent 60%),
+        radial-gradient(2px 2px at 240px 120px, rgba(255,255,255,.75), transparent 60%);
+      background-size: 260px 260px;
+      animation: snowMove 10s linear infinite;
+      opacity:.35;
+    }
+    @keyframes snowMove{
+      from{transform: translateY(-40px)}
+      to{transform: translateY(40px)}
+    }
+
+    header{
+      position:sticky; top:0; z-index:5;
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.35);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar{
+      max-width:1100px; margin:0 auto; padding:16px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:.4px;
+    }
+    .brand .dot{
+      width:10px; height:10px; border-radius:999px; background:var(--red);
+      box-shadow: 0 0 18px rgba(229,9,20,.8);
+    }
+    .brand span{color:var(--red)}
+    .pill{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      padding:8px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .wrap{max-width:1100px; margin:0 auto; padding:26px 18px 56px; position:relative; z-index:1;}
+    .hero{
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr;} }
+
+    .card{
+      border:1px solid var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      border-radius:22px;
+      overflow:hidden;
+    }
+    .cardPad{padding:18px 18px 16px;}
+    .headline{
+      padding:22px 20px 18px;
+      background:
+        radial-gradient(600px 220px at 10% 0%, rgba(229,9,20,.28), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    h1{margin:0 0 8px; font-size:32px; line-height:1.1;}
+    .sub{margin:0; color:var(--muted); line-height:1.45}
+
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    @media (max-width:560px){ .grid2{grid-template-columns:1fr;} }
+
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px;}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.40);
+      color:#fff;
+      outline:none;
+    }
+    input:focus{border-color: rgba(229,9,20,.65); box-shadow: 0 0 0 4px rgba(229,9,20,.12);}
+    .btn{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:.3px;
+    }
+    .btnPrimary{
+      background: linear-gradient(90deg, #ff0a16, #c9000a);
+      color:#fff;
+      box-shadow: 0 12px 30px rgba(229,9,20,.22);
+    }
+    .btnPrimary:disabled{opacity:.55; cursor:not-allowed;}
+    .btnGhost{
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .mini{font-size:12px; color:var(--muted)}
+    .ok{
+      color:#d1fae5;
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.25);
+      padding:10px 12px;
+      border-radius:14px;
+      margin-top:12px;
+    }
+
+    /* Ticket modal */
+    .modalWrap{
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.65);
+      z-index:50;
+      padding:16px;
+    }
+    .modal{
+      width:min(560px, 100%);
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,15,15,.92);
+      box-shadow: 0 30px 90px rgba(0,0,0,.7);
+      overflow:hidden;
+    }
+    .modalTop{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .x{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .modalBody{padding:16px;}
+    .ticketBox{
+      border-radius:18px;
+      border:1px dashed rgba(255,255,255,.22);
+      background: radial-gradient(500px 200px at 0% 0%, rgba(229,9,20,.22), rgba(0,0,0,.2));
+      padding:14px 14px;
+    }
+    .ticketCode{
+      font-size:30px;
+      font-weight:1000;
+      letter-spacing:1px;
+      margin:6px 0 6px;
+    }
+    .hint{
+      margin:10px 0 0;
+      color: var(--muted);
+      line-height:1.35;
+      font-size:13px;
+    }
+    .actions{display:flex; gap:10px; margin-top:14px;}
+    .actions .btn{flex:1;}
+    @media (max-width:520px){ .actions{flex-direction:column;} }
+
+    footer{
+      max-width:1100px; margin:22px auto 0; padding:0 18px;
+      color:rgba(255,255,255,.35); font-size:12px;
+    }
+    .badges{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+    }
+    .badge{
+      font-size:12px; color:var(--muted);
+      padding:8px 10px; border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="snow"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand"><div class="dot"></div> SICCHA <span>Streaming</span></div>
+      <div class="pill">🎄 Sorteo Prime Video • 5 ganadores • 20 días</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="card">
+        <div class="headline">
+          <h1>Sorteo navideño 🎁</h1>
+          <p class="sub">
+            Regístrate con tu nombre y celular. Te damos un <b>ticket único</b> y tu nombre aparecerá en la ruleta.
+          </p>
+          <div class="badges">
+            <div class="badge">✅ 1 ticket por celular</div>
+            <div class="badge">🔒 Tickets únicos</div>
+            <div class="badge">🎡 Ruleta con participantes</div>
+          </div>
+        </div>
+
+        <div class="cardPad">
+          <div class="grid2">
+            <div>
+              <label>Nombre</label>
+              <input id="name" placeholder="Ej: Brayan">
+            </div>
+            <div>
+              <label>Celular (WhatsApp)</label>
+              <input id="phone" placeholder="Ej: 987654321" inputmode="numeric">
+            </div>
+          </div>
+
+          <button id="btn" class="btn btnPrimary" style="margin-top:12px;">Participar</button>
+          <div id="msg" class="mini" style="margin-top:10px;"></div>
+
+          <div class="ok" style="margin-top:14px;">
+            Tip: usa tu <b>número real</b>. Si intentas registrarte otra vez con el mismo celular, te mostrará tu ticket anterior.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="headline">
+          <h1 style="font-size:26px;margin-bottom:6px;">¿Cómo funciona?</h1>
+          <p class="sub">Participas hoy y mañana se publican resultados.</p>
+        </div>
+        <div class="cardPad">
+          <p class="mini">1) Te registras</p>
+          <p class="mini">2) Se genera tu ticket único</p>
+          <p class="mini">3) Tu nombre entra a la ruleta</p>
+          <p class="mini">4) Mañana 5:00 PM se muestran ganadores</p>
+          <p class="mini" style="margin-top:12px;color:#fff;">
+            👇 Luego entra a la ruleta para ver tu nombre dentro.
+          </p>
+          <button class="btn btnGhost" onclick="location.href='ruleta.html'">Ver ruleta</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    SICCHA Streaming © 2025 • Sorteo promocional (no afiliado a Prime Video).
+  </footer>
+
+  <!-- Ticket Modal -->
+  <div class="modalWrap" id="modalWrap">
+    <div class="modal">
+      <div class="modalTop">
+        <div style="font-weight:900;">🎟️ Tu ticket de participación</div>
+        <button class="x" id="closeModal">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="ticketBox">
+          <div class="mini">Tu ticket único:</div>
+          <div class="ticketCode" id="ticketCode">SS-XXXXXX</div>
+          <div class="hint">
+            ✅ <b>Toma captura</b> de este ticket para reclamar si eres uno de los <b>5 ganadores</b>.<br>
+            (Guárdalo también en tus notas por si cambias de celular.)
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btnGhost" id="copyBtn">Copiar ticket</button>
+          <button class="btn btnPrimary" onclick="location.href='ruleta.html'">Ver ruleta</button>
+        </div>
+        <div class="mini" id="copyMsg" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+    );
+
+    const $ = (id) => document.getElementById(id);
+
+    function generarTicket(){
+      const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let t="SS-";
+      for(let i=0;i<6;i++) t+=c[Math.floor(Math.random()*c.length)];
+      return t;
+    }
+    function limpiarTelefono(t){ return (t||"").replace(/\D/g,"").trim(); }
+
+    function openModal(ticket){
+      localStorage.setItem("myTicket", ticket);
+      $("ticketCode").textContent = ticket;
+      $("modalWrap").style.display = "flex";
+    }
+    function closeModal(){ $("modalWrap").style.display = "none"; $("copyMsg").textContent=""; }
+
+    $("closeModal").onclick = closeModal;
+    $("modalWrap").addEventListener("click", (e)=>{ if(e.target.id==="modalWrap") closeModal(); });
+
+    $("copyBtn").onclick = async () => {
+      const t = $("ticketCode").textContent;
+      try{
+        await navigator.clipboard.writeText(t);
+        $("copyMsg").textContent = "✅ Ticket copiado. Toma captura también.";
+      }catch{
+        $("copyMsg").textContent = "Copia manual: " + t;
+      }
+    };
+
+    $("btn").onclick = async () => {
+      const name = ($("name").value||"").trim();
+      const phone = limpiarTelefono($("phone").value);
+      $("msg").textContent = "";
+
+      if(name.length < 2){ $("msg").textContent="❌ Escribe un nombre válido."; return; }
+      if(phone.length < 8){ $("msg").textContent="❌ Escribe un celular válido (solo números)."; return; }
+
+      $("btn").disabled = true;
+      $("btn").textContent = "Registrando...";
+
+      // Si ya existe, mostrar ticket anterior
+      const { data: exists, error: selErr } = await sb
+        .from("participants")
+        .select("ticket,name")
+        .eq("phone", phone)
+        .maybeSingle();
+
+      if(selErr){
+        $("msg").textContent = "❌ Error: revisa permisos/URL/key.";
+        $("btn").disabled = false;
+        $("btn").textContent = "Participar";
+        return;
+      }
+
+      if(exists){
+        localStorage.setItem("myName", exists.name);
+        $("msg").textContent = "✅ Ya estabas registrado. Te mostramos tu ticket.";
+        $("btn").disabled = false;
+        $("btn").textContent = "Participar";
+        openModal(exists.ticket);
+        return;
+      }
+
+      // Insert nuevo
+      let ticket = generarTicket();
+      for(let tries=0; tries<4; tries++){
+        const { error: insErr } = await sb.from("participants").insert([{ name, phone, ticket }]);
+        if(!insErr){
+          localStorage.setItem("myName", name);
+          $("msg").textContent = "✅ Registro listo. Te mostramos tu ticket.";
+          break;
+        }
+        ticket = generarTicket();
+        if(tries===3){
+          $("msg").textContent = "❌ No se pudo registrar. Intenta otra vez.";
+          $("btn").disabled = false;
+          $("btn").textContent = "Participar";
+          return;
+        }
+      }
+
+      $("btn").disabled = false;
+      $("btn").textContent = "Participar";
+      openModal(ticket);
+    };
+  </script>
+</body>
+</html>
