@@ -467,133 +467,134 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // ✅ Tus datos de Supabase
-    const sb = window.supabase.createClient(
-      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
-      "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
-    );
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ✅ Tus datos de Supabase
+  const sb = window.supabase.createClient(
+    "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+    "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
+  );
 
-    const $ = (id) => document.getElementById(id);
-    function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  const $ = (id) => document.getElementById(id);
+  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function pad2(n){ return String(n).padStart(2,"0"); }
 
-    // ====== COUNTDOWN (HOY 5:00 PM) ======
-    function getTargetToday5pm(){
-      const now = new Date();
-      const t = new Date(now);
-      t.setHours(17,0,0,0); // 5:00 PM
-      return t;
+  // ====== COUNTDOWN (HOY 5:00 PM) ======
+  function getTargetToday5pm(){
+    const now = new Date();
+    const t = new Date(now);
+    t.setHours(17,0,0,0); // 5:00 PM
+    return t;
+  }
+
+  function updateCountdown(){
+    const now = new Date();
+    const target = getTargetToday5pm();
+    let ms = target - now;
+    if(ms < 0) ms = 0;
+
+    const s = Math.floor(ms/1000);
+    const days = Math.floor(s/86400);
+    const hours = Math.floor((s%86400)/3600);
+    const mins = Math.floor((s%3600)/60);
+    const secs = s%60;
+
+    if($("d")) $("d").textContent = days;
+    if($("h")) $("h").textContent = pad2(hours);
+    if($("m")) $("m").textContent = pad2(mins);
+    if($("s")) $("s").textContent = pad2(secs);
+
+    if($("countText")){
+      $("countText").textContent = ms > 0
+        ? `Faltan ${days} día(s), ${hours} hora(s) y ${mins} min para las 5:00 PM.`
+        : "✅ El sorteo ya puede publicarse / ya ocurrió.";
     }
-    function pad2(n){ return String(n).padStart(2,"0"); }
-
-    function updateCountdown(){
-      const now = new Date();
-      const target = getTargetToday5pm();
-      let ms = target - now;
-
-      if(ms < 0) ms = 0;
-
-      const s = Math.floor(ms/1000);
-      const days = Math.floor(s/86400);
-      const hours = Math.floor((s%86400)/3600);
-      const mins = Math.floor((s%3600)/60);
-      const secs = s%60;
-
-      $("d").textContent = days;
-      $("h").textContent = pad2(hours);
-      $("m").textContent = pad2(mins);
-      $("s").textContent = pad2(secs);
-
-      if(ms > 0){
-        $("countText").textContent = `Faltan ${days} día(s), ${hours} hora(s) y ${mins} min para las 5:00 PM.`;
-        $("targetHint").textContent = "🎄 El sorteo será en unas horas.";
-      }else{
-        $("countText").textContent = "✅ El sorteo ya puede publicarse / ya ocurrió.";
-        $("targetHint").textContent = "🎉 Si ya se eligieron ganadores, aparecerán aquí.";
-      }
+    if($("targetHint")){
+      $("targetHint").textContent = ms > 0
+        ? "🎄 El sorteo será en unas horas."
+        : "🎉 Si ya se eligieron ganadores, aparecerán aquí.";
     }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+  }
 
-    // ====== WINNERS LOAD + REVEAL ANIMATION ======
-    function clearGrid(){
-      $("grid").innerHTML = "";
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ====== WINNERS LOAD (ADAPTADO A TU TABLA: name, ticket, drawn_at) ======
+  async function loadWinners(){
+    const state = $("state");
+    const grid = $("grid");
+
+    if(grid){
+      grid.style.display = "none";
+      grid.innerHTML = "";
+    }
+    if(state){
+      state.className = "state";
+      state.textContent = "Cargando ganadores...";
     }
 
-    async function loadWinners(){
-      $("grid").style.display = "none";
-      clearGrid();
-      $("state").className = "state";
-      $("state").textContent = "Cargando ganadores...";
+    // ✅ OJO: tu tabla tiene drawn_at (NO created_at) y NO tiene position
+    const { data, error } = await sb
+      .from("winners")
+      .select("id, name, ticket, drawn_at")
+      .order("drawn_at", { ascending: true });
+    if(error){
+      if(state) state.textContent = "❌ No se pudo cargar ganadores (revisa RLS/SELECT en winners).";
+      return;
+    }
+    if(!data || data.length === 0){
+      if(state) state.textContent = "⏳ Aún no hay ganadores publicados. Vuelve más tarde.";
+      return;
+    }
+    if(state){
+      state.className = "state good";
+      state.textContent = "✅ Ganadores publicados. ¡Felicidades!";
+    }
+    if(!grid) return;
 
-      // Ajusta si tus columnas tienen otros nombres:
-      const { data, error } = await sb
-        .from("winners")
-        .select("id, name, position, created_at")
-        .order("position", { ascending: true });
-
-      if(error){
-        $("state").textContent = "❌ No se pudo cargar ganadores. Revisa policies (SELECT para anon) o la tabla winners.";
-        return;
-      }
-
-      if(!data || data.length === 0){
-        $("state").textContent = "⏳ Aún no hay ganadores publicados. Revisa la cuenta regresiva y vuelve más tarde.";
-        return;
-      }
-
-      $("state").className = "state good";
-      $("state").textContent = "✅ Ganadores publicados. ¡Felicidades a los 5!";
-      $("grid").style.display = "grid";
-
-      // Reveal secuencial (uno por uno)
-      data.forEach((w, idx) => {
-        const pos = w.position ?? (idx+1);
-        const isTop = pos === 1;
-
-        const d = w.created_at ? new Date(w.created_at) : null;
-        const stamp = d ? d.toLocaleString("es-PE") : "";
-
-        const card = document.createElement("div");
-        card.className = "winnerCard";
-
-        card.innerHTML = `
-          <div class="spark"></div>
-          <div class="ornaments">
-            <div class="ball red"></div>
-            <div class="ball green"></div>
-            <div class="ball blue"></div>
-            <div class="ball gold"></div>
-          </div>
-
-          <div class="left">
-            <div class="rank ${isTop ? "top" : ""}">#${esc(pos)}</div>
-            <div style="min-width:0;">
-              <div class="name">${esc(w.name || "Ganador")}</div>
-              <div class="meta">
-                <span>🎁 Premio: Prime Video (20 días)</span>
-                ${stamp ? `<span>🕒 ${esc(stamp)}</span>` : ``}
-              </div>
+    grid.style.display = "grid";
+    data.forEach((w, idx) => {
+      const pos = idx + 1; // #1..#5 por orden de drawn_at
+      const isTop = pos === 1;
+      const d = w.drawn_at ? new Date(w.drawn_at) : null;
+      const stamp = d ? d.toLocaleString("es-PE") : "";
+      const card = document.createElement("div");
+      card.className = "winnerCard";
+      // Si tu CSS tiene animación con .reveal, la activamos con delay
+      card.innerHTML = `
+        <div class="spark"></div>
+        <div class="ornaments">
+          <div class="ball red"></div>
+          <div class="ball green"></div>
+          <div class="ball blue"></div>
+          <div class="ball gold"></div>
+        </div>
+        <div class="left">
+          <div class="rank ${isTop ? "top" : ""}">#${esc(pos)}</div>
+          <div style="min-width:0;">
+            <div class="name">${esc(w.name || "Ganador")}</div>
+            <div class="meta">
+              <span>🎁 Premio: Prime Video (20 días)</span>
+              ${stamp ? `<span>🕒 ${esc(stamp)}</span>` : ``}
+              <span>🎟️ ${esc(w.ticket || "")}</span>
             </div>
           </div>
+        </div>
+        <div style="text-align:right; color:rgba(231,241,255,.82); font-size:12px;">
+          ${isTop ? "👑 TOP 1" : "🏅"}
+        </div>
+      `;
+      grid.appendChild(card);
 
-          <div style="text-align:right; color:rgba(231,241,255,.82); font-size:12px;">
-            ${isTop ? "👑 TOP 1" : "🏅"}
-          </div>
-        `;
-
-        $("grid").appendChild(card);
-
-        // animación escalonada
-        setTimeout(() => {
-          card.classList.add("reveal");
-        }, 200 + idx * 260);
-      });
-    }
-
-    loadWinners();
-    // auto refresco por si publicas ganadores mientras la gente mira
-    setInterval(loadWinners, 15000);
-  </script>
+      // reveal escalonado
+      setTimeout(() => {
+        card.classList.add("reveal");
+      }, 200 + idx * 260);
+    });
+  }
+  loadWinners();
+  setInterval(loadWinners, 15000);
+</script>
 </body>
 </html>
+
