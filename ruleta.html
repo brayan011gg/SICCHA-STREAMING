@@ -249,13 +249,11 @@
       $("pickMsg").textContent = "🔒 El giro está desactivado para público.";
     }
 
-    // ---- Countdown: mañana 5:00 PM (hora local del PC) ----
     function getTarget(){
-      const now = new Date();
-      const target = new Date(now);
-      target.setDate(now.getDate() + 1);
-      target.setHours(17, 0, 0, 0);
-      return target;
+  const now = new Date();
+  const target = new Date(now);
+  target.setHours(17, 0, 0, 0); // hoy 5:00 PM
+  return target;
     }
     const target = getTarget();
 
@@ -446,3 +444,4 @@
   </script>
 </body>
 </html>
+
