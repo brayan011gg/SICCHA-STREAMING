@@ -563,10 +563,11 @@ setInterval(updateCountdown,1000);
 
 // Load winners (EXACTO A TU CÓDIGO)
 async function loadWinners(){
-  const {data,error}=await sb
-    .from("winners")
-    .select("id,name,created_at")
-    .order("created_at",{ascending:true});
+const {data,error}=await sb
+  .from("winners")
+  .select("id,name,created_at,status")
+  .order("created_at",{ascending:true});
+
 
   if(error){
     $("state").textContent="❌ No se pudo cargar ganadores";
@@ -595,11 +596,23 @@ async function loadWinners(){
         <div class="card-icon">${icons[i]||'🎁'}</div>
         <div class="rank ${i===0?'top-1':''}">#${i+1}</div>
         <div class="info">
-          <div class="name">${w.name}</div>
-          <div class="date">
-            🎬 Prime Video 20 días
-            <span style="margin-left:10px">🕒 ${new Date(w.created_at).toLocaleString("es-PE")}</span>
-          </div>
+  <div class="name">${w.name}</div>
+
+  <div class="date">
+    🎬 Prime Video 20 días
+    <span style="margin-left:10px">🕒 ${new Date(w.created_at).toLocaleString("es-PE")}</span>
+  </div>
+
+  <div class="date" style="
+    margin-top:8px;
+    font-weight:800;
+    color:${(w.status||'PENDIENTE')==='ENTREGADO'?'#00ff9c':'#FFD700'};
+    text-shadow:0 0 10px ${(w.status||'PENDIENTE')==='ENTREGADO'?'rgba(0,255,156,.6)':'rgba(255,215,0,.6)'};
+  ">
+    ${(w.status||'PENDIENTE')==='ENTREGADO'?'✅ PREMIO ENTREGADO':'⏳ PREMIO PENDIENTE'}
+  </div>
+</div>
+
         </div>
       </div>
     `;
