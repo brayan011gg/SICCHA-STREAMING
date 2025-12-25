@@ -467,12 +467,6 @@
           <label>Nombre completo</label>
           <input id="nombre" placeholder="Juan Pérez">
           
-          <label>DNI</label>
-          <input id="dni" placeholder="12345678">
-          
-          <label>Email</label>
-          <input id="email" type="email" placeholder="correo@ejemplo.com">
-          
           <label>Teléfono</label>
           <input id="telefono" placeholder="999999999">
           
@@ -644,12 +638,10 @@
     if($("registrarBtn")) {
       $("registrarBtn").addEventListener("click", async () => {
         const nombre = ($("nombre").value || "").trim();
-        const dni = ($("dni").value || "").trim();
-        const email = ($("email").value || "").trim();
         const telefono = ($("telefono").value || "").trim();
         const mensaje = $("mensaje");
 
-        if(!nombre || !dni || !email || !telefono) {
+        if(!nombre || !telefono) {
           mensaje.textContent = "❌ Por favor completa todos los campos.";
           mensaje.style.color = "#e50914";
           return;
@@ -665,8 +657,6 @@
             .from('participantes')
             .insert([{ 
               nombre: nombre, 
-              dni: dni, 
-              email: email, 
               telefono: telefono,
               ticket: ticket,
               ganador: false
@@ -684,8 +674,6 @@
           mensaje.style.color = "#22c55e";
           
           $("nombre").value = "";
-          $("dni").value = "";
-          $("email").value = "";
           $("telefono").value = "";
 
         } catch(err) {
