@@ -41,9 +41,7 @@ input{
   background:#2a2a2a;
   color:#fff;
 }
-button{
-  cursor:pointer;
-}
+button{ cursor:pointer; }
 .btn{
   background:#e50914;
   color:#fff;
@@ -89,9 +87,33 @@ button{
   border-radius:10px;
   margin-top:12px;
 }
-.small{
-  color:#aaa;
+.small{ color:#aaa; }
+
+.actions{
+  margin-left:auto;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
+.btnMini{
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:800;
+  border:1px solid #444;
+  background:#222;
+  color:#fff;
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:12px;
+  margin-top:6px;
+}
+.badge.ok{ background:#1f8f4a2b; border:1px solid #1f8f4a; }
+.badge.wait{ background:#d6a20a2b; border:1px solid #d6a20a; }
 </style>
 </head>
 
@@ -101,7 +123,6 @@ button{
 
 <div class="container">
 
-<!-- LOGIN -->
 <div class="card" id="loginCard">
   <h2>Acceso Administrador</h2>
   <input id="email" type="email" placeholder="admin@email.com">
@@ -110,7 +131,6 @@ button{
   <div id="loginMsg"></div>
 </div>
 
-<!-- ADMIN -->
 <div class="card" id="adminCard" style="display:none;">
   <h2>Panel del sorteo</h2>
 
@@ -121,7 +141,7 @@ button{
 
   <div id="adminMsg"></div>
 
-  <h3 style="margin-top:30px;">🏆 Ganadores guardados</h3>
+  <h3 style="margin-top:30px;">🏆 Ganadores</h3>
   <div class="list" id="winnersList"></div>
 
   <button class="btn2" id="logoutBtn" style="margin-top:20px;">Salir</button>
@@ -135,9 +155,9 @@ const sb = supabase.createClient(
   "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
   "sb_publishable_tFo5T-sC2sq8D9FgKqJKuQ_MC3en0fl"
 );
-
 const $ = id => document.getElementById(id);
 
+/* AUTH */
 async function updateUI(){
   const { data } = await sb.auth.getUser();
   const logged = !!data.user;
@@ -145,90 +165,147 @@ async function updateUI(){
   $("adminCard").style.display = logged ? "block" : "none";
   if(logged) loadWinners();
 }
-
 $("loginBtn").onclick = async ()=>{
-  $("loginMsg").innerHTML = "⏳ Verificando...";
+  $("loginMsg").innerHTML="⏳ Verificando...";
   const { error } = await sb.auth.signInWithPassword({
     email:$("email").value.trim(),
     password:$("password").value
   });
   if(error){
-    $("loginMsg").innerHTML = `<div class="err">${error.message}</div>`;
+    $("loginMsg").innerHTML=`<div class="err">${error.message}</div>`;
     return;
   }
-  $("loginMsg").innerHTML = `<div class="ok">Bienvenido</div>`;
   updateUI();
 };
-
 $("logoutBtn").onclick = async ()=>{
   await sb.auth.signOut();
   updateUI();
 };
 
-async function loadWinners(){
-  const { data, error } = await sb
+/* ESTADO */
+async function setWinnerStatus(id,status){
+  const { error } = await sb
     .from("winners")
-    .select("name, created_at")
-    .order("created_at", { ascending:true });
+    .update({
+      status,
+      delivered_at: status==="ENTREGADO"?new Date().toISOString():null
+    })
+    .eq("id",id)
+    .limit(1);
 
   if(error){
-    $("winnersList").innerHTML = `<div class="err">${error.message}</div>`;
+    $("adminMsg").innerHTML=`<div class="err">${error.message}</div>`;
     return;
   }
+  loadWinners();
+}
+
+/* 🔁 REEMPLAZO SEGURO */
+async function replaceWinner(winnerId){
+  if(!confirm("¿Reemplazar SOLO este ganador?")) return;
+
+  const { data: used } = await sb
+    .from("winners")
+    .select("ticket")
+    .neq("id",winnerId);
+
+  const usedTickets = used.map(w=>w.ticket).filter(Boolean);
+
+  const { data: participants } = await sb
+    .from("participants")
+    .select("name,ticket");
+
+  const candidates = participants.filter(
+    p => p.ticket && !usedTickets.includes(p.ticket)
+  );
+  if(!candidates.length){
+    $("adminMsg").innerHTML=`<div class="err">No hay candidatos</div>`;
+    return;
+  }
+
+  const pick = candidates[Math.floor(Math.random()*candidates.length)];
+
+  const { error } = await sb
+    .from("winners")
+    .update({
+      name:pick.name,
+      ticket:pick.ticket,
+      status:"PENDIENTE",
+      delivered_at:null,
+      created_at:new Date().toISOString()
+    })
+    .eq("id",winnerId)
+    .limit(1);
+
+  if(error){
+    $("adminMsg").innerHTML=`<div class="err">${error.message}</div>`;
+    return;
+  }
+  loadWinners();
+}
+
+/* LISTA */
+async function loadWinners(){
+  const { data } = await sb
+    .from("winners")
+    .select("id,name,ticket,status,created_at")
+    .order("created_at",{ascending:true});
 
   if(!data.length){
-    $("winnersList").innerHTML = `<div class="small">Aún no hay ganadores</div>`;
+    $("winnersList").innerHTML=`<div class="small">Sin ganadores</div>`;
     return;
   }
 
-  $("winnersList").innerHTML = data.map((w,i)=>`
+  $("winnersList").innerHTML=data.map((w,i)=>`
     <div class="item">
       <div class="num">${i+1}</div>
       <div>
         <b>${w.name}</b><br>
-        <span class="small">${new Date(w.created_at).toLocaleString("es-PE")}</span>
+        <span class="small">Ticket: ${w.ticket}</span><br>
+        <span class="small">${new Date(w.created_at).toLocaleString("es-PE")}</span><br>
+        <span class="badge ${w.status==="ENTREGADO"?"ok":"wait"}">${w.status||"PENDIENTE"}</span>
+      </div>
+      <div class="actions">
+        <button class="btnMini" data-r="${w.id}">🔁</button>
+        <button class="btnMini" data-e="${w.id}">✅</button>
+        <button class="btnMini" data-p="${w.id}">⏳</button>
       </div>
     </div>
   `).join("");
 }
 
+/* EVENTS */
+document.addEventListener("click",e=>{
+  if(e.target.dataset.r) replaceWinner(Number(e.target.dataset.r));
+  if(e.target.dataset.e) setWinnerStatus(Number(e.target.dataset.e),"ENTREGADO");
+  if(e.target.dataset.p) setWinnerStatus(Number(e.target.dataset.p),"PENDIENTE");
+});
+
+/* DRAW */
 $("drawBtn").onclick = async ()=>{
-  $("adminMsg").innerHTML = "🎲 Sorteando...";
+  const { data:p } = await sb.from("participants").select("name,ticket");
+  if(p.length<5) return;
 
-  const { data: participants, error } = await sb
-    .from("participants")
-    .select("name, ticket");
-
-  if(error || participants.length < 5){
-    $("adminMsg").innerHTML = `<div class="err">Necesitas al menos 5 participantes</div>`;
-    return;
-  }
-
-  const shuffled = [...participants].sort(()=>Math.random()-0.5).slice(0,5);
-
+  const winners=[...p].sort(()=>Math.random()-0.5).slice(0,5);
   await sb.from("winners").delete().neq("id",-1);
-
-  const { error: insErr } = await sb
-    .from("winners")
-    .insert(shuffled.map(p=>({name:p.name, ticket:p.ticket})));
-
-  if(insErr){
-    $("adminMsg").innerHTML = `<div class="err">${insErr.message}</div>`;
-    return;
-  }
-
-  $("adminMsg").innerHTML = `<div class="ok">Ganadores guardados</div>`;
+  await sb.from("winners").insert(
+    winners.map(x=>({
+      name:x.name,
+      ticket:x.ticket,
+      status:"PENDIENTE"
+    }))
+  );
   loadWinners();
 };
 
 $("clearBtn").onclick = async ()=>{
-  if(!confirm("¿Borrar ganadores?")) return;
-  await sb.from("winners").delete().neq("id",-1);
-  loadWinners();
+  if(confirm("¿Borrar ganadores?")){
+    await sb.from("winners").delete().neq("id",-1);
+    loadWinners();
+  }
 };
 
 updateUI();
 </script>
-
 </body>
 </html>
