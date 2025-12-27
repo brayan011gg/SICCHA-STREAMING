@@ -3,136 +3,495 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin · SICCHA Streaming 🎄</title>
+<title>Admin · SICCHA Streaming 🎮</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI,Arial;
-  background:#141414;
-  color:#fff;
-}
-.header{
-  padding:20px;
-  font-size:28px;
-  font-weight:900;
-  color:#e50914;
-}
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
-.card{
-  background:#1f1f1f;
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:24px;
-}
-input,button{
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  font-size:16px;
-}
-input{
-  width:100%;
-  margin-bottom:12px;
-  background:#2a2a2a;
-  color:#fff;
-}
-button{ cursor:pointer; }
-.btn{
-  background:#e50914;
-  color:#fff;
-  font-weight:700;
-}
-.btn2{
-  background:#333;
-  color:#fff;
-}
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.list .item{
-  background:#2a2a2a;
-  border-radius:12px;
-  padding:14px;
-  margin:10px 0;
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-.num{
-  background:#e50914;
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-}
-.ok{
-  background:#163;
-  padding:12px;
-  border-radius:10px;
-  margin-top:12px;
-}
-.err{
-  background:#511;
-  padding:12px;
-  border-radius:10px;
-  margin-top:12px;
-}
-.small{ color:#aaa; }
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
 
-.actions{
-  margin-left:auto;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+:root {
+  --neon-cyan: #00ffff;
+  --neon-pink: #ff00ff;
+  --neon-purple: #bd00ff;
+  --neon-blue: #0066ff;
+  --neon-red: #ff0040;
+  --dark-bg: #0a0a0f;
+  --card-bg: #13131a;
+  --input-bg: #1a1a24;
 }
-.btnMini{
-  padding:10px 12px;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:800;
-  border:1px solid #444;
-  background:#222;
-  color:#fff;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:12px;
-  margin-top:6px;
+
+body {
+  font-family: 'Rajdhani', 'Segoe UI', Arial, sans-serif;
+  background: var(--dark-bg);
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
-.badge.ok{ background:#1f8f4a2b; border:1px solid #1f8f4a; }
-.badge.wait{ background:#d6a20a2b; border:1px solid #d6a20a; }
+
+/* Fondo animado tipo cyberpunk */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0,255,255,0.03) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(255,0,255,0.03) 50%, transparent 70%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Grid cyberpunk de fondo */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header gamer */
+.header {
+  padding: 30px 20px;
+  font-size: 48px;
+  font-weight: 900;
+  text-align: center;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  text-shadow: 0 0 40px rgba(0,255,255,0.5);
+  animation: glowPulse 3s ease-in-out infinite;
+  position: relative;
+}
+
+.header::before {
+  content: '⚡';
+  position: absolute;
+  left: 20%;
+  animation: float 3s ease-in-out infinite;
+}
+
+.header::after {
+  content: '🎮';
+  position: absolute;
+  right: 20%;
+  animation: float 3s ease-in-out infinite 1.5s;
+}
+
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(0,255,255,0.6)); }
+  50% { filter: drop-shadow(0 0 40px rgba(255,0,255,0.8)); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+/* Card con efecto glass y neon border */
+.card {
+  background: rgba(19,19,26,0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 40px;
+  margin-bottom: 30px;
+  border: 2px solid rgba(0,255,255,0.2);
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 0 40px rgba(0,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(0,255,255,0.1) 50%, transparent 70%);
+  transform: rotate(45deg);
+  transition: all 0.6s;
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+.card:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 
+    0 12px 48px rgba(0,0,0,0.5),
+    0 0 60px rgba(0,255,255,0.3);
+  transform: translateY(-4px);
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 30px;
+  margin-bottom: 16px;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Inputs estilo cyberpunk */
+input {
+  width: 100%;
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 2px solid rgba(0,255,255,0.3);
+  font-size: 18px;
+  background: var(--input-bg);
+  color: #fff;
+  margin-bottom: 16px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 30px rgba(0,255,255,0.4);
+  background: rgba(26,26,36,0.9);
+}
+
+input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+/* Botones gamer */
+button {
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+  color: #000;
+  padding: 18px 32px;
+  border-radius: 16px;
+  font-size: 18px;
+  box-shadow: 
+    0 8px 25px rgba(0,255,255,0.4),
+    inset 0 -2px 8px rgba(0,0,0,0.3);
+  width: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 12px 35px rgba(0,255,255,0.6),
+    inset 0 -2px 8px rgba(0,0,0,0.3);
+}
+
+.btn:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.btn2 {
+  background: linear-gradient(135deg, #2a2a3a, #1a1a24);
+  color: var(--neon-cyan);
+  padding: 18px 32px;
+  border-radius: 16px;
+  font-size: 18px;
+  border: 2px solid rgba(0,255,255,0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  width: 100%;
+}
+
+.btn2:hover {
+  background: linear-gradient(135deg, #3a3a4a, #2a2a34);
+  border-color: var(--neon-cyan);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,255,255,0.3);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .row { grid-template-columns: 1fr; }
+}
+
+/* Lista de ganadores estilo gamer */
+.list .item {
+  background: linear-gradient(135deg, rgba(26,26,36,0.8), rgba(19,19,26,0.8));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(0,255,255,0.2);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 16px 0;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.list .item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.list .item:hover::before {
+  opacity: 1;
+}
+
+.list .item:hover {
+  border-color: var(--neon-cyan);
+  transform: translateX(8px);
+  box-shadow: 0 8px 30px rgba(0,255,255,0.3);
+}
+
+.num {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 22px;
+  color: #000;
+  box-shadow: 0 4px 20px rgba(0,255,255,0.5);
+  flex-shrink: 0;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btnMini {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  border: 2px solid rgba(0,255,255,0.3);
+  background: rgba(26,26,36,0.9);
+  color: var(--neon-cyan);
+  transition: all 0.3s;
+}
+
+.btnMini:hover {
+  background: var(--neon-cyan);
+  color: #000;
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(0,255,255,0.5);
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.badge.ok {
+  background: rgba(0,255,135,0.2);
+  border: 2px solid #00ff87;
+  color: #00ff87;
+  box-shadow: 0 4px 15px rgba(0,255,135,0.3);
+}
+
+.badge.wait {
+  background: rgba(255,215,0,0.2);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+}
+
+/* Mensajes */
+.ok {
+  background: linear-gradient(135deg, rgba(0,255,135,0.2), rgba(0,255,135,0.1));
+  border: 2px solid #00ff87;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-top: 16px;
+  color: #00ff87;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0,255,135,0.3);
+}
+
+.err {
+  background: linear-gradient(135deg, rgba(255,0,64,0.2), rgba(255,0,64,0.1));
+  border: 2px solid var(--neon-red);
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-top: 16px;
+  color: var(--neon-red);
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(255,0,64,0.3);
+}
+
+.small {
+  color: rgba(255,255,255,0.6);
+  font-size: 15px;
+}
+
+/* Animaciones adicionales */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Línea de escaneo cyberpunk */
+body::after {
+  animation: scanline 8s linear infinite;
+}
+
+/* Scrollbar gamer */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
+  border-radius: 10px;
+  border: 2px solid var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon-purple), var(--neon-pink));
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .header {
+    font-size: 32px;
+    letter-spacing: 3px;
+  }
+  
+  .card {
+    padding: 24px;
+  }
+  
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">SICCHA Streaming 🎄</div>
+<div class="header">⚡ SICCHA ADMIN ⚡</div>
 
 <div class="container">
 
 <div class="card" id="loginCard">
-  <h2>Acceso Administrador</h2>
+  <h2>🔐 Acceso Administrador</h2>
   <input id="email" type="email" placeholder="admin@email.com">
   <input id="password" type="password" placeholder="Contraseña">
-  <button class="btn" id="loginBtn">Iniciar sesión</button>
+  <button class="btn" id="loginBtn">🚀 Iniciar sesión</button>
   <div id="loginMsg"></div>
 </div>
 
 <div class="card" id="adminCard" style="display:none;">
-  <h2>Panel del sorteo</h2>
+  <h2>🎮 Panel del sorteo</h2>
 
   <div class="row">
     <button class="btn" id="drawBtn">🎲 Elegir 5 ganadores</button>
@@ -141,10 +500,10 @@ button{ cursor:pointer; }
 
   <div id="adminMsg"></div>
 
-  <h3 style="margin-top:30px;">🏆 Ganadores</h3>
+  <h3>🏆 Ganadores</h3>
   <div class="list" id="winnersList"></div>
 
-  <button class="btn2" id="logoutBtn" style="margin-top:20px;">Salir</button>
+  <button class="btn2" id="logoutBtn" style="margin-top:20px;">🚪 Cerrar sesión</button>
 </div>
 
 </div>
@@ -172,7 +531,7 @@ $("loginBtn").onclick = async ()=>{
     password:$("password").value
   });
   if(error){
-    $("loginMsg").innerHTML=`<div class="err">${error.message}</div>`;
+    $("loginMsg").innerHTML=`<div class="err">❌ ${error.message}</div>`;
     return;
   }
   updateUI();
@@ -194,7 +553,7 @@ async function setWinnerStatus(id,status){
     .limit(1);
 
   if(error){
-    $("adminMsg").innerHTML=`<div class="err">${error.message}</div>`;
+    $("adminMsg").innerHTML=`<div class="err">❌ ${error.message}</div>`;
     return;
   }
   loadWinners();
@@ -219,7 +578,7 @@ async function replaceWinner(winnerId){
     p => p.ticket && !usedTickets.includes(p.ticket)
   );
   if(!candidates.length){
-    $("adminMsg").innerHTML=`<div class="err">No hay candidatos</div>`;
+    $("adminMsg").innerHTML=`<div class="err">❌ No hay candidatos</div>`;
     return;
   }
 
@@ -238,9 +597,10 @@ async function replaceWinner(winnerId){
     .limit(1);
 
   if(error){
-    $("adminMsg").innerHTML=`<div class="err">${error.message}</div>`;
+    $("adminMsg").innerHTML=`<div class="err">❌ ${error.message}</div>`;
     return;
   }
+  $("adminMsg").innerHTML=`<div class="ok">✅ Ganador reemplazado: ${pick.name}</div>`;
   loadWinners();
 }
 
@@ -252,23 +612,23 @@ async function loadWinners(){
     .order("created_at",{ascending:true});
 
   if(!data.length){
-    $("winnersList").innerHTML=`<div class="small">Sin ganadores</div>`;
+    $("winnersList").innerHTML=`<div class="small" style="text-align:center;padding:40px;">Sin ganadores aún</div>`;
     return;
   }
 
   $("winnersList").innerHTML=data.map((w,i)=>`
     <div class="item">
       <div class="num">${i+1}</div>
-      <div>
-        <b>${w.name}</b><br>
-        <span class="small">Ticket: ${w.ticket}</span><br>
-        <span class="small">${new Date(w.created_at).toLocaleString("es-PE")}</span><br>
+      <div style="flex:1;">
+        <b style="font-size:20px;">${w.name}</b><br>
+        <span class="small">🎫 Ticket: ${w.ticket}</span><br>
+        <span class="small">📅 ${new Date(w.created_at).toLocaleString("es-PE")}</span><br>
         <span class="badge ${w.status==="ENTREGADO"?"ok":"wait"}">${w.status||"PENDIENTE"}</span>
       </div>
       <div class="actions">
-        <button class="btnMini" data-r="${w.id}">🔁</button>
-        <button class="btnMini" data-e="${w.id}">✅</button>
-        <button class="btnMini" data-p="${w.id}">⏳</button>
+        <button class="btnMini" data-r="${w.id}" title="Reemplazar">🔁</button>
+        <button class="btnMini" data-e="${w.id}" title="Marcar entregado">✅</button>
+        <button class="btnMini" data-p="${w.id}" title="Marcar pendiente">⏳</button>
       </div>
     </div>
   `).join("");
@@ -284,7 +644,10 @@ document.addEventListener("click",e=>{
 /* DRAW */
 $("drawBtn").onclick = async ()=>{
   const { data:p } = await sb.from("participants").select("name,ticket");
-  if(p.length<5) return;
+  if(p.length<5){
+    $("adminMsg").innerHTML=`<div class="err">❌ Necesitas al menos 5 participantes</div>`;
+    return;
+  }
 
   const winners=[...p].sort(()=>Math.random()-0.5).slice(0,5);
   await sb.from("winners").delete().neq("id",-1);
@@ -295,12 +658,14 @@ $("drawBtn").onclick = async ()=>{
       status:"PENDIENTE"
     }))
   );
+  $("adminMsg").innerHTML=`<div class="ok">🎉 ¡5 ganadores seleccionados!</div>`;
   loadWinners();
 };
 
 $("clearBtn").onclick = async ()=>{
-  if(confirm("¿Borrar ganadores?")){
+  if(confirm("¿Borrar TODOS los ganadores?")){
     await sb.from("winners").delete().neq("id",-1);
+    $("adminMsg").innerHTML=`<div class="ok">✅ Ganadores borrados</div>`;
     loadWinners();
   }
 };
