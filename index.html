@@ -2,1421 +2,1577 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#e50914">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#100a0a">
 <title>SICCHA STREAMING — Trujillo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════
-   TOKENS
-══════════════════════════════ */
 :root {
-  --red:      #e50914;
-  --red2:     #b81d24;
-  --red3:     #7f0000;
-  --red-glow: rgba(229,9,20,.3);
-  --green:    #25D366;
-  --green2:   #1daa57;
-  --avail:    #4ade80;
-
-  --bg:    #0f0a1e;
-  --bg2:   #150f2a;
-  --bg3:   #1c1435;
-  --card:  rgba(255,255,255,.05);
-  --card2: rgba(255,255,255,.08);
-  --bord:  rgba(255,255,255,.09);
-  --bord2: rgba(255,255,255,.14);
-
-  --t1: #f0eaff;
-  --t2: rgba(210,200,255,.75);
-  --t3: rgba(180,170,240,.45);
-
-  --r1:10px; --r2:16px; --r3:22px; --r4:28px; --rp:9999px;
-
-  --sh-red: 0 8px 32px rgba(229,9,20,.25);
-  --sh-card:0 2px 20px rgba(0,0,0,.35);
+  --fd: 'Instrument Serif', Georgia, serif;
+  --fb: 'Inter', system-ui, sans-serif;
+  --bg:  #100a0a;
+  --bg2: #160c0c;
+  --bg3: #1e1010;
+  --fg:  #f5f0f0;
+  --m1:  rgba(220,210,210,.7);
+  --m2:  rgba(180,165,165,.45);
+  --m3:  rgba(140,125,125,.25);
+  --red:  #e50914;
+  --red2: #b81d24;
+  --red3: #7f0000;
+  --rg:   rgba(229,9,20,.25);
+  --wa:   #25D366;
+  --wa2:  #1daa57;
+  --r1:8px; --r2:14px; --r3:20px; --r4:28px; --rp:9999px;
+  --nav-h: 60px;
+  --bot-h: 64px;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{
-  font-family:'Nunito Sans',system-ui,sans-serif;
-  background:var(--bg); color:var(--t1);
-  min-height:100dvh; overflow-x:hidden;
+  font-family:var(--fb);
+  background:var(--bg);color:var(--fg);
+  min-height:100dvh;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  /* GPU layer for entire page */
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
 }
-h1,h2,h3,h4{font-family:'Nunito',sans-serif}
 img{display:block;max-width:100%}
-button{cursor:pointer;font-family:inherit}
-a{text-decoration:none}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit;border:none}
 :focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-/* ══ NAV ══ */
+/* ─── LIQUID GLASS ─── */
+.glass{
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.06);
+  position:relative;overflow:hidden;
+}
+.glass::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(170deg,rgba(255,255,255,.4) 0%,rgba(255,255,255,.1) 25%,rgba(255,255,255,0) 45%,rgba(255,255,255,0) 60%,rgba(255,255,255,.1) 80%,rgba(255,255,255,.35) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+
+/* ─── KEYFRAMES — GPU-optimized: only transform+opacity ─── */
+@keyframes fr{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes bobR{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+@keyframes pulse3{0%,100%{box-shadow:3px 4px 0 var(--wa2),0 8px 24px rgba(37,211,102,.45)}50%{box-shadow:3px 4px 0 var(--wa2),0 8px 30px rgba(37,211,102,.7),0 0 0 10px rgba(37,211,102,.07)}}
+@keyframes orb{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.18);opacity:1}}
+@keyframes rise3d{from{opacity:0;transform:perspective(700px) rotateX(50deg) translateY(50px) scale(.9)}to{opacity:1;transform:perspective(700px) rotateX(0deg) translateY(0) scale(1)}}
+@keyframes menuSlide{from{transform:translateX(100%)}to{transform:translateX(0)}}
+
+.fr  {animation:fr .75s ease-out both}
+.fr1 {animation:fr .75s ease-out .12s both}
+.fr2 {animation:fr .75s ease-out .24s both}
+.fr3 {animation:fr .75s ease-out .36s both}
+.fr4 {animation:fr .75s ease-out .48s both}
+
+/* fade-up on scroll */
+.fu{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.fu.vis{opacity:1;transform:translateY(0)}
+
+/* ─────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 5%;transition:all .3s;
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:var(--nav-h);
+  transition:background .3s;
 }
 nav.solid{
-  background:rgba(15,10,30,.92);
-  backdrop-filter:blur(20px);
-  box-shadow:0 1px 0 var(--bord);
+  background:rgba(14,7,7,.88);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 .nav-inner{
-  max-width:1280px;margin:0 auto;
-  height:66px;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  max-width:1340px;margin:0 auto;
+  height:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;gap:12px;
 }
-/* Brand */
-.brand{display:flex;align-items:center;gap:10px;user-select:none;flex-shrink:0}
-.brand-mark{
-  width:38px;height:38px;
+.nav-logo{display:flex;align-items:center;gap:9px;user-select:none;flex-shrink:0}
+.nav-mark{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
   background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:11px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:3px 4px 0 var(--red3),0 6px 18px var(--red-glow);
+  box-shadow:3px 3px 0 var(--red3),0 5px 16px var(--rg);
+  will-change:transform;
 }
-.brand-name{
-  font-family:'Nunito',sans-serif;
-  font-size:21px;font-weight:900;letter-spacing:-0.5px;color:var(--t1);
-}
-.brand-name span{color:var(--red)}
+.nav-name{font-family:var(--fd);font-size:20px;color:var(--fg);letter-spacing:-.3px}
+.nav-name sup{font-size:9px;font-family:var(--fb);vertical-align:super}
+
+/* Desktop links */
 .nav-links{display:flex;gap:2px}
-.nav-links a{
-  padding:7px 13px;border-radius:8px;
-  color:var(--t3);font-size:14px;font-weight:600;
+.nav-links a{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--m1);transition:color .2s,background .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--fg);background:rgba(255,255,255,.06)}
+@media(max-width:767px){.nav-links{display:none}}
+
+/* Desktop CTA */
+.nav-cta{
+  display:flex;align-items:center;gap:7px;
+  border-radius:var(--rp);padding:9px 18px;
+  font-size:13px;font-weight:600;color:var(--fg);
+  min-height:40px;flex-shrink:0;touch-action:manipulation;
+  transition:transform .2s;
+}
+.nav-cta:hover{transform:scale(1.03)}
+@media(max-width:767px){.nav-cta{display:none}}
+
+/* Mobile hamburger */
+.nav-ham{
+  display:none;
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(255,255,255,.07);
+  align-items:center;justify-content:center;flex-direction:column;gap:5px;
+  touch-action:manipulation;
+  transition:background .2s;
+}
+.nav-ham:hover{background:rgba(255,255,255,.12)}
+.nav-ham span{display:block;width:20px;height:2px;background:var(--fg);border-radius:2px;transition:all .25s cubic-bezier(.16,1,.3,1)}
+.nav-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:767px){.nav-ham{display:flex}}
+
+/* Mobile slide menu */
+.mob-menu{
+  position:fixed;top:var(--nav-h);right:0;bottom:0;
+  width:min(300px,90vw);
+  background:rgba(18,8,8,.97);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border-left:1px solid rgba(255,255,255,.06);
+  z-index:199;
+  display:flex;flex-direction:column;gap:4px;
+  padding:24px 20px;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  will-change:transform;
+}
+.mob-menu.open{transform:translateX(0)}
+.mob-menu a{
+  padding:14px 16px;border-radius:12px;
+  font-size:16px;font-weight:600;color:var(--m1);
+  display:flex;align-items:center;gap:10px;
   transition:color .2s,background .2s;
 }
-.nav-links a:hover{color:var(--t1);background:rgba(255,255,255,.06)}
-@media(max-width:600px){.nav-links{display:none}}
-.nav-btn{
-  display:flex;align-items:center;gap:7px;
-  background:var(--red);border:none;border-radius:9px;
-  padding:10px 20px;
-  color:#fff;font-size:14px;font-weight:700;
-  box-shadow:3px 4px 0 var(--red3),0 6px 16px var(--red-glow);
-  transition:all .18s ease;min-height:44px;flex-shrink:0;
+.mob-menu a:hover,.mob-menu a.active{color:var(--fg);background:rgba(255,255,255,.07)}
+.mob-menu-wa{
+  margin-top:auto;
+  background:var(--wa);
+  border-radius:14px;padding:15px 20px;
+  font-size:15px;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:3px 4px 0 var(--wa2),0 8px 22px rgba(37,211,102,.35);
   touch-action:manipulation;
+  transition:transform .18s,box-shadow .18s;
 }
-.nav-btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--red3),0 10px 24px var(--red-glow)}
-.nav-btn:active{transform:translateY(1px);box-shadow:2px 2px 0 var(--red3)}
+.mob-menu-wa:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--wa2),0 12px 28px rgba(37,211,102,.45)}
+.mob-overlay{
+  position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(3px);
+  opacity:0;visibility:hidden;
+  transition:opacity .3s,visibility .3s;
+}
+.mob-overlay.open{opacity:1;visibility:visible}
 
-/* ══ HERO ══ */
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
 .hero{
+  position:relative;
   min-height:100dvh;
-  padding:100px 5% 60px;
-  position:relative;overflow:hidden;
-  display:flex;align-items:center;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;
+  padding:calc(var(--nav-h) + 40px) 24px 80px;
+  overflow:hidden;
 }
-.hero-bg{
-  position:absolute;inset:0;z-index:0;
+/* Video */
+.hero-vid{position:absolute;inset:0;z-index:0}
+.hero-vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-vid::after{
+  content:'';position:absolute;inset:0;z-index:1;
   background:
-    radial-gradient(ellipse 65% 75% at 75% 35%,rgba(120,60,255,.22) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 55% at 15% 65%,rgba(229,9,20,.14) 0%,transparent 55%),
-    radial-gradient(ellipse 40% 45% at 55% 85%,rgba(255,77,109,.1) 0%,transparent 50%);
+    linear-gradient(0deg,rgba(14,6,6,.97) 0%,rgba(14,6,6,.35) 38%,rgba(14,6,6,.06) 68%,rgba(14,6,6,.28) 100%),
+    linear-gradient(90deg,rgba(14,6,6,.42) 0%,transparent 55%,rgba(14,6,6,.28) 100%);
 }
-.hero-grid{
-  position:absolute;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);
-  background-size:54px 54px;
-  mask-image:radial-gradient(ellipse 85% 75% at 65% 40%,rgba(0,0,0,.5) 0%,transparent 70%);
-}
+
 .hero-inner{
   position:relative;z-index:2;
-  max-width:1280px;margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:clamp(32px,6vw,80px);align-items:center;
+  max-width:1100px;width:100%;
+  display:flex;flex-direction:column;align-items:center;
 }
-@media(max-width:800px){.hero-inner{grid-template-columns:1fr;text-align:center}}
 
-/* Hero copy */
-.hero-copy{display:flex;flex-direction:column;gap:22px}
+/* Tag */
 .hero-tag{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(229,9,20,.1);border:1.5px solid rgba(229,9,20,.25);
-  padding:6px 16px;border-radius:var(--rp);
-  font-size:12px;font-weight:700;color:#ff6666;
-  letter-spacing:1.5px;text-transform:uppercase;width:fit-content;
+  border-radius:var(--rp);padding:6px 16px;
+  font-size:11px;font-weight:600;letter-spacing:1.8px;
+  text-transform:uppercase;color:rgba(255,255,255,.6);
+  margin-bottom:28px;
 }
-@media(max-width:800px){.hero-tag{margin:0 auto}}
-.hero-tag-dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
-
+.hero-tag-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 8px var(--red);
+  animation:pdot 2.2s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+/* H1 */
 .hero-h1{
-  font-size:clamp(38px,6.5vw,76px);
-  font-weight:900;line-height:1.02;letter-spacing:-2.5px;color:#fff;
+  font-family:var(--fd);
+  font-size:clamp(40px,7.5vw,90px);
+  font-weight:400;line-height:.96;letter-spacing:-2.5px;
+  color:#fff;margin-bottom:22px;
+  text-shadow:0 2px 40px rgba(0,0,0,.55);
 }
-.hero-h1 em{
-  font-style:normal;
-  background:linear-gradient(135deg,var(--red) 0%,#ff4d6d 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.hero-h1 em{font-style:italic;color:var(--m1)}
+.hero-sub{
+  font-size:clamp(14px,1.5vw,17px);
+  color:var(--m1);line-height:1.7;
+  max-width:540px;margin-bottom:36px;
 }
-.hero-sub{font-size:clamp(15px,1.7vw,18px);color:var(--t2);line-height:1.65;max-width:460px;font-weight:500}
-@media(max-width:800px){.hero-sub{margin:0 auto}}
-
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-@media(max-width:800px){.hero-actions{justify-content:center}}
-.btn-red{
-  display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;border-radius:var(--r2);
-  padding:15px 26px;color:#fff;
-  font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
-  box-shadow:4px 6px 0 var(--red3),0 10px 28px var(--red-glow);
-  transition:all .2s cubic-bezier(.16,1,.3,1);
+.hero-cta{
+  display:flex;align-items:center;gap:8px;
+  border-radius:var(--rp);padding:16px 44px;
+  font-size:15px;font-weight:600;color:var(--fg);
   min-height:52px;touch-action:manipulation;
+  margin-bottom:60px;
+  transition:transform .2s;
 }
-.btn-red:hover{transform:translateY(-3px);box-shadow:5px 8px 0 var(--red3),0 16px 36px var(--red-glow)}
-.btn-red:active{transform:translateY(1px);box-shadow:2px 3px 0 var(--red3)}
-.btn-ghost{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.07);
-  border:1.5px solid rgba(255,255,255,.15);
-  border-radius:var(--r2);padding:15px 26px;
-  color:var(--t1);font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
-  min-height:52px;touch-action:manipulation;
-  transition:all .2s;
-}
-.btn-ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
-.btn-ghost:active{transform:scale(.97)}
+.hero-cta:hover{transform:scale(1.04)}
+@media(max-width:480px){.hero-cta{padding:14px 32px;font-size:14px;margin-bottom:40px}}
 
-.hero-pills{display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:800px){.hero-pills{justify-content:center}}
+/* Trust pills */
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .hero-pill{
-  display:flex;align-items:center;gap:7px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
-  border-radius:var(--rp);padding:9px 16px;
-  font-size:13px;font-weight:700;color:var(--t2);
-  backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:6px;
+  border-radius:var(--rp);padding:8px 14px;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.6);
 }
+@media(max-width:380px){.hero-pill{padding:7px 11px;font-size:11px}}
 
-/* ══ 3D PHONE SCENE ══ */
-.hero-visual{
-  position:relative;
-  height:clamp(400px,52vw,580px);
-  perspective:1100px;perspective-origin:50% 45%;
-}
-@media(max-width:800px){.hero-visual{display:none}}
-
-.star-field{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.star{position:absolute;border-radius:50%;background:rgba(255,255,255,.8);animation:twinkle var(--d,3s) var(--dl,0s) ease-in-out infinite}
-@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
-
-.phone-scene{
-  width:100%;height:100%;
-  position:relative;transform-style:preserve-3d;
+/* ── MOBILE HERO PHONE ── */
+.hero-mob-phone{
+  display:none;
+  position:relative;z-index:3;
+  margin-bottom:32px;
   will-change:transform;
-  transition:transform .06s linear;
 }
+@media(max-width:767px){.hero-mob-phone{display:block}}
 
-.ph-wrap{position:absolute;transform-style:preserve-3d;animation:phFloat 7s ease-in-out infinite}
-.ph-wrap.left {left:-2%;top:50%;transform:translateY(-50%) translateX(-20px) rotateY(20deg) rotateX(4deg);animation-delay:0s}
-.ph-wrap.center{left:50%;top:47%;transform:translateX(-50%) translateY(-50%) rotateX(6deg);z-index:10;animation-delay:-1.8s}
-.ph-wrap.right {right:-2%;top:52%;transform:translateY(-50%) translateX(20px) rotateY(-20deg) rotateX(4deg);animation-delay:-3.5s}
-@keyframes phFloat{0%,100%{margin-top:0}50%{margin-top:-16px}}
-
-/* Phone body */
-.phone{position:relative;transform-style:preserve-3d}
-.ph-wrap.center .phone{width:220px;height:445px;border-radius:38px}
-.ph-wrap.left   .phone,.ph-wrap.right .phone{width:185px;height:375px;border-radius:32px;opacity:.85}
-
-.phone-shell{
+/* Floating phone for mobile hero */
+.hmp-wrap{
+  width:200px;height:400px;
+  border-radius:34px;
+  position:relative;
+  margin:0 auto;
+  animation:bob 5s ease-in-out infinite;
+  will-change:transform;
+  transform:translateZ(0);
+}
+.hmp-shell{
   position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(145deg,#2a2040 0%,#1a1430 40%,#120e24 100%);
+  background:linear-gradient(148deg,#1e1428 0%,#12102a 45%,#0c0820 100%);
   border:1.5px solid rgba(255,255,255,.12);
   box-shadow:
     0 0 0 1px rgba(255,255,255,.06) inset,
     0 2px 5px rgba(255,255,255,.07) inset,
-    0 28px 70px rgba(0,0,0,.7),
-    0 8px 28px rgba(139,92,246,.28),
-    10px 0 22px rgba(0,0,0,.35),
-    -10px 0 22px rgba(0,0,0,.35);
+    0 32px 80px rgba(0,0,0,.8),
+    0 10px 32px rgba(229,9,20,.25),
+    12px 0 24px rgba(0,0,0,.35),
+    -12px 0 24px rgba(0,0,0,.35);
 }
-.ph-wrap.center .phone-shell{
-  background:linear-gradient(145deg,#2e2245 0%,#1e1838 40%,#150f2a 100%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.1) inset,
-    0 2px 6px rgba(255,255,255,.09) inset,
-    0 36px 90px rgba(0,0,0,.7),
-    0 12px 44px rgba(139,92,246,.4),
-    0 -4px 28px rgba(229,9,20,.12),
-    14px 0 28px rgba(0,0,0,.35),
-    -14px 0 28px rgba(0,0,0,.35);
-}
-/* Side buttons */
-.pb-r{position:absolute;right:-3.5px;top:110px;width:4px;height:58px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:0 3px 3px 0;box-shadow:2px 0 5px rgba(0,0,0,.4)}
-.pb-l1{position:absolute;left:-3.5px;top:90px;width:4px;height:30px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:3px 0 0 3px}
-.pb-l2{position:absolute;left:-3.5px;top:135px;width:4px;height:50px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:3px 0 0 3px}
-
-/* Screen */
-.phone-scr{
+.hmp-br {position:absolute;right:-3.5px;top:110px;width:4px;height:56px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:0 3px 3px 0}
+.hmp-bl1{position:absolute;left:-3.5px;top:90px; width:4px;height:28px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:3px 0 0 3px}
+.hmp-bl2{position:absolute;left:-3.5px;top:132px;width:4px;height:48px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:3px 0 0 3px}
+.hmp-scr{
   position:absolute;top:9px;left:7px;right:7px;bottom:9px;
-  border-radius:inherit;border-radius:calc(38px - 7px);
-  overflow:hidden;background:#08041a;
+  border-radius:27px;overflow:hidden;
+  background:linear-gradient(155deg,#1a0308 0%,#350610 35%,#1a0305 60%,#080202 100%);
 }
-.ph-wrap.left   .phone-scr,
-.ph-wrap.right  .phone-scr{border-radius:calc(32px - 7px)}
-
-/* Dynamic island */
-.dyn-island{
+.hmp-island{
   position:absolute;top:13px;left:50%;transform:translateX(-50%);
-  background:#000;border-radius:22px;z-index:10;
-  box-shadow:0 0 0 1px rgba(255,255,255,.05);
+  width:100px;height:28px;background:#000;border-radius:18px;z-index:5;
 }
-.ph-wrap.center .dyn-island{width:108px;height:30px}
-.ph-wrap.left   .dyn-island,
-.ph-wrap.right  .dyn-island{width:88px;height:24px}
-
-/* Screen wallpaper + orbs */
-.scr-bg{position:absolute;inset:0}
-.ph-wrap.center .scr-bg{background:linear-gradient(160deg,#1a0533 0%,#2d1060 30%,#0f1a3d 60%,#080420 100%)}
-.ph-wrap.left   .scr-bg{background:linear-gradient(160deg,#0d1f0d 0%,#1a3520 40%,#081208 100%)}
-.ph-wrap.right  .scr-bg{background:linear-gradient(160deg,#1a0a0a 0%,#350d0d 40%,#0e0303 100%)}
-
-.scr-orb{position:absolute;border-radius:50%;filter:blur(18px);animation:orb 5s ease-in-out infinite}
-@keyframes orb{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.2);opacity:1}}
-
-/* Screen UI */
-.scr-ui{
-  position:absolute;inset:0;
+.hmp-orb{position:absolute;border-radius:50%;filter:blur(18px);will-change:transform,opacity;animation:orb 5s ease-in-out infinite}
+.hmp-ui{
+  position:absolute;inset:0;z-index:2;
   display:flex;flex-direction:column;align-items:center;
   padding:52px 14px 18px;
 }
-.ph-wrap.left  .scr-ui,
-.ph-wrap.right .scr-ui{padding:44px 12px 14px}
-
-.scr-app{
-  width:60px;height:60px;border-radius:17px;
+.hmp-app{
+  width:62px;height:62px;border-radius:18px;
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:11px;overflow:hidden;flex-shrink:0;
-  box-shadow:0 6px 20px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08) inset;
+  overflow:hidden;flex-shrink:0;margin-bottom:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08) inset;
+  background:linear-gradient(135deg,#e50914,#831010);
 }
-.scr-app img{width:48px;height:48px;object-fit:contain}
-.scr-app-fb{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
-.ph-wrap.left  .scr-app,
-.ph-wrap.right .scr-app{width:50px;height:50px;border-radius:14px}
-.ph-wrap.left  .scr-app img,
-.ph-wrap.right .scr-app img{width:38px;height:38px}
-.ph-wrap.left  .scr-app-fb,
-.ph-wrap.right .scr-app-fb{width:38px;height:38px}
-
-.scr-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:rgba(255,255,255,.9);text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.6);line-height:1.3}
-.scr-price{font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:#fff;letter-spacing:-1px;margin:7px 0 3px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
-.ph-wrap.left  .scr-price,
-.ph-wrap.right .scr-price{font-size:19px}
-.scr-per{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;margin-bottom:12px}
-
-.scr-rows{display:flex;flex-direction:column;gap:6px;width:100%}
-.scr-row{
+.hmp-app img{width:48px;height:48px;object-fit:contain}
+.hmp-app-fb{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+.hmp-label{font-family:var(--fd);font-size:13px;color:rgba(255,255,255,.88);text-align:center;margin-bottom:4px}
+.hmp-price{font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin:5px 0 3px;font-variant-numeric:tabular-nums}
+.hmp-per{font-size:10px;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:14px}
+.hmp-rows{display:flex;flex-direction:column;gap:6px;width:100%}
+.hmp-row{
   display:flex;align-items:center;gap:7px;
-  background:rgba(255,255,255,.06);
-  border-radius:10px;padding:7px 9px;
-  border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.06);border-radius:10px;padding:7px 9px;
+  border:1px solid rgba(255,255,255,.04);
 }
-.sr-ico{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.sr-lines{flex:1;display:flex;flex-direction:column;gap:3px}
-.sr-ln{height:5px;background:rgba(255,255,255,.14);border-radius:3px}
-.sr-ln.s{width:55%}
-.sr-tag{font-size:10px;font-weight:800;font-family:'Nunito',sans-serif;color:var(--red);white-space:nowrap}
-
-.scr-btn{
-  margin-top:10px;width:100%;
+.hmp-rico{width:24px;height:24px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hmp-rlines{flex:1;display:flex;flex-direction:column;gap:3px}
+.hmp-rln{height:5px;background:rgba(255,255,255,.14);border-radius:2px}
+.hmp-rln.s{width:55%}
+.hmp-rtag{font-size:10px;font-weight:800;color:var(--red);white-space:nowrap}
+.hmp-btn{
+  margin-top:12px;width:100%;
   background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:12px;padding:9px 8px;
+  border-radius:13px;padding:10px 8px;
   display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:#fff;
-  box-shadow:0 4px 14px rgba(229,9,20,.45),0 0 0 1px rgba(255,255,255,.08) inset;
-  cursor:pointer;
+  font-size:12px;font-weight:700;color:#fff;
+  box-shadow:0 4px 16px rgba(229,9,20,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+  touch-action:manipulation;
 }
-.ph-wrap.left  .scr-btn,
-.ph-wrap.right .scr-btn{margin-top:8px;font-size:10px;padding:7px}
-
-/* Ground glow */
-.ph-glow{
-  position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
-  border-radius:50%;filter:blur(13px);pointer-events:none;
-}
-.ph-wrap.center .ph-glow{width:170px;height:28px;background:rgba(139,92,246,.55)}
-.ph-wrap.left   .ph-glow{width:130px;height:22px;background:rgba(29,185,84,.4)}
-.ph-wrap.right  .ph-glow{width:130px;height:22px;background:rgba(229,9,20,.4)}
-
-/* Floating badges */
-.h-badge{
-  position:absolute;z-index:20;
-  background:rgba(255,255,255,.09);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:18px;padding:9px 15px;
-  display:flex;align-items:center;gap:9px;
-  white-space:nowrap;
-  box-shadow:0 8px 28px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.05) inset;
-  animation:bFloat var(--bd,5.5s) var(--bdd,0s) ease-in-out infinite;
-}
-@keyframes bFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.hb-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hb-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#fff}
-.hb-sub{font-size:11px;color:var(--t3)}
-.hb-1{top:4%;left:-10px;--bd:6s;--bdd:0s}
-.hb-2{top:43%;right:-8px;--bd:7s;--bdd:-2.5s}
-.hb-3{bottom:6%;left:8%;--bd:5.5s;--bdd:-1.5s}
-
-/* ══ TRUST BAR ══ */
-.trust{padding:18px 5%;border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);background:var(--bg2)}
-.trust-inner{
-  max-width:1280px;margin:0 auto;
-  display:flex;align-items:center;justify-content:center;
-  gap:clamp(14px,3.5vw,44px);flex-wrap:wrap;
-}
-.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--t2)}
-.trust-item svg{flex-shrink:0;color:var(--avail)}
-.trust-sep{width:1px;height:18px;background:var(--bord)}
-@media(max-width:500px){.trust-sep{display:none}}
-
-/* ══ COMMON SECTION ══ */
-.sec{padding:72px 5%}
-.sec-inner{max-width:1280px;margin:0 auto}
-.sec-head{text-align:center;margin-bottom:48px}
-.sec-eye{
-  display:inline-flex;align-items:center;gap:7px;
-  background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.2);
-  border-radius:var(--rp);padding:5px 16px;
-  font-size:11px;font-weight:700;color:#ff5555;
-  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px;
-}
-.sec-title{font-size:clamp(24px,3.2vw,40px);font-weight:900;letter-spacing:-1.2px;color:#fff;line-height:1.1}
-.sec-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:540px;margin:12px auto 0;font-weight:500}
-
-/* ══ PLATFORMS ══ */
-.plat-sec{padding:72px 5%;background:var(--bg2)}
-.plat-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:13px;
-}
-@media(max-width:1200px){.plat-grid{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:820px) {.plat-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px) {.plat-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
-
-.plat-card{
-  background:var(--card);
-  border:1px solid var(--bord);
-  border-radius:18px;
-  padding:18px;
-  display:flex;flex-direction:column;gap:13px;
-  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .25s;
-  position:relative;overflow:hidden;
-  cursor:pointer;
-}
-.plat-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(145deg,rgba(255,255,255,.025) 0%,transparent 60%);
+.hmp-glow{
+  position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);
+  width:140px;height:24px;border-radius:50%;
+  background:rgba(229,9,20,.45);filter:blur(13px);
   pointer-events:none;
 }
-.plat-card:hover{
-  transform:translateY(-5px);
-  border-color:rgba(229,9,20,.35);
-  box-shadow:0 14px 44px rgba(229,9,20,.12),0 0 0 1px rgba(229,9,20,.18);
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:24px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  z-index:2;
+  animation:fr .8s .9s both;
+  will-change:transform,opacity;
 }
-.plat-card:active{transform:scale(.97)}
+.sh-line{width:1px;height:36px;background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,transparent 100%);animation:bob 2.5s 1.5s ease-in-out infinite;will-change:transform}
+.sh-txt{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--m2)}
 
-/* platform card accent per-brand */
-.plat-card[data-id="netflix"]:hover  {border-color:rgba(229,9,20,.5);box-shadow:0 14px 44px rgba(229,9,20,.18),0 0 0 1px rgba(229,9,20,.3)}
-.plat-card[data-id="spotify"]:hover  {border-color:rgba(29,185,84,.4);box-shadow:0 14px 44px rgba(29,185,84,.15),0 0 0 1px rgba(29,185,84,.25)}
-.plat-card[data-id="disney"]:hover   {border-color:rgba(26,62,196,.5);box-shadow:0 14px 44px rgba(26,62,196,.18),0 0 0 1px rgba(26,62,196,.3)}
-.plat-card[data-id="max"]:hover      {border-color:rgba(88,34,180,.5);box-shadow:0 14px 44px rgba(88,34,180,.18),0 0 0 1px rgba(88,34,180,.3)}
-.plat-card[data-id="prime"]:hover    {border-color:rgba(0,168,224,.4);box-shadow:0 14px 44px rgba(0,168,224,.15),0 0 0 1px rgba(0,168,224,.25)}
+/* ─────────────────────────────────────────────
+   PLATFORMS SECTION — 2-col desktop, stack mobile
+───────────────────────────────────────────── */
+.plat-sec{
+  padding:80px 24px;
+  background:var(--bg2);
+  position:relative;overflow:hidden;
+}
+.plat-sec::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 45% at 18% 55%,rgba(229,9,20,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 35% at 82% 20%,rgba(139,92,246,.04) 0%,transparent 55%);
+}
 
-/* card header */
-.pc-head{display:flex;align-items:center;justify-content:space-between}
-.pc-logo{
-  width:52px;height:52px;border-radius:13px;
-  background:rgba(255,255,255,.06);
+.plat-inner{max-width:1340px;margin:0 auto;position:relative;z-index:1}
+
+/* 2-col layout */
+.plat-layout{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:56px;align-items:start;
+}
+@media(max-width:1080px){.plat-layout{grid-template-columns:300px 1fr;gap:36px}}
+@media(max-width:820px) {.plat-layout{grid-template-columns:1fr}}
+
+/* ── Sticky phones column ── */
+.plat-phones-col{position:relative}
+.phones-sticky{
+  position:sticky;top:76px;
+}
+@media(max-width:820px){
+  .phones-sticky{position:relative;top:auto;margin-bottom:40px}
+  .plat-phones-col{order:-1}
+}
+
+.ps-label{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--red);
+  margin-bottom:24px;
+}
+
+/* Phone pair */
+.ps-phones-wrap{
+  position:relative;height:420px;
+  perspective:1200px;perspective-origin:50% 45%;
+}
+@media(max-width:820px){height:320px}
+
+.ps-scene{
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .07s linear; /* smooth RAF update */
+}
+
+.ps-ph{
+  position:absolute;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+/* Left phone — recessed */
+.ps-ph-l{
+  left:0;top:28px;
+  transform:rotateY(22deg) rotateX(5deg) translateZ(-40px);
+  animation:bob 7s ease-in-out infinite;
+  will-change:transform;
+}
+/* Right phone — front */
+.ps-ph-r{
+  right:0;top:0;
+  transform:rotateY(-16deg) rotateX(4deg) translateZ(0);
+  animation:bobR 7s ease-in-out infinite;
+  will-change:transform;
+}
+
+/* Phone body */
+.ps-hp{width:155px;height:310px;border-radius:26px;position:relative}
+@media(max-width:820px){.ps-hp{width:130px;height:260px;border-radius:22px}}
+
+.ps-hp-shell{
+  position:absolute;inset:0;border-radius:inherit;
+  border:1.5px solid rgba(255,255,255,.1);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.055) inset,
+    0 2px 4px rgba(255,255,255,.06) inset,
+    0 24px 60px rgba(0,0,0,.75),
+    0 8px 22px rgba(120,80,255,.2),
+    9px 0 18px rgba(0,0,0,.3),
+    -9px 0 18px rgba(0,0,0,.3);
+}
+.ps-ph-l .ps-hp-shell{background:linear-gradient(148deg,#1a1228 0%,#110e24 45%,#0c0820 100%)}
+.ps-ph-r .ps-hp-shell{
+  background:linear-gradient(148deg,#1e0a0a 0%,#150808 45%,#0c0404 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.055) inset,
+    0 2px 4px rgba(255,255,255,.06) inset,
+    0 24px 60px rgba(0,0,0,.75),
+    0 8px 22px rgba(229,9,20,.18),
+    9px 0 18px rgba(0,0,0,.3),
+    -9px 0 18px rgba(0,0,0,.3);
+}
+/* Buttons */
+.ps-br {position:absolute;right:-3px;top:85px;width:3.5px;height:50px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:0 3px 3px 0}
+.ps-bl1{position:absolute;left:-3px;top:72px; width:3.5px;height:24px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:3px 0 0 3px}
+.ps-bl2{position:absolute;left:-3px;top:108px;width:3.5px;height:40px;background:linear-gradient(180deg,#2e2550,#1a1535);border-radius:3px 0 0 3px}
+
+/* Screen */
+.ps-scr{position:absolute;top:7px;left:6px;right:6px;bottom:7px;border-radius:21px;overflow:hidden}
+.ps-ph-l .ps-scr{background:linear-gradient(155deg,#0d0820 0%,#1a0d50 35%,#0c1840 60%,#060412 100%)}
+.ps-ph-r .ps-scr{background:linear-gradient(155deg,#1a0308 0%,#380608 35%,#1a0205 60%,#080202 100%)}
+.ps-island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:72px;height:20px;background:#000;border-radius:16px;z-index:4}
+.ps-orb{position:absolute;border-radius:50%;filter:blur(16px);will-change:transform,opacity;animation:orb 5s ease-in-out infinite}
+
+/* Screen UI */
+.ps-ui{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  padding:38px 10px 12px;
+}
+.ps-app{
+  width:44px;height:44px;border-radius:13px;
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;flex-shrink:0;
-  transition:transform .25s;
+  overflow:hidden;flex-shrink:0;margin-bottom:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.07) inset;
 }
-.plat-card:hover .pc-logo{transform:scale(1.08)}
-.pc-logo img{width:44px;height:44px;object-fit:contain}
-.pc-logo-fb{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.ps-app img{width:34px;height:34px;object-fit:contain}
+.ps-app-fb{width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.ps-label2{font-family:var(--fd);font-size:10px;color:rgba(255,255,255,.85);text-align:center;margin-bottom:3px;line-height:1.2}
+.ps-price{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.ps-per{font-size:9px;color:rgba(255,255,255,.38);font-weight:600;margin-bottom:8px}
+.ps-rows{display:flex;flex-direction:column;gap:4px;width:100%}
+.ps-row{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.055);border-radius:8px;padding:5px 7px;
+  border:1px solid rgba(255,255,255,.04);
+}
+.ps-rico{width:20px;height:20px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ps-rlines{flex:1;display:flex;flex-direction:column;gap:3px}
+.ps-rln{height:4px;background:rgba(255,255,255,.12);border-radius:2px}
+.ps-rln.s{width:55%}
+.ps-rtag{font-size:9px;font-weight:800;white-space:nowrap}
+.ps-btn{
+  margin-top:7px;width:100%;border-radius:9px;padding:7px 5px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  font-size:9px;font-weight:700;color:#fff;
+  touch-action:manipulation;
+  box-shadow:0 3px 10px rgba(229,9,20,.4),0 0 0 1px rgba(255,255,255,.07) inset;
+}
+.ps-ph-l .ps-btn{background:linear-gradient(135deg,#7c3aed,#5b21b6);box-shadow:0 3px 10px rgba(124,58,237,.4)}
+.ps-ph-r .ps-btn{background:linear-gradient(135deg,var(--red),var(--red2))}
+.ps-glow{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);border-radius:50%;filter:blur(11px);pointer-events:none}
+.ps-ph-l .ps-glow{width:100px;height:16px;background:rgba(120,80,255,.4)}
+.ps-ph-r .ps-glow{width:100px;height:16px;background:rgba(229,9,20,.38)}
+
+/* Stats below phones */
+.ps-stats{
+  display:flex;align-items:center;margin-top:24px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:13px 18px;
+}
+.ps-stat{display:flex;flex-direction:column;gap:2px;flex:1;text-align:center}
+.ps-stat-n{font-family:var(--fd);font-size:20px;color:#fff;letter-spacing:-.4px;line-height:1}
+.ps-stat-l{font-size:10px;color:var(--m2);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.ps-stat-sep{width:1px;height:28px;background:rgba(255,255,255,.07);flex-shrink:0}
+
+/* ── Grid column ── */
+.plat-grid-col{}
+.sec-head{margin-bottom:36px}
+.sec-eye{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);margin-bottom:9px}
+.sec-title{font-family:var(--fd);font-size:clamp(26px,3.5vw,46px);font-weight:400;letter-spacing:-1.3px;color:var(--fg);line-height:1.06;margin-bottom:12px}
+.sec-sub{font-size:15px;color:var(--m1);max-width:480px;line-height:1.65}
+
+/* Platform grid */
+.plat-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+@media(max-width:580px){.plat-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+
+/* Platform card — full-bleed logo */
+.plat-card{
+  position:relative;border-radius:16px;overflow:hidden;
+  cursor:pointer;aspect-ratio:3/4;
+  border:1px solid rgba(255,255,255,.07);
+  will-change:transform,opacity;
+  transform:translateZ(0); /* GPU layer */
+}
+/* 3D entry state */
+.plat-card[data-s="h"]{
+  opacity:0;
+  transform:perspective(700px) rotateX(52deg) translateY(50px) scale(.88);
+}
+.plat-card[data-s="i"]{
+  opacity:1;
+  transform:perspective(700px) rotateX(0deg) translateY(0) scale(1);
+  transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1);
+}
+/* Hover — tilt toward viewer */
+@media(hover:hover){
+  .plat-card[data-s="i"]:hover{
+    transform:perspective(700px) rotateX(-4deg) translateY(-9px) scale(1.03)!important;
+    box-shadow:0 24px 56px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12);
+    border-color:rgba(255,255,255,.16);
+    z-index:2;
+  }
+}
+.plat-card:active{transform:perspective(700px) scale(.97)!important}
+
+/* Card layers */
+.pc-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .35s cubic-bezier(.16,1,.3,1);will-change:transform}
+@media(hover:hover){.plat-card:hover .pc-bg{transform:scale(1.07)}}
+.pc-ov{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(0,0,0,.07) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0) 48%,rgba(0,0,0,.55) 74%,rgba(0,0,0,.88) 100%);
+}
+.pc-ov::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28) 0%,transparent 28%)}
 .pc-live{
-  width:9px;height:9px;border-radius:50%;
-  background:var(--avail);
-  box-shadow:0 0 9px rgba(74,222,128,.7);
-  animation:livep 2s ease-in-out infinite;
+  position:absolute;top:12px;right:12px;z-index:3;
+  width:8px;height:8px;border-radius:50%;
+  background:#4ade80;box-shadow:0 0 9px rgba(74,222,128,.75);
+  animation:pdot 2.2s ease-in-out infinite;will-change:transform,opacity;
 }
-@keyframes livep{0%,100%{opacity:1}50%{opacity:.35}}
-.pc-out-ind{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}
+.pc-rank{position:absolute;top:10px;left:11px;z-index:3;font-size:9.5px;font-weight:800;letter-spacing:.6px;color:rgba(255,255,255,.5);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.pc-rank.top{color:var(--red)}
+.pc-logo-c{
+  position:absolute;inset:0;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.pc-logo-c img{
+  width:clamp(44px,55%,88px);height:auto;max-height:72px;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 18px rgba(0,0,0,.6)) brightness(1.05);
+  transition:transform .32s cubic-bezier(.16,1,.3,1),filter .25s;
+  will-change:transform;
+}
+@media(hover:hover){.plat-card:hover .pc-logo-c img{transform:scale(1.1);filter:drop-shadow(0 8px 28px rgba(0,0,0,.7)) brightness(1.12)}}
+.pc-logo-fb{display:none;align-items:center;justify-content:center;width:100%;height:100%}
 
-/* card body */
-.pc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--t1)}
-.pc-desc{font-size:11px;color:var(--t3);line-height:1.4}
-
-/* card footer */
-.pc-foot{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:11px;
-  border-top:1px solid rgba(255,255,255,.06);
-  margin-top:auto;
+/* Card bottom info */
+.pc-bot{
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+  padding:13px 13px 15px;
+  display:flex;flex-direction:column;gap:7px;
 }
-.pc-price{
-  display:flex;align-items:baseline;gap:3px;
-  font-family:'Nunito',sans-serif;
-}
-.pc-price strong{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.8px}
-.pc-price span{font-size:11px;color:var(--t3);font-weight:600}
+.pc-name{font-family:var(--fd);font-size:15px;color:#fff;letter-spacing:-.2px;line-height:1.1;text-shadow:0 1px 5px rgba(0,0,0,.5)}
+@media(max-width:480px){.pc-name{font-size:13px}}
+.pc-meta{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pc-price{display:flex;align-items:baseline;gap:2px}
+.pc-price strong{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.8px;font-variant-numeric:tabular-nums;text-shadow:0 1px 5px rgba(0,0,0,.4)}
+.pc-price span{font-size:11px;font-weight:500;opacity:.55}
+@media(max-width:480px){.pc-price strong{font-size:16px}}
 .pc-buy{
-  display:inline-flex;align-items:center;gap:5px;
-  border:none;border-radius:9px;padding:8px 13px;
-  color:#fff;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  box-shadow:0 3px 12px rgba(229,9,20,.3);
-  transition:all .18s ease;min-height:34px;touch-action:manipulation;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  border-radius:8px;padding:7px 12px;
+  font-size:11px;font-weight:700;color:#fff;
+  background:rgba(229,9,20,.82);
+  backdrop-filter:blur(8px);
+  box-shadow:0 3px 10px rgba(229,9,20,.38),inset 0 1px 0 rgba(255,255,255,.14);
+  transition:all .18s ease;min-height:32px;
+  touch-action:manipulation;white-space:nowrap;flex-shrink:0;
 }
-.pc-buy:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(229,9,20,.45)}
-.pc-buy:active{transform:scale(.96)}
-.pc-buy:disabled{background:rgba(255,255,255,.1);box-shadow:none;color:var(--t3);cursor:not-allowed}
-.pc-na{font-size:11px;color:var(--t3);font-weight:600}
+@media(hover:hover){.pc-buy:hover{background:var(--red);transform:translateY(-1px);box-shadow:0 5px 16px rgba(229,9,20,.52)}}
+.pc-buy:active{transform:scale(.94)}
+.pc-na{font-size:10px;font-weight:600;color:rgba(255,255,255,.3)}
 
-/* ══ PLANS ══ */
+/* ─────────────────────────────────────────────
+   PLANS
+───────────────────────────────────────────── */
+.plans-sec{padding:80px 24px;background:var(--bg)}
+.plans-inner{max-width:1340px;margin:0 auto}
 .plans-grid{
   display:grid;grid-template-columns:repeat(3,1fr);
-  gap:22px;align-items:stretch;
+  gap:18px;align-items:start;margin-top:48px;
 }
-@media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+@media(max-width:860px){.plans-grid{grid-template-columns:1fr;max-width:400px;margin:48px auto 0}}
 
 .plan-card{
-  background:var(--card);border:1.5px solid var(--bord);
-  border-radius:24px;padding:32px 26px;
-  display:flex;flex-direction:column;
+  border-radius:22px;padding:30px 24px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.035);
+  backdrop-filter:blur(10px);
   position:relative;overflow:hidden;
-  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
+  display:flex;flex-direction:column;
+  transition:transform .28s cubic-bezier(.16,1,.3,1),border-color .2s;
+  will-change:transform;
 }
-.plan-card:hover{transform:translateY(-7px);border-color:rgba(229,9,20,.3)}
+@media(hover:hover){.plan-card:hover{transform:translateY(-6px);border-color:rgba(229,9,20,.28)}}
 .plan-card.feat{
-  border-color:var(--red);
-  background:linear-gradient(145deg,rgba(229,9,20,.08) 0%,rgba(30,20,50,.5) 100%);
-  box-shadow:0 0 0 1px rgba(229,9,20,.2),0 20px 50px rgba(229,9,20,.12);
+  border-color:rgba(229,9,20,.45);
+  background:linear-gradient(145deg,rgba(229,9,20,.09) 0%,rgba(20,10,30,.6) 100%);
+  box-shadow:0 0 0 1px rgba(229,9,20,.18),0 18px 44px rgba(229,9,20,.1);
   transform:scale(1.02);
 }
-.plan-card.feat:hover{transform:scale(1.02) translateY(-7px)}
-
+@media(hover:hover){.plan-card.feat:hover{transform:scale(1.02) translateY(-6px)}}
 .plan-badge{
-  position:absolute;top:18px;right:18px;
+  position:absolute;top:16px;right:16px;
   background:linear-gradient(135deg,var(--red),var(--red2));
-  color:#fff;font-size:11px;font-weight:800;
-  padding:4px 12px;border-radius:var(--rp);
-  text-transform:uppercase;letter-spacing:.5px;
+  color:#fff;font-size:10px;font-weight:800;
+  padding:4px 11px;border-radius:var(--rp);
+  letter-spacing:.5px;text-transform:uppercase;
   box-shadow:2px 3px 0 var(--red3);
 }
-.plan-icon{
-  width:56px;height:56px;border-radius:16px;
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:18px;
-  box-shadow:var(--sh-card);
-}
-.plan-tag{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
-.plan-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:5px;letter-spacing:-.4px}
-.plan-desc{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:22px}
-.plan-price{font-size:46px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
-.plan-psub{font-size:12px;color:var(--t3);margin:5px 0 22px}
-
-.plan-feats{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1;margin-bottom:24px}
-.pf{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--t2);font-weight:600;line-height:1.4}
-.pf-yes{width:20px;height:20px;border-radius:7px;flex-shrink:0;background:rgba(74,222,128,.12);color:var(--avail);display:flex;align-items:center;justify-content:center;margin-top:1px}
-.pf-no {width:20px;height:20px;border-radius:7px;flex-shrink:0;background:rgba(255,255,255,.05);color:var(--t3);display:flex;align-items:center;justify-content:center;margin-top:1px;opacity:.5}
-
+.plan-ico{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.plan-tag{font-size:10px;font-weight:700;color:var(--m2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.plan-title{font-family:var(--fd);font-size:22px;color:#fff;letter-spacing:-.4px;margin-bottom:6px}
+.plan-desc{font-size:13px;color:var(--m1);line-height:1.6;margin-bottom:20px}
+.plan-price{font-size:44px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
+.plan-psub{font-size:11px;color:var(--m2);margin:5px 0 20px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1;margin-bottom:24px}
+.pf{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--m1);font-weight:500}
+.pf-ok{width:18px;height:18px;border-radius:6px;flex-shrink:0;background:rgba(74,222,128,.12);color:#4ade80;display:flex;align-items:center;justify-content:center}
+.pf-no{width:18px;height:18px;border-radius:6px;flex-shrink:0;background:rgba(255,255,255,.04);color:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
 .plan-btn{
-  width:100%;border:none;border-radius:12px;padding:15px;
-  font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
-  min-height:50px;transition:all .2s cubic-bezier(.16,1,.3,1);touch-action:manipulation;
+  width:100%;border-radius:12px;padding:14px;
+  font-size:14px;font-weight:700;font-family:var(--fb);
+  min-height:50px;
+  transition:all .2s cubic-bezier(.16,1,.3,1);
+  touch-action:manipulation;will-change:transform;
 }
-.plan-btn.p{
-  background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;
-  box-shadow:3px 4px 0 var(--red3),0 8px 24px var(--red-glow);
-}
-.plan-btn.p:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--red3),0 12px 30px var(--red-glow)}
-.plan-btn.s{
-  background:rgba(255,255,255,.07);color:var(--t1);
-  border:1.5px solid rgba(255,255,255,.12);
-}
-.plan-btn.s:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.plan-btn.p{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;box-shadow:3px 4px 0 var(--red3),0 8px 22px var(--rg)}
+@media(hover:hover){.plan-btn.p:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--red3),0 12px 28px var(--rg)}}
+.plan-btn.s{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.1)}
+@media(hover:hover){.plan-btn.s:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}}
 .plan-btn:active{transform:scale(.97)!important}
 
-/* ══ HOW IT WORKS ══ */
-.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:720px){.how-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
-
+/* ─────────────────────────────────────────────
+   HOW IT WORKS
+───────────────────────────────────────────── */
+.how-sec{padding:80px 24px;background:var(--bg2)}
+.how-inner{max-width:1340px;margin:0 auto}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+@media(max-width:680px){.how-grid{grid-template-columns:1fr;max-width:360px;margin:48px auto 0}}
 .how-card{
-  background:var(--card);border:1px solid var(--bord);
-  border-radius:22px;padding:32px 24px;
-  text-align:center;position:relative;overflow:hidden;
-  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
+  border-radius:20px;padding:30px 24px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  position:relative;overflow:hidden;
+  transition:transform .28s cubic-bezier(.16,1,.3,1),border-color .2s;
+  will-change:transform;
 }
-.how-card:hover{transform:translateY(-6px);border-color:rgba(229,9,20,.25)}
-.how-num{
-  position:absolute;top:14px;right:18px;
-  font-size:52px;font-weight:900;color:rgba(229,9,20,.07);line-height:1;
-  font-family:'Nunito',sans-serif;
-}
-.how-ico{
-  width:68px;height:68px;border-radius:20px;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 18px;box-shadow:var(--sh-card);
-}
-.how-ico.a{background:linear-gradient(135deg,rgba(229,9,20,.18),rgba(180,30,30,.12))}
-.how-ico.b{background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(100,60,200,.12))}
-.how-ico.c{background:linear-gradient(135deg,rgba(74,222,128,.15),rgba(29,185,84,.08))}
-.how-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:9px}
-.how-desc{font-size:13px;color:var(--t2);line-height:1.65;font-weight:500}
+@media(hover:hover){.how-card:hover{transform:translateY(-5px);border-color:rgba(229,9,20,.22)}}
+.how-n{position:absolute;top:14px;right:18px;font-family:var(--fd);font-size:58px;color:rgba(229,9,20,.06);line-height:1}
+.how-ico{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.how-title{font-family:var(--fd);font-size:19px;color:#fff;margin-bottom:9px;letter-spacing:-.2px}
+.how-desc{font-size:13px;color:var(--m1);line-height:1.65}
 
-/* ══ TESTIMONIALS ══ */
-.testi-sec{padding:72px 5%;background:var(--bg2)}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:900px){.testi-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:580px){.testi-grid{grid-template-columns:1fr}}
-
+/* ─────────────────────────────────────────────
+   TESTIMONIALS
+───────────────────────────────────────────── */
+.testi-sec{padding:80px 24px}
+.testi-inner{max-width:1340px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+@media(max-width:860px){.testi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.testi-grid{grid-template-columns:1fr}}
 .testi-card{
-  background:var(--card);border:1px solid var(--bord);
-  border-radius:20px;padding:24px 20px;
-  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
+  border-radius:18px;padding:22px 18px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.03);
+  transition:transform .26s cubic-bezier(.16,1,.3,1),border-color .2s;
+  will-change:transform;
 }
-.testi-card:hover{transform:translateY(-4px);border-color:rgba(229,9,20,.2)}
-.testi-stars{display:flex;gap:3px;margin-bottom:13px}
-.testi-quote{font-size:14px;color:var(--t2);line-height:1.7;font-weight:500;margin-bottom:18px;font-style:italic}
-.testi-quote::before{content:'\201C';font-size:36px;color:var(--red);line-height:.5;display:block;font-style:normal;margin-bottom:8px;font-family:Georgia,serif}
-.testi-person{display:flex;align-items:center;gap:11px}
-.testi-av{
-  width:42px;height:42px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;
-  box-shadow:var(--sh-card);
-}
-.testi-name{font-size:14px;font-weight:800;color:#fff}
-.testi-sub{font-size:11px;color:var(--t3);margin-top:2px}
+@media(hover:hover){.testi-card:hover{transform:translateY(-4px);border-color:rgba(229,9,20,.2)}}
+.testi-stars{display:flex;gap:2px;margin-bottom:12px}
+.testi-body{font-size:13.5px;color:var(--m1);line-height:1.7;font-style:italic;margin-bottom:16px}
+.testi-body::before{content:'\201C';font-family:var(--fd);font-size:36px;color:var(--red);opacity:.65;line-height:.4;display:block;margin-bottom:9px;font-style:normal}
+.testi-person{display:flex;align-items:center;gap:10px}
+.testi-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff}
+.testi-name{font-size:13px;font-weight:700;color:#fff}
+.testi-meta{font-size:11px;color:var(--m2);margin-top:2px}
 
-/* ══ CTA ══ */
-.cta-sec{padding:72px 5%}
+/* ─────────────────────────────────────────────
+   CTA BANNER
+───────────────────────────────────────────── */
+.cta-sec{padding:60px 24px 80px}
 .cta-box{
-  max-width:1280px;margin:0 auto;
-  background:linear-gradient(135deg,var(--red) 0%,var(--red2) 50%,#8b0030 100%);
-  border-radius:28px;padding:clamp(36px,5vw,72px) clamp(24px,5vw,72px);
+  max-width:1340px;margin:0 auto;
+  border-radius:24px;
+  padding:clamp(36px,5vw,70px) clamp(24px,5vw,70px);
+  position:relative;overflow:hidden;
   display:flex;align-items:center;justify-content:space-between;
-  gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;
-  box-shadow:8px 10px 0 var(--red3),0 20px 56px var(--red-glow);
+  gap:28px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#1a0305 0%,#280008 35%,#0a0d24 100%);
+  border:1px solid rgba(229,9,20,.22);
+  box-shadow:0 0 0 1px rgba(229,9,20,.1),0 20px 52px rgba(229,9,20,.1),8px 9px 0 rgba(80,0,0,.45);
 }
 .cta-box::before{
   content:'';position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(circle 280px at 80% 50%,rgba(255,255,255,.1) 0%,transparent 60%),
-    radial-gradient(circle 180px at 20% 80%,rgba(255,255,255,.06) 0%,transparent 50%);
+  background:radial-gradient(circle 340px at 80% 50%,rgba(229,9,20,.1) 0%,transparent 60%);
 }
 .cta-copy{position:relative;z-index:1}
-.cta-copy h2{font-size:clamp(22px,3.2vw,38px);font-weight:900;color:#fff;letter-spacing:-.8px;margin-bottom:9px}
-.cta-copy p{font-size:16px;color:rgba(255,255,255,.8);font-weight:600;max-width:440px}
-.cta-btns{display:flex;gap:11px;flex-wrap:wrap;position:relative;z-index:1}
+.cta-copy h2{font-family:var(--fd);font-size:clamp(22px,3.5vw,40px);color:#fff;letter-spacing:-.8px;line-height:1.1;margin-bottom:9px}
+.cta-copy p{font-size:15px;color:var(--m1);max-width:420px;line-height:1.6}
+.cta-btns{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+@media(max-width:480px){.cta-btns{width:100%}.cta-btns button{flex:1}}
+
 .btn-wa{
-  display:inline-flex;align-items:center;gap:9px;
-  background:var(--green);border:none;border-radius:var(--r2);
-  padding:16px 28px;color:#fff;
-  font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;
-  box-shadow:4px 5px 0 var(--green2),0 10px 28px rgba(37,211,102,.4);
-  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:56px;touch-action:manipulation;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--wa);border-radius:var(--rp);
+  padding:15px 26px;color:#fff;
+  font-size:14px;font-weight:700;font-family:var(--fb);
+  box-shadow:3px 4px 0 var(--wa2),0 8px 24px rgba(37,211,102,.35);
+  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:52px;
+  touch-action:manipulation;will-change:transform;
 }
-.btn-wa:hover{transform:translateY(-3px);box-shadow:5px 7px 0 var(--green2),0 16px 36px rgba(37,211,102,.5)}
-.btn-wa:active{transform:scale(.97)}
-.btn-cg{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.35);
-  border-radius:var(--r2);padding:16px 24px;
-  color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;
-  min-height:56px;touch-action:manipulation;transition:all .2s;
+@media(hover:hover){.btn-wa:hover{transform:translateY(-3px);box-shadow:4px 6px 0 var(--wa2),0 14px 32px rgba(37,211,102,.45)}}
+.btn-wa:active{transform:scale(.96)}
+.btn-gl{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border-radius:var(--rp);padding:15px 22px;
+  color:rgba(255,255,255,.75);
+  font-size:14px;font-weight:600;font-family:var(--fb);
+  min-height:52px;touch-action:manipulation;
+  transition:all .2s;
 }
-.btn-cg:hover{background:rgba(255,255,255,.25)}
+@media(hover:hover){.btn-gl:hover{color:#fff;transform:scale(1.03)}}
 
-/* ══ FOOTER ══ */
-footer{background:#07041a;border-top:1px solid rgba(255,255,255,.05);padding:48px 5% 28px}
-.footer-inner{
-  max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;
-  padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.06);
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+footer{background:#0a0404;border-top:1px solid rgba(255,255,255,.05);padding:44px 24px 24px}
+.foot-inner{
+  max-width:1340px;margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;
+  padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.05);
 }
-@media(max-width:680px){.footer-inner{grid-template-columns:1fr}}
-.footer-brand{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:9px;display:flex;align-items:center;gap:8px}
-.footer-desc{font-size:13px;color:rgba(255,255,255,.35);line-height:1.65;max-width:270px}
-.foot-col h4{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:13px}
-.foot-col a{display:block;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px;transition:color .15s}
-.foot-col a:hover{color:var(--t1)}
-.footer-bottom{text-align:center;padding-top:22px;font-size:12px;color:rgba(255,255,255,.2)}
-.footer-bottom strong{color:var(--red)}
+@media(max-width:640px){.foot-inner{grid-template-columns:1fr}}
+.foot-brand{font-family:var(--fd);font-size:20px;color:var(--fg);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.foot-desc{font-size:12.5px;color:var(--m2);line-height:1.65;max-width:240px}
+.foot-col h4{font-size:10px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+.foot-col a{display:block;font-size:13px;color:var(--m2);margin-bottom:8px;transition:color .15s}
+.foot-col a:hover{color:var(--fg)}
+.foot-bottom{text-align:center;padding-top:20px;font-size:11px;color:rgba(255,255,255,.17);max-width:1340px;margin:0 auto}
+.foot-bottom strong{color:var(--red)}
 
-/* ══ WA FLOAT ══ */
+/* ─────────────────────────────────────────────
+   WA FLOAT BUTTON
+───────────────────────────────────────────── */
 .wa-float{
-  position:fixed;bottom:26px;right:26px;
-  width:58px;height:58px;border-radius:50%;
-  background:var(--green);border:none;
+  position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));right:20px;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--wa);
   display:flex;align-items:center;justify-content:center;
-  z-index:80;
-  box-shadow:3px 4px 0 var(--green2),0 8px 26px rgba(37,211,102,.5);
-  transition:transform .2s,box-shadow .2s;
-  animation:wap 3.5s ease-in-out infinite;
+  z-index:150;
+  box-shadow:3px 4px 0 var(--wa2),0 8px 22px rgba(37,211,102,.48);
+  animation:pulse3 3.5s ease-in-out infinite;
+  will-change:transform;transform:translateZ(0);
   touch-action:manipulation;
+  transition:transform .18s,box-shadow .18s;
 }
-.wa-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:4px 6px 0 var(--green2),0 14px 36px rgba(37,211,102,.65);animation:none}
-.wa-float:active{transform:scale(.94)}
-@media(max-width:600px){.wa-float{bottom:18px;right:14px;width:52px;height:52px}}
-@keyframes wap{0%,100%{box-shadow:3px 4px 0 var(--green2),0 8px 26px rgba(37,211,102,.5)}50%{box-shadow:3px 4px 0 var(--green2),0 8px 32px rgba(37,211,102,.75),0 0 0 12px rgba(37,211,102,.07)}}
+@media(hover:hover){.wa-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:4px 6px 0 var(--wa2),0 14px 32px rgba(37,211,102,.6);animation:none}}
+.wa-float:active{transform:scale(.9)}
+/* Move up on mobile to not overlap bottom bar */
+@media(max-width:767px){
+  .wa-float{
+    bottom:calc(var(--bot-h) + 12px + env(safe-area-inset-bottom));
+    right:14px;width:50px;height:50px;
+  }
+}
 
-/* ══ MODAL ══ */
+/* ─────────────────────────────────────────────
+   MOBILE BOTTOM NAV BAR
+───────────────────────────────────────────── */
+.bot-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:190;
+  background:rgba(14,6,6,.95);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:0 4px;
+  padding-bottom:env(safe-area-inset-bottom);
+  height:calc(var(--bot-h) + env(safe-area-inset-bottom));
+  display:none;
+}
+@media(max-width:767px){.bot-bar{display:flex;align-items:stretch}}
+.bot-items{display:flex;width:100%;align-items:stretch}
+.bot-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:8px 4px 6px;
+  color:var(--m2);font-size:10px;font-weight:600;letter-spacing:.2px;
+  transition:color .18s;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.bot-item svg{transition:transform .2s cubic-bezier(.16,1,.3,1)}
+.bot-item:active svg{transform:scale(.88)}
+.bot-item.active{color:var(--red)}
+.bot-item.active svg{filter:drop-shadow(0 0 6px rgba(229,9,20,.7))}
+/* Special WA item */
+.bot-item.wa-item{
+  flex:1.2;
+}
+.bot-wa-ico{
+  width:40px;height:40px;border-radius:50%;background:var(--wa);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(37,211,102,.45);
+  transition:transform .18s;
+}
+.bot-item.wa-item:active .bot-wa-ico{transform:scale(.88)}
+
+/* Body padding to not hide content behind bars */
+@media(max-width:767px){
+  body{padding-bottom:calc(var(--bot-h) + env(safe-area-inset-bottom))}
+}
+
+/* ─────────────────────────────────────────────
+   MODAL
+───────────────────────────────────────────── */
 .modal-ov{
   position:fixed;inset:0;
-  background:rgba(8,4,26,.75);backdrop-filter:blur(12px);
+  background:rgba(10,3,3,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   z-index:300;display:flex;align-items:flex-end;justify-content:center;
   opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;
 }
-@media(min-width:641px){.modal-ov{align-items:center;padding:24px}}
+@media(min-width:640px){.modal-ov{align-items:center;padding:24px}}
 .modal-ov.open{opacity:1;visibility:visible}
 .modal{
-  background:#1a1430;width:100%;max-width:430px;
-  border-radius:24px 24px 0 0;
-  border:1px solid var(--bord2);
-  transform:translateY(40px);transition:transform .38s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 -8px 40px rgba(229,9,20,.15);
+  background:#180909;width:100%;max-width:420px;
+  border-radius:22px 22px 0 0;
+  border:1px solid rgba(255,255,255,.09);
+  transform:translateY(40px);
+  transition:transform .38s cubic-bezier(.16,1,.3,1);
+  overflow:hidden;
+  box-shadow:0 -6px 36px rgba(229,9,20,.1);
+  will-change:transform;
 }
-@media(min-width:641px){.modal{border-radius:24px}}
+@media(min-width:640px){.modal{border-radius:22px}}
 .modal-ov.open .modal{transform:translateY(0)}
-.modal-drag{display:flex;justify-content:center;padding:13px 0 0}
-@media(min-width:641px){.modal-drag{display:none}}
-.modal-drag-bar{width:42px;height:5px;background:rgba(255,255,255,.12);border-radius:3px}
-.modal-body{padding:22px 26px 28px}
-.modal-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.modal-ico{
-  width:66px;height:66px;border-radius:18px;
-  background:rgba(255,255,255,.07);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;flex-shrink:0;
-}
-.modal-ico img{width:52px;height:52px;object-fit:contain}
-.modal-ico-fb{width:52px;height:52px;display:flex;align-items:center;justify-content:center}
-.modal-pname{font-size:22px;font-weight:900;color:#fff}
-.modal-pdesc{font-size:13px;color:var(--t2);margin-top:3px}
+.modal-drag{display:flex;justify-content:center;padding:12px 0 0}
+@media(min-width:640px){.modal-drag{display:none}}
+.modal-drag-bar{width:38px;height:5px;background:rgba(255,255,255,.1);border-radius:3px}
+.modal-body{padding:20px 24px 26px}
+.modal-top{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.modal-logo{width:64px;height:64px;border-radius:15px;overflow:hidden;flex-shrink:0;position:relative}
+.modal-logo img{width:100%;height:100%;object-fit:cover}
+.modal-logo-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.modal-pname{font-family:var(--fd);font-size:21px;color:#fff}
+.modal-pdesc{font-size:12.5px;color:var(--m1);margin-top:3px}
 .modal-ppill{
+  border-radius:13px;padding:15px 18px;margin-bottom:18px;
   background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:14px;padding:18px 22px;margin-bottom:22px;
   display:flex;align-items:center;justify-content:space-between;
   box-shadow:3px 4px 0 var(--red3);
 }
-.mpp-lbl{font-size:12px;font-weight:700;color:rgba(255,255,255,.7)}
-.mpp-price{font-size:40px;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
-.mpp-per{font-size:12px;color:rgba(255,255,255,.65);font-weight:600}
-.modal-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;display:block}
-.modal-sel{
-  width:100%;background:rgba(255,255,255,.07);
-  border:1.5px solid rgba(229,9,20,.2);border-radius:12px;
-  padding:13px 16px;color:#fff;
-  font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;
-  appearance:none;margin-bottom:18px;cursor:pointer;min-height:50px;
+.mpp-l{font-size:11px;font-weight:600;color:rgba(255,255,255,.62)}
+.mpp-p{font-size:38px;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1}
+.mpp-s{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
+.mlbl{font-size:10.5px;font-weight:700;color:var(--m1);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:block}
+.msel{
+  width:100%;background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(229,9,20,.2);border-radius:11px;
+  padding:12px 15px;color:#fff;
+  font-size:15px;font-weight:600;font-family:var(--fb);
+  appearance:none;margin-bottom:14px;cursor:pointer;min-height:48px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e50914' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;
+  background-repeat:no-repeat;background-position:right 13px center;
 }
-.modal-sel:focus{outline:2px solid var(--red);outline-offset:2px}
-.modal-sel option{background:#1a1430}
-.modal-acts{display:flex;flex-direction:column;gap:9px}
-.modal-wa{
-  width:100%;background:var(--green);border:none;border-radius:12px;
-  padding:15px;color:#fff;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  box-shadow:3px 4px 0 var(--green2);
-  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:52px;touch-action:manipulation;
+.msel:focus{outline:2px solid var(--red)}
+.msel option{background:#180909}
+.macts{display:flex;flex-direction:column;gap:8px}
+.mwa{
+  width:100%;background:var(--wa);border-radius:12px;
+  padding:14px;color:#fff;font-size:14px;font-weight:700;font-family:var(--fb);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:3px 4px 0 var(--wa2);
+  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:50px;
+  touch-action:manipulation;will-change:transform;
 }
-.modal-wa:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--green2)}
-.modal-wa:active{transform:scale(.97)}
-.modal-cancel{
-  width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
-  border-radius:12px;padding:13px;color:var(--t2);
-  font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;
-  transition:all .2s;min-height:46px;
+@media(hover:hover){.mwa:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--wa2)}}
+.mwa:active{transform:scale(.97)}
+.mcancel{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;padding:12px;color:var(--m1);
+  font-size:13.5px;font-weight:600;font-family:var(--fb);
+  transition:all .2s;min-height:44px;
 }
-.modal-cancel:hover{background:rgba(255,255,255,.1);color:#fff}
+.mcancel:hover{background:rgba(255,255,255,.09);color:#fff}
 
-/* ══ TOAST ══ */
+/* Toast */
 .toast{
-  position:fixed;bottom:96px;left:50%;
+  position:fixed;
+  bottom:calc(var(--bot-h) + 16px + env(safe-area-inset-bottom));
+  left:50%;
   transform:translateX(-50%) translateY(12px);
-  background:var(--bg3);border:1px solid var(--bord2);
+  background:#1e0808;border:1px solid rgba(255,255,255,.1);
   backdrop-filter:blur(20px);
-  color:var(--t1);padding:12px 22px;border-radius:10px;
-  font-size:13px;font-weight:700;
+  color:var(--fg);padding:11px 20px;border-radius:10px;
+  font-size:13px;font-weight:600;
   z-index:9999;opacity:0;
   transition:opacity .25s,transform .25s cubic-bezier(.16,1,.3,1);
   pointer-events:none;white-space:nowrap;
-  box-shadow:var(--sh-card);
+  box-shadow:0 4px 18px rgba(0,0,0,.35);
 }
+@media(min-width:768px){.toast{bottom:28px}}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ══ FADE UP ══ */
-.fu{opacity:0;transform:translateY(24px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
-.fu.vis{opacity:1;transform:translateY(0)}
-
-/* ══ SCROLLBAR ══ */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#07041a}
-::-webkit-scrollbar-thumb{background:rgba(139,92,246,.3);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(229,9,20,.4)}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ══ NAV ══ -->
 <nav id="nav">
   <div class="nav-inner">
-    <div class="brand">
-      <div class="brand-mark">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <polygon points="6 3 20 12 6 21" fill="white"/>
-        </svg>
+    <div class="nav-logo">
+      <div class="nav-mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="6 3 20 12 6 21" fill="white"/></svg>
       </div>
-      <div class="brand-name">SICCHA <span>STREAMING</span></div>
+      <div class="nav-name">SICCHA<sup>®</sup></div>
     </div>
-    <nav class="nav-links">
+    <div class="nav-links">
+      <a href="#inicio" class="active">Inicio</a>
       <a href="#platforms">Plataformas</a>
       <a href="#plans">Planes</a>
-      <a href="#how">Cómo funciona</a>
       <a href="#reviews">Opiniones</a>
-    </nav>
-    <button class="nav-btn" id="navBtn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+    </div>
+    <button class="nav-cta glass" id="navWa">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
       Pedir ahora
+    </button>
+    <button class="nav-ham" id="navHam" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-bg" aria-hidden="true"></div>
-  <div class="hero-grid" aria-hidden="true"></div>
-  <div class="hero-inner">
-
-    <!-- Copy -->
-    <div class="hero-copy">
-      <div class="hero-tag">
-        <span class="hero-tag-dot" aria-hidden="true"></span>
-        Streaming en Trujillo, Perú
-      </div>
-      <h1 class="hero-h1">Disfruta sin<br>límites tu<br><em>streaming</em></h1>
-      <p class="hero-sub">Las plataformas que amas al mejor precio. Entrega inmediata, precios en soles y soporte personalizado.</p>
-      <div class="hero-actions">
-        <a href="#platforms" class="btn-red">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-          Ver plataformas
-        </a>
-        <button class="btn-ghost" id="heroWa">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-          Consultar gratis
-        </button>
-      </div>
-      <div class="hero-pills">
-        <div class="hero-pill">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Entrega inmediata
-        </div>
-        <div class="hero-pill">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Garantía total
-        </div>
-        <div class="hero-pill">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          Soporte 24/7
-        </div>
-      </div>
-    </div>
-
-    <!-- 3D Phones -->
-    <div class="hero-visual" aria-hidden="true">
-      <div class="star-field" id="sf"></div>
-      <div class="phone-scene" id="ps">
-
-        <!-- LEFT — Spotify -->
-        <div class="ph-wrap left">
-          <div class="phone">
-            <div class="phone-shell"></div>
-            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
-            <div class="phone-scr">
-              <div class="scr-bg"></div>
-              <div class="scr-orb" style="width:110px;height:110px;background:rgba(29,185,84,.45);top:-15px;left:-15px;animation-delay:-1s"></div>
-              <div class="scr-orb" style="width:70px;height:70px;background:rgba(29,185,84,.25);bottom:30px;right:-5px;animation-delay:-2.5s"></div>
-              <div class="dyn-island"></div>
-              <div class="scr-ui">
-                <div class="scr-app" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">
-                  <img src="assets/spotify.png" alt="Spotify" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <div class="scr-app-fb" style="display:none"><svg viewBox="0 0 36 36" width="32" height="32"><circle cx="18" cy="18" r="14" fill="#1db954"/><path d="M11 16c4-2 9-2 13 0M11 19c3-1.5 7-1.5 11 0M11 22c2.5-1 5.5-1 8 0" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
-                </div>
-                <div class="scr-name">Spotify Premium</div>
-                <div class="scr-price">S/ 12</div>
-                <div class="scr-per">por mes</div>
-                <div class="scr-rows">
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(29,185,84,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="#1db954"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/12</div></div>
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(29,185,84,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1db954" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">OK</div></div>
-                </div>
-                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar</div>
-              </div>
-            </div>
-            <div class="ph-glow"></div>
-          </div>
-        </div>
-
-        <!-- CENTER — Netflix -->
-        <div class="ph-wrap center">
-          <div class="phone">
-            <div class="phone-shell"></div>
-            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
-            <div class="phone-scr">
-              <div class="scr-bg"></div>
-              <div class="scr-orb" style="width:150px;height:150px;background:rgba(139,92,246,.5);top:-25px;right:-25px;animation-delay:0s"></div>
-              <div class="scr-orb" style="width:110px;height:110px;background:rgba(229,9,20,.3);bottom:25px;left:-15px;animation-delay:-2s"></div>
-              <div class="scr-orb" style="width:80px;height:80px;background:rgba(255,204,2,.18);top:48%;right:8px;animation-delay:-1s"></div>
-              <div class="dyn-island"></div>
-              <div class="scr-ui">
-                <div class="scr-app" style="background:linear-gradient(135deg,#e50914,#831010);width:64px;height:64px;border-radius:18px">
-                  <img src="assets/netflix.png" alt="Netflix" width="50" height="50" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <div class="scr-app-fb" style="display:none;width:50px;height:50px"><svg viewBox="0 0 50 50" width="46" height="46"><text x="10" y="38" font-size="36" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg></div>
-                </div>
-                <div class="scr-name">Netflix Premium HD</div>
-                <div class="scr-price">S/ 15</div>
-                <div class="scr-per">por mes</div>
-                <div class="scr-rows">
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/15</div></div>
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 2l-4 5-4-5"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">HD</div></div>
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.12)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">HOY</div></div>
-                </div>
-                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar ahora</div>
-              </div>
-            </div>
-            <div class="ph-glow"></div>
-          </div>
-        </div>
-
-        <!-- RIGHT — Disney+ -->
-        <div class="ph-wrap right">
-          <div class="phone">
-            <div class="phone-shell"></div>
-            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
-            <div class="phone-scr">
-              <div class="scr-bg"></div>
-              <div class="scr-orb" style="width:120px;height:120px;background:rgba(26,62,196,.45);top:-10px;right:-10px;animation-delay:-0.8s"></div>
-              <div class="scr-orb" style="width:75px;height:75px;background:rgba(100,150,255,.25);bottom:40px;left:0;animation-delay:-3s"></div>
-              <div class="dyn-island"></div>
-              <div class="scr-ui">
-                <div class="scr-app" style="background:linear-gradient(135deg,#1a3ec4,#0a1f7a)">
-                  <img src="assets/disney.png" alt="Disney+" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <div class="scr-app-fb" style="display:none"><svg viewBox="0 0 44 44" width="38" height="38"><text x="3" y="32" font-size="22" font-weight="900" font-family="Georgia,serif" fill="#4a7fff" font-style="italic">D+</text></svg></div>
-                </div>
-                <div class="scr-name">Disney+ 4K</div>
-                <div class="scr-price">S/ 12</div>
-                <div class="scr-per">por mes</div>
-                <div class="scr-rows">
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(26,62,196,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4a7fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/12</div></div>
-                  <div class="scr-row"><div class="sr-ico" style="background:rgba(26,62,196,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="#4a7fff"><polygon points="10 8 16 12 10 16 10 8"/><circle cx="12" cy="12" r="10" fill="none" stroke="#4a7fff" stroke-width="2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">4K</div></div>
-                </div>
-                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar</div>
-              </div>
-            </div>
-            <div class="ph-glow"></div>
-          </div>
-        </div>
-
-      </div><!-- /phone-scene -->
-
-      <!-- Badges -->
-      <div class="h-badge hb-1">
-        <div class="hb-ico" style="background:rgba(255,204,2,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffcc02" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-        <div><div class="hb-name">Entrega inmediata</div><div class="hb-sub">El mismo día</div></div>
-      </div>
-      <div class="h-badge hb-2">
-        <div class="hb-ico" style="background:rgba(229,9,20,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="#ff5555"/></svg></div>
-        <div><div class="hb-name">+500 clientes</div><div class="hb-sub">Trujillo, Perú</div></div>
-      </div>
-      <div class="h-badge hb-3">
-        <div class="hb-ico" style="background:rgba(74,222,128,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke="#4ade80" stroke-width="2"/></svg></div>
-        <div><div class="hb-name">Garantía total</div><div class="hb-sub">100% seguro</div></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- TRUST BAR -->
-<div class="trust fu">
-  <div class="trust-inner">
-    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Entrega el mismo día</div>
-    <div class="trust-sep" aria-hidden="true"></div>
-    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Desde S/ 7 por mes</div>
-    <div class="trust-sep" aria-hidden="true"></div>
-    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Soporte 24/7 WhatsApp</div>
-    <div class="trust-sep" aria-hidden="true"></div>
-    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Garantía de acceso</div>
-  </div>
+<!-- Mobile slide menu -->
+<div class="mob-overlay" id="mobOverlay"></div>
+<div class="mob-menu" id="mobMenu" role="navigation" aria-label="Menú principal">
+  <a href="#inicio" class="active">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Inicio
+  </a>
+  <a href="#platforms">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 2l-4 5-4-5"/></svg>
+    Plataformas
+  </a>
+  <a href="#plans">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Planes
+  </a>
+  <a href="#reviews">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Opiniones
+  </a>
+  <button class="mob-menu-wa" id="mobMenuWa">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+    Pedir por WhatsApp
+  </button>
 </div>
 
-<!-- PLATFORMS -->
-<section class="plat-sec" id="platforms">
-  <div class="sec-inner">
-    <div class="sec-head fu">
-      <div class="sec-eye">Catálogo</div>
-      <h2 class="sec-title">Todas las plataformas</h2>
-      <p class="sec-sub">Elige la que quieres y recíbela hoy mismo en Trujillo.</p>
+<!-- ══ HERO ══ -->
+<section class="hero" id="inicio">
+  <div class="hero-vid">
+    <video autoplay loop muted playsinline preload="auto">
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-inner">
+    <!-- Mobile phone shown first on mobile -->
+    <div class="hero-mob-phone fr">
+      <div class="hmp-wrap">
+        <div class="hmp-shell"></div>
+        <div class="hmp-br"></div><div class="hmp-bl1"></div><div class="hmp-bl2"></div>
+        <div class="hmp-scr">
+          <div class="hmp-orb" style="width:130px;height:130px;background:rgba(229,9,20,.38);top:-16px;right:-16px;animation-delay:0s"></div>
+          <div class="hmp-orb" style="width:90px;height:90px;background:rgba(180,10,10,.22);bottom:28px;left:-8px;animation-delay:-2s"></div>
+          <div class="hmp-orb" style="width:70px;height:70px;background:rgba(139,92,246,.2);top:42%;right:8px;animation-delay:-1s"></div>
+          <div class="hmp-island"></div>
+          <div class="hmp-ui">
+            <div class="hmp-app">
+              <img src="assets/netflix.png" alt="Netflix" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="hmp-app-fb" style="display:none"><svg viewBox="0 0 48 48" width="42" height="42"><text x="7" y="36" font-size="32" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg></div>
+            </div>
+            <div class="hmp-label">Netflix Premium HD</div>
+            <div class="hmp-price">S/ 15</div>
+            <div class="hmp-per">por mes</div>
+            <div class="hmp-rows">
+              <div class="hmp-row"><div class="hmp-rico" style="background:rgba(229,9,20,.2)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="hmp-rlines"><div class="hmp-rln"></div><div class="hmp-rln s"></div></div><div class="hmp-rtag">HD+</div></div>
+              <div class="hmp-row"><div class="hmp-rico" style="background:rgba(229,9,20,.15)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="hmp-rlines"><div class="hmp-rln"></div><div class="hmp-rln s"></div></div><div class="hmp-rtag">HOY</div></div>
+              <div class="hmp-row"><div class="hmp-rico" style="background:rgba(74,222,128,.12)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="hmp-rlines"><div class="hmp-rln"></div><div class="hmp-rln s"></div></div><div class="hmp-rtag" style="color:#4ade80">OK</div></div>
+            </div>
+            <button class="hmp-btn" id="hmpBtn">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+        <div class="hmp-glow"></div>
+      </div>
     </div>
-    <div class="plat-grid" id="platGrid" role="list"></div>
+
+    <div class="hero-tag glass fr">
+      <span class="hero-tag-dot" aria-hidden="true"></span>
+      Streaming premium en Trujillo
+    </div>
+    <h1 class="hero-h1 fr1">Disfruta sin<br>límites tu<br><em>streaming favorito.</em></h1>
+    <p class="hero-sub fr2">Las plataformas más populares al mejor precio. Entrega inmediata, precios en soles y soporte 24/7.</p>
+    <button class="hero-cta glass fr3" id="heroCta">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      Ver plataformas
+    </button>
+    <div class="hero-pills fr4">
+      <div class="hero-pill glass"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Entrega inmediata</div>
+      <div class="hero-pill glass"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Garantía total</div>
+      <div class="hero-pill glass"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Soporte 24/7</div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="sh-line"></div><div class="sh-txt">Explorar</div>
   </div>
 </section>
 
-<!-- PLANS -->
-<section class="sec" id="plans">
-  <div class="sec-inner">
-    <div class="sec-head fu">
-      <div class="sec-eye">Planes y precios</div>
-      <h2 class="sec-title">Elige tu combo ideal</h2>
-      <p class="sec-sub">Combina plataformas y ahorra más. Entrega inmediata incluida.</p>
-    </div>
-    <div class="plans-grid fu">
-
-      <div class="plan-card">
-        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(229,9,20,.2),rgba(180,30,30,.1))">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<!-- ══ PLATFORMS ══ -->
+<section class="plat-sec" id="platforms">
+  <div class="plat-inner">
+    <div class="plat-layout">
+      <!-- Left: sticky phones -->
+      <div class="plat-phones-col">
+        <div class="phones-sticky">
+          <div class="ps-label fu">Disponible ahora</div>
+          <div class="ps-phones-wrap">
+            <div id="psScene" class="ps-scene">
+              <!-- Left phone: Spotify/purple -->
+              <div class="ps-ph ps-ph-l" id="psL">
+                <div class="ps-hp">
+                  <div class="ps-hp-shell"></div>
+                  <div class="ps-br"></div><div class="ps-bl1"></div><div class="ps-bl2"></div>
+                  <div class="ps-scr">
+                    <div class="ps-orb" style="width:100px;height:100px;background:rgba(139,92,246,.42);top:-10px;left:-10px;animation-delay:-1s"></div>
+                    <div class="ps-orb" style="width:65px;height:65px;background:rgba(99,102,241,.26);bottom:28px;right:-4px;animation-delay:-2.5s"></div>
+                    <div class="ps-island"></div>
+                    <div class="ps-ui">
+                      <div class="ps-app" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">
+                        <img src="assets/spotify.png" alt="Spotify" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <div class="ps-app-fb" style="display:none"><svg viewBox="0 0 34 34" width="28"><circle cx="17" cy="17" r="14" fill="#1db954"/><path d="M10 15c4.5-2 9-2 14 0M10 19c3.5-1.5 7-1.5 11 0M10 23c2.5-1 5.5-1 8 0" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+                      </div>
+                      <div class="ps-label2">Spotify Premium</div>
+                      <div class="ps-price">S/ 12</div>
+                      <div class="ps-per">/ mes</div>
+                      <div class="ps-rows">
+                        <div class="ps-row"><div class="ps-rico" style="background:rgba(29,185,84,.2)"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1db954"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ps-rlines"><div class="ps-rln"></div><div class="ps-rln s"></div></div><div class="ps-rtag" style="color:#1db954">S/12</div></div>
+                        <div class="ps-row"><div class="ps-rico" style="background:rgba(139,92,246,.2)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="ps-rlines"><div class="ps-rln"></div><div class="ps-rln s"></div></div><div class="ps-rtag" style="color:#a78bfa">HOY</div></div>
+                      </div>
+                      <button class="ps-btn">
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                        Comprar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ps-glow"></div>
+                </div>
+              </div>
+              <!-- Right phone: Netflix/red -->
+              <div class="ps-ph ps-ph-r" id="psR">
+                <div class="ps-hp">
+                  <div class="ps-hp-shell"></div>
+                  <div class="ps-br"></div><div class="ps-bl1"></div><div class="ps-bl2"></div>
+                  <div class="ps-scr">
+                    <div class="ps-orb" style="width:110px;height:110px;background:rgba(229,9,20,.38);top:-12px;right:-12px;animation-delay:0s"></div>
+                    <div class="ps-orb" style="width:70px;height:70px;background:rgba(180,10,10,.2);bottom:22px;left:-5px;animation-delay:-2s"></div>
+                    <div class="ps-island"></div>
+                    <div class="ps-ui">
+                      <div class="ps-app" style="background:linear-gradient(135deg,#e50914,#831010)">
+                        <img src="assets/netflix.png" alt="Netflix" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <div class="ps-app-fb" style="display:none"><svg viewBox="0 0 34 34" width="28"><text x="5" y="26" font-size="22" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg></div>
+                      </div>
+                      <div class="ps-label2">Netflix Premium</div>
+                      <div class="ps-price">S/ 15</div>
+                      <div class="ps-per">/ mes</div>
+                      <div class="ps-rows">
+                        <div class="ps-row"><div class="ps-rico" style="background:rgba(229,9,20,.2)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="ps-rlines"><div class="ps-rln"></div><div class="ps-rln s"></div></div><div class="ps-rtag" style="color:#e50914">HD</div></div>
+                        <div class="ps-row"><div class="ps-rico" style="background:rgba(229,9,20,.14)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="ps-rlines"><div class="ps-rln"></div><div class="ps-rln s"></div></div><div class="ps-rtag" style="color:#ff5555">HOY</div></div>
+                      </div>
+                      <button class="ps-btn">
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                        Comprar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ps-glow"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ps-stats fu">
+            <div class="ps-stat"><div class="ps-stat-n">10</div><div class="ps-stat-l">Plataformas</div></div>
+            <div class="ps-stat-sep"></div>
+            <div class="ps-stat"><div class="ps-stat-n">+500</div><div class="ps-stat-l">Clientes</div></div>
+            <div class="ps-stat-sep"></div>
+            <div class="ps-stat"><div class="ps-stat-n">24/7</div><div class="ps-stat-l">Soporte</div></div>
+          </div>
         </div>
-        <div class="plan-tag">Starter</div>
-        <div class="plan-title">Plan Básico</div>
-        <div class="plan-desc">Perfecto para empezar con una plataforma favorita.</div>
-        <div class="plan-price">S/ 15</div>
-        <div class="plan-psub">por plataforma / mes</div>
-        <ul class="plan-feats">
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 plataforma a elegir</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 perfil dedicado</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte por WhatsApp</li>
-          <li class="pf"><span class="pf-no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Descuento combo</li>
-        </ul>
-        <button class="plan-btn s" onclick="openWa('Plan Básico - S/ 15')">Elegir este plan</button>
       </div>
-
-      <div class="plan-card feat">
-        <div class="plan-badge">Popular</div>
-        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(229,9,20,.25),rgba(139,0,0,.15))">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <!-- Right: grid -->
+      <div class="plat-grid-col">
+        <div class="sec-head fu">
+          <div class="sec-eye">Catálogo completo</div>
+          <h2 class="sec-title">Todas las plataformas</h2>
+          <p class="sec-sub">Elige la que quieres y recíbela hoy mismo en Trujillo.</p>
         </div>
-        <div class="plan-tag">Combo</div>
-        <div class="plan-title">Duo Streaming</div>
-        <div class="plan-desc">Las 2 plataformas más populares juntas y más baratas.</div>
-        <div class="plan-price">S/ 25</div>
-        <div class="plan-psub">Netflix + Prime Video / mes</div>
+        <div class="plat-grid" id="platGrid" role="list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PLANS ══ -->
+<section class="plans-sec" id="plans">
+  <div class="plans-inner">
+    <div class="sec-head fu"><div class="sec-eye">Planes y precios</div><h2 class="sec-title">Elige tu combo ideal</h2><p class="sec-sub">Combina plataformas y ahorra más.</p></div>
+    <div class="plans-grid">
+      <div class="plan-card fu">
+        <div class="plan-ico" style="background:rgba(229,9,20,.12)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="plan-tag">Starter</div><div class="plan-title">Plan Básico</div>
+        <div class="plan-desc">Una plataforma favorita al mejor precio.</div>
+        <div class="plan-price">S/ 15</div><div class="plan-psub">por plataforma / mes</div>
         <ul class="plan-feats">
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Prime Video</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>2 perfiles dedicados</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte por WhatsApp</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 6 vs individual</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 plataforma a elegir</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 perfil dedicado</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
+          <li class="pf"><span class="pf-no"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Descuento combo</li>
+        </ul>
+        <button class="plan-btn s" onclick="openWa('Plan Básico - S/ 15')">Elegir plan</button>
+      </div>
+      <div class="plan-card feat fu">
+        <div class="plan-badge">Popular</div>
+        <div class="plan-ico" style="background:rgba(229,9,20,.18)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="plan-tag">Combo</div><div class="plan-title">Duo Streaming</div>
+        <div class="plan-desc">Las 2 plataformas más populares juntas.</div>
+        <div class="plan-price">S/ 25</div><div class="plan-psub">Netflix + Prime / mes</div>
+        <ul class="plan-feats">
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Prime Video</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>2 perfiles dedicados</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 6</li>
         </ul>
         <button class="plan-btn p" onclick="openWa('Duo Streaming - S/ 25')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
           Quiero este combo
         </button>
       </div>
-
-      <div class="plan-card">
-        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(99,60,200,.1))">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/><polygon points="12 7 13.8 10.6 17.8 11.2 14.9 14 15.6 18 12 16.1 8.4 18 9.1 14 6.2 11.2 10.2 10.6 12 7"/></svg>
-        </div>
-        <div class="plan-tag">Premium</div>
-        <div class="plan-title">Todo incluido</div>
+      <div class="plan-card fu">
+        <div class="plan-ico" style="background:rgba(139,92,246,.14)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="plan-tag">Premium</div><div class="plan-title">Todo incluido</div>
         <div class="plan-desc">Netflix + Disney+ + Spotify. El pack definitivo.</div>
-        <div class="plan-price">S/ 35</div>
-        <div class="plan-psub">3 plataformas / mes</div>
+        <div class="plan-price">S/ 35</div><div class="plan-psub">3 plataformas / mes</div>
         <ul class="plan-feats">
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Disney+ + Spotify</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>3 perfiles dedicados</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte prioritario VIP</li>
-          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 16 vs individual</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Disney+ + Spotify</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>3 perfiles dedicados</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte prioritario VIP</li>
+          <li class="pf"><span class="pf-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 16</li>
         </ul>
         <button class="plan-btn s" onclick="openWa('Todo incluido Premium - S/ 35')">Elegir premium</button>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="sec" id="how" style="background:var(--bg2)">
-  <div class="sec-inner">
-    <div class="sec-head fu">
-      <div class="sec-eye">Super sencillo</div>
-      <h2 class="sec-title">Como funciona</h2>
-      <p class="sec-sub">En 3 pasos tienes tu streaming listo hoy mismo.</p>
-    </div>
+<!-- ══ HOW ══ -->
+<section class="how-sec" id="how">
+  <div class="how-inner">
+    <div class="sec-head fu"><div class="sec-eye">Super sencillo</div><h2 class="sec-title">Cómo funciona</h2><p class="sec-sub">En 3 pasos tienes tu streaming listo hoy.</p></div>
     <div class="how-grid">
-      <div class="how-card fu">
-        <div class="how-num" aria-hidden="true">01</div>
-        <div class="how-ico a"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
-        <div class="how-title">Elige tu plataforma</div>
-        <p class="how-desc">Explora el catalogo y selecciona la plataforma o combo que quieres.</p>
-      </div>
-      <div class="how-card fu">
-        <div class="how-num" aria-hidden="true">02</div>
-        <div class="how-ico b"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-        <div class="how-title">Contacta por WhatsApp</div>
-        <p class="how-desc">Te redirigimos con tu pedido listo. Confirmamos en segundos.</p>
-      </div>
-      <div class="how-card fu">
-        <div class="how-num" aria-hidden="true">03</div>
-        <div class="how-ico c"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="how-title">Disfruta al instante</div>
-        <p class="how-desc">Recibes tus credenciales el mismo dia. Listo para ver tu contenido.</p>
-      </div>
+      <div class="how-card fu"><div class="how-n" aria-hidden="true">01</div><div class="how-ico" style="background:rgba(229,9,20,.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><div class="how-title">Elige tu plataforma</div><p class="how-desc">Explora el catálogo y selecciona la plataforma o combo que quieres.</p></div>
+      <div class="how-card fu"><div class="how-n" aria-hidden="true">02</div><div class="how-ico" style="background:rgba(139,92,246,.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="how-title">Contacta por WhatsApp</div><p class="how-desc">Te redirigimos con tu pedido listo. Confirmamos en segundos.</p></div>
+      <div class="how-card fu"><div class="how-n" aria-hidden="true">03</div><div class="how-ico" style="background:rgba(74,222,128,.08)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div><div class="how-title">Disfruta al instante</div><p class="how-desc">Recibes tus credenciales el mismo día. Listo para ver.</p></div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
+<!-- ══ REVIEWS ══ -->
 <section class="testi-sec" id="reviews">
-  <div class="sec-inner">
-    <div class="sec-head fu">
-      <div class="sec-eye">Clientes felices</div>
-      <h2 class="sec-title">Lo que dicen ellos</h2>
-      <p class="sec-sub">Mas de 500 clientes en Trujillo ya disfrutan sus plataformas.</p>
-    </div>
+  <div class="testi-inner">
+    <div class="sec-head fu"><div class="sec-eye">Clientes felices</div><h2 class="sec-title">Lo que dicen ellos</h2><p class="sec-sub">Más de 500 clientes en Trujillo ya disfrutan sus plataformas.</p></div>
     <div class="testi-grid">
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">Netflix al instante, super barato y el soporte siempre responde rapido. Lo recomiendo a todos!</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">L</div><div><div class="testi-name">Luciana R.</div><div class="testi-sub">Cliente desde 2024 · Netflix</div></div></div>
-      </div>
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">Tengo el combo Disney + Netflix y pago menos que antes por uno solo. El trato es muy bueno.</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#e50914,#831010)">C</div><div><div class="testi-name">Carlos M.</div><div class="testi-sub">Cliente desde 2023 · Combo</div></div></div>
-      </div>
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">Spotify todo el mes por super precio. Nunca he tenido problemas y responden rapidisimo.</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">V</div><div><div class="testi-name">Valeria S.</div><div class="testi-sub">Cliente desde 2024 · Spotify</div></div></div>
-      </div>
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">DGO para ver la Liga 1 es lo mejor. Siempre funciona sin cortes y el precio es imbatible.</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">A</div><div><div class="testi-name">Andre P.</div><div class="testi-sub">Cliente desde 2024 · DGO</div></div></div>
-      </div>
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">El plan premium es increible. Tengo Netflix, Disney y Spotify todo junto pagando menos.</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">D</div><div><div class="testi-name">Diego F.</div><div class="testi-sub">Cliente VIP · Plan Premium</div></div></div>
-      </div>
-      <div class="testi-card fu">
-        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <p class="testi-quote">Crunchyroll para mi anime y todo bien. Recomende a 3 amigos y todos contentos. Muy confiable.</p>
-        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f47521,#c45000)">S</div><div><div class="testi-name">Sofia T.</div><div class="testi-sub">Cliente desde 2024 · Crunchyroll</div></div></div>
-      </div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">Netflix al instante, super barato y soporte rapido. Lo recomiendo!</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">L</div><div><div class="testi-name">Luciana R.</div><div class="testi-meta">Netflix · 2024</div></div></div></div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">Combo Disney + Netflix y pago menos. El trato es muy bueno.</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#e50914,#831010)">C</div><div><div class="testi-name">Carlos M.</div><div class="testi-meta">Combo · 2023</div></div></div></div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">Plan premium increible. Netflix, Disney y Spotify juntos pagando menos.</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">D</div><div><div class="testi-name">Diego F.</div><div class="testi-meta">Premium · VIP</div></div></div></div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">DGO para Liga 1 es perfecto. Sin cortes y precio imbatible en Trujillo.</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">A</div><div><div class="testi-name">Andre P.</div><div class="testi-meta">DGO · 2024</div></div></div></div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">Spotify por super precio. Nunca he tenido problemas, responden rapidisimo.</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">V</div><div><div class="testi-name">Valeria S.</div><div class="testi-meta">Spotify · 2024</div></div></div></div>
+      <div class="testi-card fu"><div class="testi-stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><p class="testi-body">Crunchyroll para mi anime favorito. Recomende a 3 amigos y todos contentos.</p><div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f47521,#c45000)">S</div><div><div class="testi-name">Sofia T.</div><div class="testi-meta">Crunchyroll · 2024</div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ══ CTA ══ -->
 <section class="cta-sec">
   <div class="cta-box fu">
-    <div class="cta-copy">
-      <h2>Listo para empezar?</h2>
-      <p>Escribenos ahora por WhatsApp y en minutos tienes tu streaming activo.</p>
-    </div>
+    <div class="cta-copy"><h2>Listo para empezar?</h2><p>Escribenos ahora y en minutos tienes tu streaming activo.</p></div>
     <div class="cta-btns">
       <button class="btn-wa" id="ctaWa">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Pedir por WhatsApp
       </button>
-      <a href="#plans" class="btn-cg">Ver planes</a>
+      <button class="btn-gl glass" onclick="document.getElementById('platforms').scrollIntoView({behavior:'smooth'})">Ver plataformas</button>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 <footer>
-  <div class="footer-inner">
+  <div class="foot-inner">
     <div>
-      <div class="footer-brand">
-        <div class="brand-mark" style="width:32px;height:32px;border-radius:9px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="6 3 20 12 6 21" fill="white"/></svg></div>
-        <span style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#fff">SICCHA <span style="color:var(--red)">STREAMING</span></span>
+      <div class="foot-brand">
+        <div class="nav-mark" style="width:28px;height:28px;border-radius:8px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="6 3 20 12 6 21" fill="white"/></svg></div>
+        SICCHA<sup style="font-size:9px;font-family:var(--fb);vertical-align:super;margin-left:1px">®</sup>
+        <span style="font-size:12px;font-family:var(--fb);font-weight:500;color:var(--m2);margin-left:2px">STREAMING</span>
       </div>
-      <p class="footer-desc">Las mejores plataformas de streaming al mejor precio en Trujillo, Peru.</p>
+      <p class="foot-desc">Las mejores plataformas de streaming al mejor precio en Trujillo, Peru.</p>
     </div>
-    <div class="foot-col">
-      <h4>Plataformas</h4>
-      <a href="#platforms">Netflix</a>
-      <a href="#platforms">Disney+</a>
-      <a href="#platforms">Spotify</a>
-      <a href="#platforms">HBO Max</a>
-      <a href="#platforms">Prime Video</a>
-    </div>
-    <div class="foot-col">
-      <h4>SICCHA</h4>
-      <a href="#plans">Planes</a>
-      <a href="#how">Como funciona</a>
-      <a href="#reviews">Opiniones</a>
-      <a href="#" id="footWa">WhatsApp</a>
-    </div>
+    <div class="foot-col"><h4>Plataformas</h4><a href="#platforms">Netflix</a><a href="#platforms">Disney+</a><a href="#platforms">Spotify</a><a href="#platforms">Prime Video</a></div>
+    <div class="foot-col"><h4>SICCHA</h4><a href="#plans">Planes</a><a href="#how">Como funciona</a><a href="#reviews">Opiniones</a><a href="#" id="footWa">WhatsApp</a></div>
   </div>
-  <div class="footer-bottom"><strong>SICCHA STREAMING</strong> &middot; Trujillo, Peru &middot; 2026</div>
+  <div class="foot-bottom"><strong>SICCHA STREAMING</strong> &middot; Trujillo, Peru &middot; 2026</div>
 </footer>
 
 <!-- WA FLOAT -->
 <button class="wa-float" id="waFloat" aria-label="Contactar por WhatsApp">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </button>
 
+<!-- MOBILE BOTTOM BAR -->
+<nav class="bot-bar" aria-label="Navegación inferior">
+  <div class="bot-items">
+    <button class="bot-item active" onclick="scrollTo(0,0)" aria-label="Inicio">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="bot-item" onclick="document.getElementById('platforms').scrollIntoView({behavior:'smooth'})" aria-label="Plataformas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 2l-4 5-4-5"/></svg>
+      Catálogo
+    </button>
+    <button class="bot-item wa-item" id="botWa" aria-label="WhatsApp">
+      <div class="bot-wa-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </div>
+      Pedir
+    </button>
+    <button class="bot-item" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})" aria-label="Planes">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Planes
+    </button>
+    <button class="bot-item" onclick="document.getElementById('reviews').scrollIntoView({behavior:'smooth'})" aria-label="Opiniones">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Opiniones
+    </button>
+  </div>
+</nav>
+
 <!-- MODAL -->
-<div class="modal-ov" id="modalOv" role="dialog" aria-modal="true" aria-label="Comprar plataforma">
+<div class="modal-ov" id="modalOv" role="dialog" aria-modal="true" aria-label="Comprar">
   <div class="modal">
     <div class="modal-drag" aria-hidden="true"><div class="modal-drag-bar"></div></div>
     <div class="modal-body">
       <div class="modal-top">
-        <div class="modal-ico" id="mIco">
+        <div class="modal-logo" id="mLogo">
           <img id="mImg" src="" alt="" onerror="this.style.display='none';document.getElementById('mFb').style.display='flex'">
-          <div id="mFb" class="modal-ico-fb" style="display:none"></div>
+          <div id="mFb" class="modal-logo-fb" style="display:none"></div>
         </div>
         <div><div class="modal-pname" id="mName"></div><div class="modal-pdesc" id="mDesc"></div></div>
       </div>
       <div class="modal-ppill">
-        <div><div class="mpp-lbl">Precio por perfil</div><div class="mpp-price" id="mPrice"></div></div>
-        <div class="mpp-per">/ mes</div>
+        <div><div class="mpp-l">Precio por perfil</div><div class="mpp-p" id="mPrice"></div></div>
+        <div class="mpp-s">/ mes</div>
       </div>
-      <label class="modal-lbl" for="qtySelect">Cantidad de perfiles</label>
-      <select class="modal-sel" id="qtySelect">
-        <option value="1">1 Perfil</option>
-        <option value="2">2 Perfiles</option>
-        <option value="3">3 Perfiles</option>
-        <option value="4">4 Perfiles</option>
-        <option value="5">5 Perfiles</option>
-      </select>
-      <div class="modal-acts">
-        <button class="modal-wa" id="mWaBtn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+      <label class="mlbl" for="qtySelect">Perfiles</label>
+      <select class="msel" id="qtySelect"><option value="1">1 Perfil</option><option value="2">2 Perfiles</option><option value="3">3 Perfiles</option><option value="4">4 Perfiles</option><option value="5">5 Perfiles</option></select>
+      <div class="macts">
+        <button class="mwa" id="mBuyBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
           Comprar por WhatsApp
         </button>
-        <button class="modal-cancel" id="mCancel">Cancelar</button>
+        <button class="mcancel" id="mCancel">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-var WA = '51934574931';
-var activeProduct = null;
-var toastTimer;
+'use strict';
+var WA='51934574931', aProd=null, tTimer;
 
-var PLATS = [
-  {id:'netflix',   name:'Netflix',      price:15, ok:true,  logo:'assets/netflix.png',    desc:'1 Perfil · HD Premium',       svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#141414"/><text x="8" y="32" font-size="28" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg>'},
-  {id:'disney',    name:'Disney+',      price:12, ok:true,  logo:'assets/disney.png',     desc:'1 Perfil · 4K · Marvel',      svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0b0d2b"/><text x="4" y="30" font-size="16" font-weight="900" font-family="Georgia,serif" fill="#1a6bd7" font-style="italic">D+</text></svg>'},
-  {id:'prime',     name:'Prime Video',  price:8,  ok:true,  logo:'assets/prime-video.png',desc:'1 Perfil · Series HD',         svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#00a8e0"/><text x="4" y="26" font-size="11" font-weight="800" font-family="Arial" fill="white">prime</text><text x="4" y="38" font-size="9" font-family="Arial" fill="rgba(255,255,255,.7)">video</text></svg>'},
-  {id:'max',       name:'HBO Max',      price:8,  ok:true,  logo:'assets/hbo-max.png',    desc:'1 Perfil · Series exclusivas', svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0b0030"/><text x="3" y="28" font-size="16" font-weight="900" font-family="Arial" fill="white">MAX</text></svg>'},
-  {id:'spotify',   name:'Spotify',      price:12, ok:true,  logo:'assets/spotify.png',    desc:'Musica sin limites',           svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#191414"/><circle cx="22" cy="22" r="14" fill="#1db954"/><path d="M14 19c5-2.5 11-2.5 16 0M14 23c4-2 9-2 13.5 0M14 27c3-1.5 7-1.5 10 0" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>'},
-  {id:'crunchy',   name:'Crunchyroll',  price:8,  ok:true,  logo:'assets/crunchyroll.png',desc:'1 Perfil · Anime completo',    svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#f47521"/><circle cx="22" cy="22" r="14" fill="rgba(0,0,0,.2)"/><text x="10" y="27" font-size="13" font-weight="900" font-family="Arial" fill="white">CR</text></svg>'},
-  {id:'paramount', name:'Paramount+',   price:7,  ok:true,  logo:'assets/paramount.png',  desc:'1 Perfil · Peliculas y series',svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0a1628"/><path d="M22 10l12 9-12 7-12-7z" fill="#0064ff"/><path d="M10 19l12 8 12-8M10 24l12 8 12-8" stroke="#0064ff" stroke-width="1.5" fill="none" stroke-opacity=".5"/></svg>'},
-  {id:'vix',       name:'VIX+',         price:7,  ok:true,  logo:'assets/vix.png',        desc:'1 Perfil · Contenido latino',  svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#001f3d"/><text x="6" y="29" font-size="20" font-weight="900" font-family="Arial" fill="#00b4d8">VIX</text></svg>'},
-  {id:'dgo',       name:'DGO + Liga 1', price:19, ok:true,  logo:'assets/dgo.png',        desc:'1 Perfil · Futbol en HD',      svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#e4002b"/><text x="5" y="28" font-size="18" font-weight="900" font-family="Arial" fill="white">DGO</text></svg>'},
-  {id:'flujo',     name:'Flujo TV',     price:12, ok:true,  logo:'assets/flujotv.png',    desc:'1 Perfil · TV en vivo',        svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#6c3fff"/><path d="M10 16h24M10 22h18M10 28h22" stroke="white" stroke-width="2.2" stroke-linecap="round"/><polygon points="30 19 38 22 30 25" fill="white"/></svg>'}
+var PLATS=[
+  {id:'netflix',  name:'Netflix',      price:15,ok:true, rank:1, logo:'assets/netflix.png',    desc:'1 Perfil · HD Premium',      bg:'linear-gradient(145deg,#141414 0%,#1a0000 40%,#2d0000 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#141414"/><text x="8" y="32" font-size="28" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg>'},
+  {id:'disney',   name:'Disney+',      price:12,ok:true, rank:2, logo:'assets/disney.png',     desc:'1 Perfil · 4K · Marvel',     bg:'linear-gradient(145deg,#0b0d2b 0%,#0a1560 40%,#132080 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#0b0d2b"/><text x="4" y="30" font-size="16" font-weight="900" font-family="Georgia" fill="#4a8fff" font-style="italic">D+</text></svg>'},
+  {id:'prime',    name:'Prime Video',  price:8, ok:true, rank:3, logo:'assets/prime-video.png',desc:'1 Perfil · Series HD',        bg:'linear-gradient(145deg,#00171f 0%,#00304a 40%,#005880 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#00a8e0"/><text x="3" y="26" font-size="11" font-weight="800" font-family="Arial" fill="white">prime</text><text x="3" y="38" font-size="9" font-family="Arial" fill="rgba(255,255,255,.7)">video</text></svg>'},
+  {id:'max',      name:'HBO Max',      price:8, ok:true, rank:4, logo:'assets/hbo-max.png',    desc:'1 Perfil · Series exclusivas',bg:'linear-gradient(145deg,#0a0020 0%,#12003a 40%,#200060 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#0b0030"/><text x="4" y="28" font-size="16" font-weight="900" font-family="Arial" fill="white">MAX</text></svg>'},
+  {id:'spotify',  name:'Spotify',      price:12,ok:true, rank:5, logo:'assets/spotify.png',    desc:'Música sin límites',          bg:'linear-gradient(145deg,#0d1117 0%,#0a2a10 40%,#0d3d14 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#191414"/><circle cx="22" cy="22" r="14" fill="#1db954"/><path d="M14 19c5-2.5 11-2.5 16 0M14 23c4-2 9-2 13.5 0M14 27c3-1.5 7-1.5 10 0" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>'},
+  {id:'crunchy',  name:'Crunchyroll',  price:8, ok:true, rank:6, logo:'assets/crunchyroll.png',desc:'1 Perfil · Anime completo',   bg:'linear-gradient(145deg,#1a0a00 0%,#3a1500 40%,#5a2000 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#f47521"/><circle cx="22" cy="22" r="14" fill="rgba(0,0,0,.2)"/><text x="10" y="27" font-size="13" font-weight="900" font-family="Arial" fill="white">CR</text></svg>'},
+  {id:'paramount',name:'Paramount+',   price:7, ok:true, rank:7, logo:'assets/paramount.png',  desc:'1 Perfil · Películas',        bg:'linear-gradient(145deg,#000820 0%,#001040 40%,#001a70 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#0a1628"/><path d="M22 10l12 9-12 7-12-7z" fill="#0064ff"/><path d="M10 19l12 8 12-8M10 24l12 8 12-8" stroke="#0064ff" stroke-width="1.5" fill="none" stroke-opacity=".4"/></svg>'},
+  {id:'vix',      name:'VIX+',         price:7, ok:true, rank:8, logo:'assets/vix.png',        desc:'1 Perfil · Contenido latino', bg:'linear-gradient(145deg,#000c1a 0%,#001a34 40%,#002550 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#001f3d"/><text x="6" y="29" font-size="20" font-weight="900" font-family="Arial" fill="#00b4d8">VIX</text></svg>'},
+  {id:'dgo',      name:'DGO + Liga 1', price:19,ok:true, rank:9, logo:'assets/dgo.png',        desc:'1 Perfil · Fútbol HD',        bg:'linear-gradient(145deg,#1a0002 0%,#2d0005 40%,#450008 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#e4002b"/><text x="5" y="28" font-size="16" font-weight="900" font-family="Arial" fill="white">DGO</text></svg>'},
+  {id:'flujo',    name:'Flujo TV',     price:12,ok:true, rank:10,logo:'assets/flujotv.png',    desc:'1 Perfil · TV en vivo',       bg:'linear-gradient(145deg,#0d0020 0%,#1a0040 40%,#280060 100%)',svg:'<svg viewBox="0 0 44 44" width="40"><rect width="44" height="44" rx="8" fill="#6c3fff"/><path d="M10 16h24M10 22h18M10 28h22" stroke="white" stroke-width="2.2" stroke-linecap="round"/><polygon points="30 19 38 22 30 25" fill="white"/></svg>'}
 ];
 
-/* ── RENDER PLATFORMS ── */
-function renderPlats() {
-  var g = document.getElementById('platGrid');
-  if (!g) return;
-  g.innerHTML = PLATS.map(function(p) {
-    return '<div class="plat-card" data-id="' + p.id + '" role="listitem">'
-      + '<div class="pc-head">'
-        + '<div class="pc-logo">'
-          + '<img src="' + p.logo + '" alt="' + p.name + '" width="44" height="44" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
-          + '<div class="pc-logo-fb" style="display:none">' + p.svg + '</div>'
-        + '</div>'
-        + (p.ok ? '<div class="pc-live" aria-label="Disponible"></div>' : '<div class="pc-out-ind"></div>')
-      + '</div>'
-      + '<div class="pc-name">' + p.name + '</div>'
-      + '<div class="pc-desc">' + p.desc + '</div>'
-      + '<div class="pc-foot">'
-        + '<div class="pc-price"><strong>S/ ' + p.price + '</strong><span>/mes</span></div>'
-        + (p.ok
-            ? '<button class="pc-buy" data-pid="' + p.id + '" aria-label="Comprar ' + p.name + '">'
-              + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
-              + 'Comprar</button>'
-            : '<span class="pc-na">No disponible</span>')
-      + '</div>'
-    + '</div>';
+/* ── RENDER PLATFORM GRID ── */
+function renderPlats(){
+  var g=document.getElementById('platGrid');
+  if(!g)return;
+  g.innerHTML=PLATS.map(function(p){
+    return '<div class="plat-card" data-id="'+p.id+'" data-s="h" role="listitem">'
+      +'<div class="pc-bg" style="background:'+p.bg+'"></div>'
+      +'<div class="pc-ov"></div>'
+      +(p.ok?'<div class="pc-live" aria-label="Disponible"></div>':'')
+      +'<div class="pc-rank'+(p.rank<=3?' top':'')+'" aria-label="Posicion '+p.rank+'">#'+p.rank+'</div>'
+      +'<div class="pc-logo-c">'
+        +'<img src="'+p.logo+'" alt="'+p.name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        +'<div class="pc-logo-fb" style="display:none">'+p.svg+'</div>'
+      +'</div>'
+      +'<div class="pc-bot">'
+        +'<div class="pc-name">'+p.name+'</div>'
+        +'<div class="pc-meta">'
+          +'<div class="pc-price"><strong>S/ '+p.price+'</strong><span>/mes</span></div>'
+          +(p.ok
+            ?'<button class="pc-buy" data-pid="'+p.id+'" aria-label="Comprar '+p.name+'">'
+              +'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>'
+              +'Comprar</button>'
+            :'<span class="pc-na">Agotado</span>')
+        +'</div>'
+      +'</div>'
+    +'</div>';
   }).join('');
-
-  /* attach buy button events */
-  g.querySelectorAll('.pc-buy').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      openModal(this.getAttribute('data-pid'));
-    });
+  g.querySelectorAll('.pc-buy').forEach(function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();openModal(this.getAttribute('data-pid'))});
   });
-
-  /* observe cards */
-  g.querySelectorAll('.plat-card').forEach(function(el, i) {
-    el.style.transitionDelay = (i % 5) * 0.055 + 's';
-    cardObs.observe(el);
+  g.querySelectorAll('.plat-card').forEach(function(el,i){
+    el.setAttribute('data-i',String(i));
+    cObs.observe(el);
   });
 }
 
 /* ── MODAL ── */
-function openModal(id) {
-  var p = PLATS.find(function(x) { return x.id === id; });
-  if (!p || !p.ok) return;
-  activeProduct = p;
-
-  var img = document.getElementById('mImg');
-  var fb  = document.getElementById('mFb');
-  img.src = p.logo; img.style.display = 'block'; fb.style.display = 'none';
-  img.onerror = function() { this.style.display = 'none'; fb.style.display = 'flex'; fb.innerHTML = p.svg; };
-
-  document.getElementById('mName').textContent  = p.name;
-  document.getElementById('mDesc').textContent  = p.desc;
-  document.getElementById('mPrice').textContent = 'S/ ' + p.price;
-  document.getElementById('qtySelect').value = '1';
+function openModal(id){
+  var p=PLATS.find(function(x){return x.id===id});
+  if(!p||!p.ok)return;
+  aProd=p;
+  var mL=document.getElementById('mLogo');
+  mL.style.background=p.bg;
+  var img=document.getElementById('mImg'),fb=document.getElementById('mFb');
+  img.src=p.logo;img.alt=p.name;img.style.display='block';
+  fb.style.display='none';fb.innerHTML='';
+  img.onerror=function(){this.style.display='none';fb.innerHTML=p.svg;fb.style.display='flex'};
+  document.getElementById('mName').textContent=p.name;
+  document.getElementById('mDesc').textContent=p.desc;
+  document.getElementById('mPrice').textContent='S/ '+p.price;
+  document.getElementById('qtySelect').value='1';
   document.getElementById('modalOv').classList.add('open');
-  document.getElementById('mWaBtn').focus();
+  document.body.style.overflow='hidden';
+  setTimeout(function(){document.getElementById('mBuyBtn').focus()},50);
 }
-function closeModal() {
+function closeModal(){
   document.getElementById('modalOv').classList.remove('open');
-  activeProduct = null;
+  document.body.style.overflow='';
+  aProd=null;
 }
 
-/* ── WA HELPERS ── */
-function openWa(plan) {
-  var msg = plan
-    ? 'Hola%21%20Estoy%20interesado%20en%3A%20' + encodeURIComponent(plan) + '%0A%0A%C2%A1Me%20puedes%20dar%20m%C3%A1s%20info%3F'
-    : 'Hola%21%20Quiero%20informaci%C3%B3n%20sobre%20las%20plataformas%20de%20streaming%20de%20SICCHA.';
-  window.open('https://api.whatsapp.com/send?phone=' + WA + '&text=' + msg, '_blank');
+/* ── WA ── */
+function openWa(plan){
+  var msg=plan
+    ?'Hola%21%20Estoy%20interesado%20en%3A%20'+encodeURIComponent(plan)+'%0A%C2%BFMe%20das%20info%3F'
+    :'Hola%21%20Quiero%20info%20sobre%20las%20plataformas%20de%20SICCHA%20Streaming.';
+  window.open('https://api.whatsapp.com/send?phone='+WA+'&text='+msg,'_blank');
 }
 
 /* ── TOAST ── */
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2600);
+function showToast(m){
+  var t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  clearTimeout(tTimer);
+  tTimer=setTimeout(function(){t.classList.remove('show')},2600);
 }
 
 /* ── NAV SCROLL ── */
-window.addEventListener('scroll', function() {
-  document.getElementById('nav').classList.toggle('solid', window.scrollY > 60);
-}, { passive: true });
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('solid',window.scrollY>50);
+},{passive:true});
+
+/* ── HAMBURGER MENU ── */
+var hamOpen=false;
+function toggleHam(open){
+  hamOpen=open===undefined?!hamOpen:open;
+  document.getElementById('navHam').classList.toggle('open',hamOpen);
+  document.getElementById('navHam').setAttribute('aria-expanded',hamOpen);
+  document.getElementById('mobMenu').classList.toggle('open',hamOpen);
+  document.getElementById('mobOverlay').classList.toggle('open',hamOpen);
+  document.body.style.overflow=hamOpen?'hidden':'';
+}
+document.getElementById('navHam').addEventListener('click',function(){toggleHam()});
+document.getElementById('mobOverlay').addEventListener('click',function(){toggleHam(false)});
+document.querySelectorAll('.mob-menu a').forEach(function(a){
+  a.addEventListener('click',function(){toggleHam(false)});
+});
+document.getElementById('mobMenuWa').addEventListener('click',function(){toggleHam(false);openWa(null)});
 
 /* ── OBSERVERS ── */
-var obs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
-  });
-}, { threshold: 0.07 });
+var fObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');fObs.unobserve(e.target)}});
+},{threshold:0.06});
+document.querySelectorAll('.fu').forEach(function(el){fObs.observe(el)});
 
-var cardObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('vis'); cardObs.unobserve(e.target); }
-    /* cards use .vis on .fu — but .plat-card uses opacity transition directly */
-    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
-  });
-}, { threshold: 0.04 });
-
-document.querySelectorAll('.fu').forEach(function(el) { obs.observe(el); });
-/* init cards hidden */
-document.querySelectorAll('.plat-card').forEach(function(el) {
-  el.style.opacity = '0'; el.style.transform = 'translateY(20px)';
-});
-
-/* ── KEYBOARD ── */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('modalOv').classList.contains('open')) closeModal();
-});
-
-/* ── EVENTS ── */
-document.getElementById('navBtn').addEventListener('click', function() { openWa(null); });
-document.getElementById('heroWa').addEventListener('click', function() { openWa(null); });
-document.getElementById('ctaWa').addEventListener('click', function() { openWa(null); });
-document.getElementById('waFloat').addEventListener('click', function() { openWa(null); });
-document.getElementById('footWa').addEventListener('click', function(e) { e.preventDefault(); openWa(null); });
-document.getElementById('mWaBtn').addEventListener('click', function() {
-  if (!activeProduct) return;
-  var qty   = parseInt(document.getElementById('qtySelect').value) || 1;
-  var total = activeProduct.price * qty;
-  var msg = 'COMPRA%20SICCHA%20STREAMING%0A%0AProducto%3A%20' + encodeURIComponent(activeProduct.name)
-          + '%0APerfiles%3A%20' + qty + '%0APrecio%3A%20S%2F%20' + total + '%0A%0A%C2%A1Gracias!';
-  window.open('https://api.whatsapp.com/send?phone=' + WA + '&text=' + msg, '_blank');
-  showToast('Redirigiendo a WhatsApp...');
-  closeModal();
-});
-document.getElementById('mCancel').addEventListener('click', closeModal);
-document.getElementById('modalOv').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-
-/* ── 3D PHONE PARALLAX ── */
-(function() {
-  /* Stars */
-  var sf = document.getElementById('sf');
-  if (sf) {
-    for (var i = 0; i < 55; i++) {
-      var s = document.createElement('div');
-      s.className = 'star';
-      var sz = Math.random() * 2.2 + 0.5;
-      s.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--d:'+(2+Math.random()*4)+'s;--dl:-'+(Math.random()*4)+'s';
-      sf.appendChild(s);
+/* 3D card entry */
+var cObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var el=e.target;
+      var delay=(parseInt(el.getAttribute('data-i')||'0')%3)*70;
+      setTimeout(function(){el.setAttribute('data-s','i')},delay);
+      cObs.unobserve(el);
     }
-  }
+  });
+},{threshold:0.05});
 
-  /* Mouse parallax */
-  var scene  = document.getElementById('ps');
-  var heroEl = document.querySelector('.hero');
-  if (!scene || !heroEl) return;
+/* ── FLUENT 3D PARALLAX — RAF + lerp, GPU-only ── */
+(function(){
+  var scene=document.getElementById('psScene');
+  var sec=document.getElementById('platforms');
+  if(!scene||!sec)return;
 
-  var tx = 0, ty = 0, cx = 0, cy = 0;
+  var tRX=0,tRY=0,cRX=0,cRY=0;
+  var MAX_X=10,MAX_Y=7;
+  var active=false;
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function tick() {
-    cx = lerp(cx, tx, 0.07);
-    cy = lerp(cy, ty, 0.07);
-    scene.style.transform = 'rotateX(' + cy + 'deg) rotateY(' + cx + 'deg)';
+  function lerp(a,b,t){return a+(b-a)*t}
+
+  /* single RAF loop — runs always, only transforms if needed */
+  function tick(){
     requestAnimationFrame(tick);
+    if(!active&&Math.abs(cRX)<0.01&&Math.abs(cRY)<0.01)return;
+    cRX=lerp(cRX,tRX,0.1);  /* higher lerp = faster/stiffer */
+    cRY=lerp(cRY,tRY,0.1);
+    /* Use matrix3d-equivalent shorthand — GPU composited */
+    scene.style.transform='rotateX('+cRY+'deg) rotateY('+cRX+'deg)';
   }
   requestAnimationFrame(tick);
 
-  heroEl.addEventListener('mousemove', function(e) {
-    var r = heroEl.getBoundingClientRect();
-    var nx = (e.clientX - r.left) / r.width  - 0.5;
-    var ny = (e.clientY - r.top)  / r.height - 0.5;
-    tx =  nx * 20;
-    ty = -ny * 12;
-  });
-  heroEl.addEventListener('mouseleave', function() { tx = 0; ty = 0; });
-  heroEl.addEventListener('touchmove', function(e) {
-    if (!e.touches[0]) return;
-    var r = heroEl.getBoundingClientRect();
-    tx =  ((e.touches[0].clientX - r.left) / r.width  - 0.5) * 14;
-    ty = -((e.touches[0].clientY - r.top)  / r.height - 0.5) * 9;
-  }, { passive: true });
-  heroEl.addEventListener('touchend', function() { tx = 0; ty = 0; });
+  function onMove(nx,ny){
+    active=true;
+    tRX=nx*MAX_X*2;
+    tRY=-ny*MAX_Y*2;
+  }
+  function onLeave(){active=true;tRX=0;tRY=0}
 
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', function(e) {
-      if (e.gamma === null) return;
-      tx = Math.max(-25, Math.min(25, e.gamma)) / 25 * 10;
-      ty = -Math.max(-25, Math.min(25, (e.beta || 0) - 45)) / 25 * 7;
-    }, { passive: true });
+  sec.addEventListener('mousemove',function(e){
+    var r=sec.getBoundingClientRect();
+    onMove((e.clientX-r.left)/r.width-.5,(e.clientY-r.top)/r.height-.5);
+  });
+  sec.addEventListener('mouseleave',onLeave);
+
+  /* Touch parallax */
+  sec.addEventListener('touchmove',function(e){
+    var r=sec.getBoundingClientRect();
+    var t=e.touches[0];
+    onMove((t.clientX-r.left)/r.width-.5,(t.clientY-r.top)/r.height-.5);
+  },{passive:true});
+  sec.addEventListener('touchend',onLeave,{passive:true});
+
+  /* Device orientation (gyro) */
+  if(window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation',function(e){
+      if(e.gamma==null)return;
+      active=true;
+      tRX=Math.max(-25,Math.min(25,e.gamma))/25*MAX_X;
+      tRY=-Math.max(-25,Math.min(25,(e.beta||0)-40))/25*MAX_Y;
+    },{passive:true});
   }
 
-  /* Click on screen buttons → WA */
-  document.querySelectorAll('.scr-btn').forEach(function(btn) {
-    btn.style.cursor = 'pointer';
-    btn.addEventListener('click', function(e) { e.stopPropagation(); openWa(null); });
+  /* Phone CTA buttons */
+  document.querySelectorAll('.ps-btn,.hmp-btn').forEach(function(b){
+    b.addEventListener('click',function(){openWa(null)});
   });
 })();
+
+/* ── BOTTOM BAR ACTIVE STATE ── */
+(function(){
+  var sections=['inicio','platforms','plans','reviews'];
+  var items=document.querySelectorAll('.bot-item:not(.wa-item)');
+  var sectionEls=sections.map(function(id){return document.getElementById(id)}).filter(Boolean);
+  window.addEventListener('scroll',function(){
+    var sy=window.scrollY+200;
+    var active=0;
+    sectionEls.forEach(function(el,i){if(el&&el.offsetTop<=sy)active=i});
+    items.forEach(function(it,i){it.classList.toggle('active',i===active)});
+  },{passive:true});
+})();
+
+/* ── EVENTS ── */
+document.getElementById('navWa').addEventListener('click',function(){openWa(null)});
+document.getElementById('heroCta').addEventListener('click',function(){document.getElementById('platforms').scrollIntoView({behavior:'smooth'})});
+document.getElementById('ctaWa').addEventListener('click',function(){openWa(null)});
+document.getElementById('waFloat').addEventListener('click',function(){openWa(null)});
+document.getElementById('botWa').addEventListener('click',function(){openWa(null)});
+document.getElementById('footWa').addEventListener('click',function(e){e.preventDefault();openWa(null)});
+document.getElementById('mBuyBtn').addEventListener('click',function(){
+  if(!aProd)return;
+  var qty=parseInt(document.getElementById('qtySelect').value)||1;
+  var total=aProd.price*qty;
+  var msg='COMPRA%20SICCHA%20STREAMING%0AProducto%3A%20'+encodeURIComponent(aProd.name)+'%0APerfiles%3A%20'+qty+'%0APrecio%3A%20S%2F%20'+total+'%0A%C2%A1Gracias!';
+  window.open('https://api.whatsapp.com/send?phone='+WA+'&text='+msg,'_blank');
+  showToast('Redirigiendo a WhatsApp...');
+  closeModal();
+});
+document.getElementById('mCancel').addEventListener('click',closeModal);
+document.getElementById('modalOv').addEventListener('click',function(e){if(e.target===this)closeModal()});
+document.getElementById('hmpBtn').addEventListener('click',function(){openWa(null)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
 
 /* ── INIT ── */
 renderPlats();
