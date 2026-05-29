@@ -3,643 +3,768 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e50914">
 <title>SICCHA STREAMING — Trujillo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════
+   TOKENS
+══════════════════════════════ */
 :root {
-  --bg:     #0a0a0a;
-  --bg2:    #111111;
-  --bg3:    #181818;
-  --bg4:    #222222;
-  --red:    #e50914;
-  --red2:   #b81d24;
-  --white:  #ffffff;
-  --t1:     #e5e5e5;
-  --t2:     #a3a3a3;
-  --t3:     #525252;
-  --border: rgba(255,255,255,.08);
-  --green:  #46d369;
+  --red:      #e50914;
+  --red2:     #b81d24;
+  --red3:     #7f0000;
+  --red-glow: rgba(229,9,20,.3);
+  --green:    #25D366;
+  --green2:   #1daa57;
+  --avail:    #4ade80;
+
+  --bg:    #0f0a1e;
+  --bg2:   #150f2a;
+  --bg3:   #1c1435;
+  --card:  rgba(255,255,255,.05);
+  --card2: rgba(255,255,255,.08);
+  --bord:  rgba(255,255,255,.09);
+  --bord2: rgba(255,255,255,.14);
+
+  --t1: #f0eaff;
+  --t2: rgba(210,200,255,.75);
+  --t3: rgba(180,170,240,.45);
+
+  --r1:10px; --r2:16px; --r3:22px; --r4:28px; --rp:9999px;
+
+  --sh-red: 0 8px 32px rgba(229,9,20,.25);
+  --sh-card:0 2px 20px rgba(0,0,0,.35);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--t1);
-  min-height:100vh;
-  overflow-x:hidden;
+  font-family:'Nunito Sans',system-ui,sans-serif;
+  background:var(--bg); color:var(--t1);
+  min-height:100dvh; overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
+h1,h2,h3,h4{font-family:'Nunito',sans-serif}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+a{text-decoration:none}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-/* ── NAV ── */
+/* ══ NAV ══ */
 nav{
-  position:fixed;top:0;left:0;right:0;
-  z-index:100;
-  padding:0 4%;
-  transition:background .4s;
-  background:linear-gradient(180deg,rgba(0,0,0,.9) 0%,transparent 100%);
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 5%;transition:all .3s;
 }
-nav.solid{background:rgba(10,10,10,.97);border-bottom:1px solid var(--border);}
+nav.solid{
+  background:rgba(15,10,30,.92);
+  backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 var(--bord);
+}
 .nav-inner{
-  max-width:1400px;margin:0 auto;
-  height:64px;
-  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  max-width:1280px;margin:0 auto;
+  height:66px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
 }
-.brand{
-  font-size:22px;font-weight:900;letter-spacing:-1px;
-  color:var(--red);
-  flex-shrink:0;
-  cursor:default;
+/* Brand */
+.brand{display:flex;align-items:center;gap:10px;user-select:none;flex-shrink:0}
+.brand-mark{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:3px 4px 0 var(--red3),0 6px 18px var(--red-glow);
 }
-.nav-links{display:flex;gap:4px;}
+.brand-name{
+  font-family:'Nunito',sans-serif;
+  font-size:21px;font-weight:900;letter-spacing:-0.5px;color:var(--t1);
+}
+.brand-name span{color:var(--red)}
+.nav-links{display:flex;gap:2px}
 .nav-links a{
-  color:var(--t2);text-decoration:none;
-  font-size:13px;font-weight:500;
-  padding:6px 12px;border-radius:6px;
+  padding:7px 13px;border-radius:8px;
+  color:var(--t3);font-size:14px;font-weight:600;
   transition:color .2s,background .2s;
 }
-.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.06);}
+.nav-links a:hover{color:var(--t1);background:rgba(255,255,255,.06)}
 @media(max-width:600px){.nav-links{display:none}}
-
-.cart-pill{
-  display:flex;align-items:center;gap:10px;
-  background:var(--red);border:none;
-  padding:9px 18px;border-radius:4px;
-  color:#fff;font-family:inherit;font-size:13px;font-weight:700;
-  cursor:pointer;
-  transition:background .2s,transform .2s;
-  flex-shrink:0;
+.nav-btn{
+  display:flex;align-items:center;gap:7px;
+  background:var(--red);border:none;border-radius:9px;
+  padding:10px 20px;
+  color:#fff;font-size:14px;font-weight:700;
+  box-shadow:3px 4px 0 var(--red3),0 6px 16px var(--red-glow);
+  transition:all .18s ease;min-height:44px;flex-shrink:0;
+  touch-action:manipulation;
 }
-.cart-pill:hover{background:var(--red2);transform:scale(1.03);}
-.cart-pill.pop{animation:cpop .3s ease;}
-@keyframes cpop{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
-.cart-count{
-  background:#fff;color:var(--red);
-  min-width:20px;height:20px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:900;
-}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--red3),0 10px 24px var(--red-glow)}
+.nav-btn:active{transform:translateY(1px);box-shadow:2px 2px 0 var(--red3)}
 
-/* ── HERO ── */
+/* ══ HERO ══ */
 .hero{
-  min-height:88vh;
-  display:flex;flex-direction:column;
-  justify-content:flex-end;
-  padding:0 4% 60px;
-  position:relative;
-  overflow:hidden;
-  background:#000;
+  min-height:100dvh;
+  padding:100px 5% 60px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;
 }
-
-/* Cinematic background gradient */
 .hero-bg{
-  position:absolute;inset:0;
+  position:absolute;inset:0;z-index:0;
   background:
-    linear-gradient(0deg, rgba(0,0,0,.95) 0%, rgba(0,0,0,.4) 40%, rgba(0,0,0,.1) 100%),
-    linear-gradient(90deg, rgba(0,0,0,.7) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 80% at 60% 30%, #1a0505 0%, #000 60%);
-  z-index:0;
+    radial-gradient(ellipse 65% 75% at 75% 35%,rgba(120,60,255,.22) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 55% at 15% 65%,rgba(229,9,20,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 45% at 55% 85%,rgba(255,77,109,.1) 0%,transparent 50%);
 }
-
-/* Animated spotlight */
-.hero-glow{
-  position:absolute;
-  width:600px;height:600px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(229,9,20,.18) 0%, transparent 70%);
-  top:-100px;right:5%;
-  animation:spotMove 12s ease-in-out infinite;
-  z-index:0;
-  pointer-events:none;
+.hero-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(ellipse 85% 75% at 65% 40%,rgba(0,0,0,.5) 0%,transparent 70%);
 }
-@keyframes spotMove{
-  0%,100%{transform:translate(0,0) scale(1);}
-  33%{transform:translate(-60px,40px) scale(1.1);}
-  66%{transform:translate(40px,-30px) scale(.95);}
-}
-
 .hero-inner{
-  position:relative;z-index:1;
-  max-width:1400px;margin:0 auto;width:100%;
+  position:relative;z-index:2;
+  max-width:1280px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(32px,6vw,80px);align-items:center;
 }
+@media(max-width:800px){.hero-inner{grid-template-columns:1fr;text-align:center}}
 
-.hero-eyebrow{
+/* Hero copy */
+.hero-copy{display:flex;flex-direction:column;gap:22px}
+.hero-tag{
   display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--red);
-  margin-bottom:20px;
+  background:rgba(229,9,20,.1);border:1.5px solid rgba(229,9,20,.25);
+  padding:6px 16px;border-radius:var(--rp);
+  font-size:12px;font-weight:700;color:#ff6666;
+  letter-spacing:1.5px;text-transform:uppercase;width:fit-content;
 }
-.hero-eyebrow::before{
-  content:'';width:28px;height:2px;
-  background:var(--red);border-radius:1px;
+@media(max-width:800px){.hero-tag{margin:0 auto}}
+.hero-tag-dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+
+.hero-h1{
+  font-size:clamp(38px,6.5vw,76px);
+  font-weight:900;line-height:1.02;letter-spacing:-2.5px;color:#fff;
+}
+.hero-h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--red) 0%,#ff4d6d 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:clamp(15px,1.7vw,18px);color:var(--t2);line-height:1.65;max-width:460px;font-weight:500}
+@media(max-width:800px){.hero-sub{margin:0 auto}}
+
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:800px){.hero-actions{justify-content:center}}
+.btn-red{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border:none;border-radius:var(--r2);
+  padding:15px 26px;color:#fff;
+  font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
+  box-shadow:4px 6px 0 var(--red3),0 10px 28px var(--red-glow);
+  transition:all .2s cubic-bezier(.16,1,.3,1);
+  min-height:52px;touch-action:manipulation;
+}
+.btn-red:hover{transform:translateY(-3px);box-shadow:5px 8px 0 var(--red3),0 16px 36px var(--red-glow)}
+.btn-red:active{transform:translateY(1px);box-shadow:2px 3px 0 var(--red3)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.15);
+  border-radius:var(--r2);padding:15px 26px;
+  color:var(--t1);font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
+  min-height:52px;touch-action:manipulation;
+  transition:all .2s;
+}
+.btn-ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.btn-ghost:active{transform:scale(.97)}
+
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:800px){.hero-pills{justify-content:center}}
+.hero-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--rp);padding:9px 16px;
+  font-size:13px;font-weight:700;color:var(--t2);
+  backdrop-filter:blur(8px);
 }
 
-.hero h1{
-  font-size:clamp(36px,6vw,72px);
-  font-weight:900;line-height:1.0;letter-spacing:-3px;
-  color:#fff;margin-bottom:20px;
-  text-shadow:0 2px 40px rgba(0,0,0,.8);
-}
-.hero h1 em{font-style:normal;color:var(--red);}
-
-.hero-desc{
-  font-size:clamp(14px,1.6vw,18px);
-  color:var(--t2);line-height:1.6;
-  max-width:500px;margin-bottom:32px;
-  font-weight:400;
-}
-
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;}
-
-.hero-btn{
-  display:flex;align-items:center;gap:8px;
-  padding:14px 28px;border-radius:4px;
-  font-family:inherit;font-size:15px;font-weight:700;
-  cursor:pointer;border:none;
-  transition:all .2s;letter-spacing:.3px;
-}
-.hero-btn-primary{background:var(--white);color:#000;}
-.hero-btn-primary:hover{background:#ccc;}
-.hero-btn-secondary{
-  background:rgba(109,109,110,.7);color:#fff;
-  border:1px solid rgba(255,255,255,.2);
-  backdrop-filter:blur(10px);
-}
-.hero-btn-secondary:hover{background:rgba(109,109,110,.9);}
-
-.hero-stats{
-  display:flex;gap:36px;flex-wrap:wrap;
-}
-.hero-stat-item{
-  display:flex;flex-direction:column;gap:2px;
-}
-.hsi-num{
-  font-size:clamp(22px,3vw,32px);font-weight:900;
-  color:#fff;letter-spacing:-1px;line-height:1;
-}
-.hsi-label{font-size:11px;color:var(--t3);font-weight:500;letter-spacing:1px;text-transform:uppercase;}
-
-/* scroll indicator */
-.scroll-hint{
-  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  opacity:.4;animation:scrollHint 2s ease-in-out infinite;
-  z-index:1;
-}
-@keyframes scrollHint{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.7;transform:translateX(-50%) translateY(6px)}}
-.scroll-hint span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t2);}
-
-/* ── HOW IT WORKS ── */
-.how{
-  padding:80px 4%;
-  background:var(--bg2);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-.how-inner{max-width:1400px;margin:0 auto;}
-
-.section-eyebrow{
-  font-size:11px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--red);
-  margin-bottom:12px;
-}
-.section-title{
-  font-size:clamp(22px,3vw,32px);font-weight:800;
-  letter-spacing:-1px;color:var(--white);
-  margin-bottom:48px;
-}
-
-.how-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:2px;
-}
-@media(max-width:640px){.how-grid{grid-template-columns:1fr;}}
-
-.how-step{
-  background:var(--bg3);
-  padding:36px 32px;
+/* ══ 3D PHONE SCENE ══ */
+.hero-visual{
   position:relative;
-  opacity:0;transform:translateY(24px);
-  transition:opacity .5s,transform .5s;
+  height:clamp(400px,52vw,580px);
+  perspective:1100px;perspective-origin:50% 45%;
 }
-.how-step:first-child{border-radius:8px 0 0 8px;}
-.how-step:last-child{border-radius:0 8px 8px 0;}
-@media(max-width:640px){
-  .how-step:first-child{border-radius:8px 8px 0 0;}
-  .how-step:last-child{border-radius:0 0 8px 8px;}
-}
-.how-step.visible{opacity:1;transform:translateY(0);}
-.how-step:nth-child(2){transition-delay:.12s;}
-.how-step:nth-child(3){transition-delay:.24s;}
+@media(max-width:800px){.hero-visual{display:none}}
 
-.step-num{
-  font-size:56px;font-weight:900;letter-spacing:-3px;
-  color:var(--red);line-height:1;
-  margin-bottom:20px;opacity:.8;
-}
-.step-title{font-size:17px;font-weight:700;color:var(--white);margin-bottom:10px;}
-.step-desc{font-size:14px;color:var(--t2);line-height:1.6;}
+.star-field{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:rgba(255,255,255,.8);animation:twinkle var(--d,3s) var(--dl,0s) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
 
-/* ── PRODUCTS ── */
-.products-section{
-  padding:60px 4% 100px;
-  max-width:1400px;margin:0 auto;
+.phone-scene{
+  width:100%;height:100%;
+  position:relative;transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .06s linear;
 }
 
-.products-header{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  margin-bottom:28px;flex-wrap:wrap;gap:12px;
-  opacity:0;transform:translateY(16px);
-  transition:opacity .5s,transform .5s;
-}
-.products-header.visible{opacity:1;transform:translateY(0);}
-.products-header-right{font-size:13px;color:var(--t3);}
+.ph-wrap{position:absolute;transform-style:preserve-3d;animation:phFloat 7s ease-in-out infinite}
+.ph-wrap.left {left:-2%;top:50%;transform:translateY(-50%) translateX(-20px) rotateY(20deg) rotateX(4deg);animation-delay:0s}
+.ph-wrap.center{left:50%;top:47%;transform:translateX(-50%) translateY(-50%) rotateX(6deg);z-index:10;animation-delay:-1.8s}
+.ph-wrap.right {right:-2%;top:52%;transform:translateY(-50%) translateX(20px) rotateY(-20deg) rotateX(4deg);animation-delay:-3.5s}
+@keyframes phFloat{0%,100%{margin-top:0}50%{margin-top:-16px}}
 
-/* grid */
-.pgrid{
+/* Phone body */
+.phone{position:relative;transform-style:preserve-3d}
+.ph-wrap.center .phone{width:220px;height:445px;border-radius:38px}
+.ph-wrap.left   .phone,.ph-wrap.right .phone{width:185px;height:375px;border-radius:32px;opacity:.85}
+
+.phone-shell{
+  position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(145deg,#2a2040 0%,#1a1430 40%,#120e24 100%);
+  border:1.5px solid rgba(255,255,255,.12);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 2px 5px rgba(255,255,255,.07) inset,
+    0 28px 70px rgba(0,0,0,.7),
+    0 8px 28px rgba(139,92,246,.28),
+    10px 0 22px rgba(0,0,0,.35),
+    -10px 0 22px rgba(0,0,0,.35);
+}
+.ph-wrap.center .phone-shell{
+  background:linear-gradient(145deg,#2e2245 0%,#1e1838 40%,#150f2a 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.1) inset,
+    0 2px 6px rgba(255,255,255,.09) inset,
+    0 36px 90px rgba(0,0,0,.7),
+    0 12px 44px rgba(139,92,246,.4),
+    0 -4px 28px rgba(229,9,20,.12),
+    14px 0 28px rgba(0,0,0,.35),
+    -14px 0 28px rgba(0,0,0,.35);
+}
+/* Side buttons */
+.pb-r{position:absolute;right:-3.5px;top:110px;width:4px;height:58px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:0 3px 3px 0;box-shadow:2px 0 5px rgba(0,0,0,.4)}
+.pb-l1{position:absolute;left:-3.5px;top:90px;width:4px;height:30px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:3px 0 0 3px}
+.pb-l2{position:absolute;left:-3.5px;top:135px;width:4px;height:50px;background:linear-gradient(180deg,#3a2e50,#2a2040);border-radius:3px 0 0 3px}
+
+/* Screen */
+.phone-scr{
+  position:absolute;top:9px;left:7px;right:7px;bottom:9px;
+  border-radius:inherit;border-radius:calc(38px - 7px);
+  overflow:hidden;background:#08041a;
+}
+.ph-wrap.left   .phone-scr,
+.ph-wrap.right  .phone-scr{border-radius:calc(32px - 7px)}
+
+/* Dynamic island */
+.dyn-island{
+  position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  background:#000;border-radius:22px;z-index:10;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05);
+}
+.ph-wrap.center .dyn-island{width:108px;height:30px}
+.ph-wrap.left   .dyn-island,
+.ph-wrap.right  .dyn-island{width:88px;height:24px}
+
+/* Screen wallpaper + orbs */
+.scr-bg{position:absolute;inset:0}
+.ph-wrap.center .scr-bg{background:linear-gradient(160deg,#1a0533 0%,#2d1060 30%,#0f1a3d 60%,#080420 100%)}
+.ph-wrap.left   .scr-bg{background:linear-gradient(160deg,#0d1f0d 0%,#1a3520 40%,#081208 100%)}
+.ph-wrap.right  .scr-bg{background:linear-gradient(160deg,#1a0a0a 0%,#350d0d 40%,#0e0303 100%)}
+
+.scr-orb{position:absolute;border-radius:50%;filter:blur(18px);animation:orb 5s ease-in-out infinite}
+@keyframes orb{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.2);opacity:1}}
+
+/* Screen UI */
+.scr-ui{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;
+  padding:52px 14px 18px;
+}
+.ph-wrap.left  .scr-ui,
+.ph-wrap.right .scr-ui{padding:44px 12px 14px}
+
+.scr-app{
+  width:60px;height:60px;border-radius:17px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:11px;overflow:hidden;flex-shrink:0;
+  box-shadow:0 6px 20px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08) inset;
+}
+.scr-app img{width:48px;height:48px;object-fit:contain}
+.scr-app-fb{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+.ph-wrap.left  .scr-app,
+.ph-wrap.right .scr-app{width:50px;height:50px;border-radius:14px}
+.ph-wrap.left  .scr-app img,
+.ph-wrap.right .scr-app img{width:38px;height:38px}
+.ph-wrap.left  .scr-app-fb,
+.ph-wrap.right .scr-app-fb{width:38px;height:38px}
+
+.scr-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:rgba(255,255,255,.9);text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.6);line-height:1.3}
+.scr-price{font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:#fff;letter-spacing:-1px;margin:7px 0 3px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.ph-wrap.left  .scr-price,
+.ph-wrap.right .scr-price{font-size:19px}
+.scr-per{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;margin-bottom:12px}
+
+.scr-rows{display:flex;flex-direction:column;gap:6px;width:100%}
+.scr-row{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.06);
+  border-radius:10px;padding:7px 9px;
+  border:1px solid rgba(255,255,255,.05);
+}
+.sr-ico{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.sr-lines{flex:1;display:flex;flex-direction:column;gap:3px}
+.sr-ln{height:5px;background:rgba(255,255,255,.14);border-radius:3px}
+.sr-ln.s{width:55%}
+.sr-tag{font-size:10px;font-weight:800;font-family:'Nunito',sans-serif;color:var(--red);white-space:nowrap}
+
+.scr-btn{
+  margin-top:10px;width:100%;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border-radius:12px;padding:9px 8px;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:#fff;
+  box-shadow:0 4px 14px rgba(229,9,20,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+  cursor:pointer;
+}
+.ph-wrap.left  .scr-btn,
+.ph-wrap.right .scr-btn{margin-top:8px;font-size:10px;padding:7px}
+
+/* Ground glow */
+.ph-glow{
+  position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+  border-radius:50%;filter:blur(13px);pointer-events:none;
+}
+.ph-wrap.center .ph-glow{width:170px;height:28px;background:rgba(139,92,246,.55)}
+.ph-wrap.left   .ph-glow{width:130px;height:22px;background:rgba(29,185,84,.4)}
+.ph-wrap.right  .ph-glow{width:130px;height:22px;background:rgba(229,9,20,.4)}
+
+/* Floating badges */
+.h-badge{
+  position:absolute;z-index:20;
+  background:rgba(255,255,255,.09);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;padding:9px 15px;
+  display:flex;align-items:center;gap:9px;
+  white-space:nowrap;
+  box-shadow:0 8px 28px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.05) inset;
+  animation:bFloat var(--bd,5.5s) var(--bdd,0s) ease-in-out infinite;
+}
+@keyframes bFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hb-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hb-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#fff}
+.hb-sub{font-size:11px;color:var(--t3)}
+.hb-1{top:4%;left:-10px;--bd:6s;--bdd:0s}
+.hb-2{top:43%;right:-8px;--bd:7s;--bdd:-2.5s}
+.hb-3{bottom:6%;left:8%;--bd:5.5s;--bdd:-1.5s}
+
+/* ══ TRUST BAR ══ */
+.trust{padding:18px 5%;border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);background:var(--bg2)}
+.trust-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(14px,3.5vw,44px);flex-wrap:wrap;
+}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--t2)}
+.trust-item svg{flex-shrink:0;color:var(--avail)}
+.trust-sep{width:1px;height:18px;background:var(--bord)}
+@media(max-width:500px){.trust-sep{display:none}}
+
+/* ══ COMMON SECTION ══ */
+.sec{padding:72px 5%}
+.sec-inner{max-width:1280px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:48px}
+.sec-eye{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.2);
+  border-radius:var(--rp);padding:5px 16px;
+  font-size:11px;font-weight:700;color:#ff5555;
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px;
+}
+.sec-title{font-size:clamp(24px,3.2vw,40px);font-weight:900;letter-spacing:-1.2px;color:#fff;line-height:1.1}
+.sec-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:540px;margin:12px auto 0;font-weight:500}
+
+/* ══ PLATFORMS ══ */
+.plat-sec{padding:72px 5%;background:var(--bg2)}
+.plat-grid{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:6px;
+  gap:13px;
 }
-@media(max-width:1100px){.pgrid{grid-template-columns:repeat(4,1fr);}}
-@media(max-width:800px){.pgrid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:520px){.pgrid{grid-template-columns:repeat(2,1fr);gap:4px;}}
+@media(max-width:1200px){.plat-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:820px) {.plat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px) {.plat-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
 
-/* card */
-.pcard{
-  position:relative;
-  border-radius:4px;
-  overflow:hidden;
-  cursor:pointer;
-  background:var(--bg3);
-  opacity:0;
-  transition:opacity .4s,transform .4s cubic-bezier(.16,1,.3,1),box-shadow .3s;
-}
-.pcard.visible{opacity:1;}
-.pcard:hover{
-  transform:scale(1.04) translateY(-4px) !important;
-  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.1);
-  z-index:2;
-}
-
-/* logo area */
-.pc-img{
-  height:150px;
-  background:linear-gradient(160deg,#1c1c1c,#0d0d0d);
-  display:flex;align-items:center;justify-content:center;
+.plat-card{
+  background:var(--card);
+  border:1px solid var(--bord);
+  border-radius:18px;
+  padding:18px;
+  display:flex;flex-direction:column;gap:13px;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .25s;
   position:relative;overflow:hidden;
-  transition:height .3s;
+  cursor:pointer;
 }
-.pc-img::after{
+.plat-card::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.8) 100%);
+  background:linear-gradient(145deg,rgba(255,255,255,.025) 0%,transparent 60%);
+  pointer-events:none;
 }
-.pc-img img{
-  max-width:80px;max-height:80px;
-  object-fit:contain;position:relative;z-index:1;
-  transition:transform .4s cubic-bezier(.16,1,.3,1);
-  filter:drop-shadow(0 4px 16px rgba(0,0,0,.6));
+.plat-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(229,9,20,.35);
+  box-shadow:0 14px 44px rgba(229,9,20,.12),0 0 0 1px rgba(229,9,20,.18);
 }
-.pcard:hover .pc-img img{transform:scale(1.12);}
-.pc-fallback{
-  font-size:24px;font-weight:900;color:var(--t3);
-  position:relative;z-index:1;letter-spacing:-1px;
-}
+.plat-card:active{transform:scale(.97)}
 
-/* rank */
-.pc-rank{
-  position:absolute;bottom:8px;left:8px;
-  font-size:10px;font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;color:var(--t2);z-index:2;
-}
-.pc-rank.top3{color:var(--red);font-weight:800;}
+/* platform card accent per-brand */
+.plat-card[data-id="netflix"]:hover  {border-color:rgba(229,9,20,.5);box-shadow:0 14px 44px rgba(229,9,20,.18),0 0 0 1px rgba(229,9,20,.3)}
+.plat-card[data-id="spotify"]:hover  {border-color:rgba(29,185,84,.4);box-shadow:0 14px 44px rgba(29,185,84,.15),0 0 0 1px rgba(29,185,84,.25)}
+.plat-card[data-id="disney"]:hover   {border-color:rgba(26,62,196,.5);box-shadow:0 14px 44px rgba(26,62,196,.18),0 0 0 1px rgba(26,62,196,.3)}
+.plat-card[data-id="max"]:hover      {border-color:rgba(88,34,180,.5);box-shadow:0 14px 44px rgba(88,34,180,.18),0 0 0 1px rgba(88,34,180,.3)}
+.plat-card[data-id="prime"]:hover    {border-color:rgba(0,168,224,.4);box-shadow:0 14px 44px rgba(0,168,224,.15),0 0 0 1px rgba(0,168,224,.25)}
 
-/* availability dot */
-.pc-dot{
-  position:absolute;top:8px;right:8px;z-index:2;
-  width:8px;height:8px;border-radius:50%;
-  box-shadow:0 0 0 2px rgba(0,0,0,.5);
-}
-.pc-dot.ok{background:var(--green);}
-.pc-dot.out{background:var(--t3);}
-
-/* body */
-.pc-body{
-  padding:14px 14px 16px;
-  display:flex;flex-direction:column;gap:6px;
-}
-.pc-name{font-size:14px;font-weight:700;color:var(--white);letter-spacing:-.3px;}
-.pc-desc{font-size:11px;color:var(--t3);line-height:1.4;}
-.pc-price{
-  font-size:22px;font-weight:900;color:var(--white);
-  letter-spacing:-1px;margin:2px 0;
-}
-.pc-price sub{font-size:11px;font-weight:500;color:var(--t3);vertical-align:baseline;letter-spacing:0;}
-
-/* hover reveal actions */
-.pc-actions{
-  display:flex;flex-direction:column;gap:6px;
-  margin-top:4px;
-  max-height:0;overflow:hidden;
-  transition:max-height .3s cubic-bezier(.16,1,.3,1),opacity .3s;
-  opacity:0;
-}
-.pcard:hover .pc-actions{max-height:120px;opacity:1;}
-@media(max-width:520px){.pc-actions{max-height:120px;opacity:1;}}
-
-.pc-btn-buy{
-  width:100%;background:var(--white);
-  border:none;border-radius:3px;padding:10px;
-  color:#000;font-family:inherit;font-size:12px;font-weight:700;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  transition:background .15s;
-}
-.pc-btn-buy:hover{background:#ccc;}
-.pc-btn-buy:disabled{opacity:.3;cursor:not-allowed;}
-
-.pc-btn-wa{
-  width:100%;background:rgba(70,211,105,.15);
-  border:1px solid rgba(70,211,105,.3);border-radius:3px;padding:9px;
-  color:var(--green);font-family:inherit;font-size:11px;font-weight:700;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  transition:background .15s;
-}
-.pc-btn-wa:hover{background:rgba(70,211,105,.25);}
-
-.pc-out-badge{
-  font-size:11px;font-weight:600;color:var(--t3);
-  text-align:center;padding:8px 0;letter-spacing:.5px;
-}
-
-/* ── FLY ── */
-.fly{
-  position:fixed;pointer-events:none;z-index:9999;
-  animation:flyAnim .7s cubic-bezier(.4,0,.2,1) forwards;
-}
-.fly img{width:40px;height:40px;object-fit:contain;border-radius:6px;}
-@keyframes flyAnim{
-  0%{transform:translate(0,0) scale(1);opacity:1;}
-  100%{transform:translate(var(--tx),var(--ty)) scale(.1);opacity:0;}
-}
-
-/* ── TOAST ── */
-.toast{
-  position:fixed;bottom:76px;left:50%;
-  transform:translateX(-50%) translateY(8px);
-  background:var(--bg3);border:1px solid var(--border);
-  backdrop-filter:blur(20px);
-  color:var(--t1);padding:12px 22px;border-radius:4px;
-  font-size:13px;font-weight:600;z-index:9998;
-  opacity:0;transition:opacity .25s,transform .25s;
-  pointer-events:none;white-space:nowrap;
-  box-shadow:0 8px 32px rgba(0,0,0,.6);
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ── WA FLOAT ── */
-.wa-float{
-  position:fixed;bottom:28px;right:28px;
-  width:54px;height:54px;border-radius:50%;
-  background:#25D366;border:none;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:80;
-  box-shadow:0 4px 20px rgba(37,211,102,.5);
-  transition:transform .2s,box-shadow .2s;
-  animation:waPulse 3s ease-in-out infinite;
-}
-.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.7);animation:none;}
-@media(max-width:600px){.wa-float{bottom:76px;right:16px;width:48px;height:48px;}}
-@keyframes waPulse{
-  0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.5);}
-  50%{box-shadow:0 4px 28px rgba(37,211,102,.8),0 0 0 8px rgba(37,211,102,.08);}
-}
-
-/* ── MOBILE BAR ── */
-.mobile-bar{
-  display:none;
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(10,10,10,.97);
-  border-top:1px solid var(--border);
-  padding:10px 16px;z-index:90;
-}
-@media(max-width:600px){.mobile-bar{display:block;}}
-.mobile-bar .cart-pill{width:100%;justify-content:center;}
-
-/* ── OVERLAY + DRAWER ── */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.8);backdrop-filter:blur(6px);
-  z-index:200;opacity:0;visibility:hidden;
-  transition:opacity .3s,visibility .3s;
-}
-.overlay.open{opacity:1;visibility:visible;}
-
-.drawer{
-  position:fixed;top:0;right:-100%;
-  width:min(440px,100vw);height:100dvh;
-  background:var(--bg2);
-  border-left:1px solid var(--border);
-  z-index:201;display:flex;flex-direction:column;
-  transition:right .38s cubic-bezier(.16,1,.3,1);
-  box-shadow:-10px 0 60px rgba(0,0,0,.6);
-}
-.drawer.open{right:0;}
-
-.drawer-head{
-  padding:20px 24px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
-}
-.drawer-head h3{font-size:18px;font-weight:700;color:var(--white);}
-
-.close-btn{
-  width:34px;height:34px;
+/* card header */
+.pc-head{display:flex;align-items:center;justify-content:space-between}
+.pc-logo{
+  width:52px;height:52px;border-radius:13px;
   background:rgba(255,255,255,.06);
-  border:none;border-radius:6px;
-  color:var(--t2);font-size:20px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:background .2s,color .2s;
+  overflow:hidden;flex-shrink:0;
+  transition:transform .25s;
 }
-.close-btn:hover{background:rgba(229,9,20,.15);color:var(--red);}
+.plat-card:hover .pc-logo{transform:scale(1.08)}
+.pc-logo img{width:44px;height:44px;object-fit:contain}
+.pc-logo-fb{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.pc-live{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--avail);
+  box-shadow:0 0 9px rgba(74,222,128,.7);
+  animation:livep 2s ease-in-out infinite;
+}
+@keyframes livep{0%,100%{opacity:1}50%{opacity:.35}}
+.pc-out-ind{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}
 
-.drawer-body{flex:1;overflow-y:auto;padding:16px 20px;}
+/* card body */
+.pc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--t1)}
+.pc-desc{font-size:11px;color:var(--t3);line-height:1.4}
 
-.cart-empty{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;height:100%;
-  gap:12px;color:var(--t3);text-align:center;
+/* card footer */
+.pc-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.06);
+  margin-top:auto;
 }
-.cart-empty p{font-size:14px;}
+.pc-price{
+  display:flex;align-items:baseline;gap:3px;
+  font-family:'Nunito',sans-serif;
+}
+.pc-price strong{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.8px}
+.pc-price span{font-size:11px;color:var(--t3);font-weight:600}
+.pc-buy{
+  display:inline-flex;align-items:center;gap:5px;
+  border:none;border-radius:9px;padding:8px 13px;
+  color:#fff;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  box-shadow:0 3px 12px rgba(229,9,20,.3);
+  transition:all .18s ease;min-height:34px;touch-action:manipulation;
+}
+.pc-buy:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(229,9,20,.45)}
+.pc-buy:active{transform:scale(.96)}
+.pc-buy:disabled{background:rgba(255,255,255,.1);box-shadow:none;color:var(--t3);cursor:not-allowed}
+.pc-na{font-size:11px;color:var(--t3);font-weight:600}
 
-.ci{
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:6px;padding:16px;margin-bottom:10px;
+/* ══ PLANS ══ */
+.plans-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:22px;align-items:stretch;
 }
-.ci-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
-.ci-img{
-  width:46px;height:46px;background:var(--bg4);
-  border-radius:6px;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;overflow:hidden;
+@media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+
+.plan-card{
+  background:var(--card);border:1.5px solid var(--bord);
+  border-radius:24px;padding:32px 26px;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
 }
-.ci-img img{max-width:36px;max-height:36px;object-fit:contain;}
-.ci-name{font-size:14px;font-weight:700;color:var(--white);}
-.ci-meta{font-size:12px;color:var(--t3);}
-.ci-bottom{display:flex;align-items:center;justify-content:space-between;}
-.qty-row{display:flex;align-items:center;gap:12px;}
-.qty-btn{
-  width:30px;height:30px;background:var(--bg4);
-  border:1px solid var(--border);border-radius:4px;
-  color:var(--white);font-size:16px;font-weight:700;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:background .15s;
+.plan-card:hover{transform:translateY(-7px);border-color:rgba(229,9,20,.3)}
+.plan-card.feat{
+  border-color:var(--red);
+  background:linear-gradient(145deg,rgba(229,9,20,.08) 0%,rgba(30,20,50,.5) 100%);
+  box-shadow:0 0 0 1px rgba(229,9,20,.2),0 20px 50px rgba(229,9,20,.12);
+  transform:scale(1.02);
 }
-.qty-btn:hover{background:var(--red);}
-.qty-num{font-size:15px;font-weight:700;min-width:20px;text-align:center;color:var(--white);}
-.ci-total{font-size:17px;font-weight:800;color:var(--white);}
-.del-btn{
-  background:none;border:none;color:var(--t3);
-  font-size:11px;font-weight:600;cursor:pointer;
-  margin-top:10px;font-family:inherit;
+.plan-card.feat:hover{transform:scale(1.02) translateY(-7px)}
+
+.plan-badge{
+  position:absolute;top:18px;right:18px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;font-size:11px;font-weight:800;
+  padding:4px 12px;border-radius:var(--rp);
   text-transform:uppercase;letter-spacing:.5px;
-  transition:color .15s;
+  box-shadow:2px 3px 0 var(--red3);
 }
-.del-btn:hover{color:var(--red);}
-
-.drawer-foot{
-  padding:16px 20px 20px;
-  border-top:1px solid var(--border);flex-shrink:0;
+.plan-icon{
+  width:56px;height:56px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;
+  box-shadow:var(--sh-card);
 }
-.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-.total-label{font-size:13px;color:var(--t2);}
-.total-val{font-size:30px;font-weight:900;color:var(--white);letter-spacing:-1px;}
+.plan-tag{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.plan-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:5px;letter-spacing:-.4px}
+.plan-desc{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:22px}
+.plan-price{font-size:46px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
+.plan-psub{font-size:12px;color:var(--t3);margin:5px 0 22px}
 
-.checkout-btn{
-  width:100%;background:#25D366;border:none;
-  padding:15px;border-radius:4px;color:#fff;
-  font-family:inherit;font-size:15px;font-weight:700;
-  cursor:pointer;margin-bottom:8px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:background .2s,transform .15s;
-  box-shadow:0 4px 16px rgba(37,211,102,.3);
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1;margin-bottom:24px}
+.pf{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--t2);font-weight:600;line-height:1.4}
+.pf-yes{width:20px;height:20px;border-radius:7px;flex-shrink:0;background:rgba(74,222,128,.12);color:var(--avail);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.pf-no {width:20px;height:20px;border-radius:7px;flex-shrink:0;background:rgba(255,255,255,.05);color:var(--t3);display:flex;align-items:center;justify-content:center;margin-top:1px;opacity:.5}
+
+.plan-btn{
+  width:100%;border:none;border-radius:12px;padding:15px;
+  font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
+  min-height:50px;transition:all .2s cubic-bezier(.16,1,.3,1);touch-action:manipulation;
 }
-.checkout-btn:hover{background:#1daa57;transform:translateY(-1px);}
-
-.clear-btn-d{
-  width:100%;background:none;
-  border:1px solid var(--border);padding:12px;
-  border-radius:4px;color:var(--t2);
-  font-family:inherit;font-size:13px;font-weight:500;
-  cursor:pointer;transition:border-color .15s,color .15s;
+.plan-btn.p{
+  background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;
+  box-shadow:3px 4px 0 var(--red3),0 8px 24px var(--red-glow);
 }
-.clear-btn-d:hover{border-color:var(--red);color:var(--red);}
+.plan-btn.p:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--red3),0 12px 30px var(--red-glow)}
+.plan-btn.s{
+  background:rgba(255,255,255,.07);color:var(--t1);
+  border:1.5px solid rgba(255,255,255,.12);
+}
+.plan-btn.s:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.plan-btn:active{transform:scale(.97)!important}
 
-/* ── MODAL ── */
+/* ══ HOW IT WORKS ══ */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:720px){.how-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
+
+.how-card{
+  background:var(--card);border:1px solid var(--bord);
+  border-radius:22px;padding:32px 24px;
+  text-align:center;position:relative;overflow:hidden;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
+}
+.how-card:hover{transform:translateY(-6px);border-color:rgba(229,9,20,.25)}
+.how-num{
+  position:absolute;top:14px;right:18px;
+  font-size:52px;font-weight:900;color:rgba(229,9,20,.07);line-height:1;
+  font-family:'Nunito',sans-serif;
+}
+.how-ico{
+  width:68px;height:68px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;box-shadow:var(--sh-card);
+}
+.how-ico.a{background:linear-gradient(135deg,rgba(229,9,20,.18),rgba(180,30,30,.12))}
+.how-ico.b{background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(100,60,200,.12))}
+.how-ico.c{background:linear-gradient(135deg,rgba(74,222,128,.15),rgba(29,185,84,.08))}
+.how-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:9px}
+.how-desc{font-size:13px;color:var(--t2);line-height:1.65;font-weight:500}
+
+/* ══ TESTIMONIALS ══ */
+.testi-sec{padding:72px 5%;background:var(--bg2)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.testi-grid{grid-template-columns:1fr}}
+
+.testi-card{
+  background:var(--card);border:1px solid var(--bord);
+  border-radius:20px;padding:24px 20px;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .2s;
+}
+.testi-card:hover{transform:translateY(-4px);border-color:rgba(229,9,20,.2)}
+.testi-stars{display:flex;gap:3px;margin-bottom:13px}
+.testi-quote{font-size:14px;color:var(--t2);line-height:1.7;font-weight:500;margin-bottom:18px;font-style:italic}
+.testi-quote::before{content:'\201C';font-size:36px;color:var(--red);line-height:.5;display:block;font-style:normal;margin-bottom:8px;font-family:Georgia,serif}
+.testi-person{display:flex;align-items:center;gap:11px}
+.testi-av{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;
+  box-shadow:var(--sh-card);
+}
+.testi-name{font-size:14px;font-weight:800;color:#fff}
+.testi-sub{font-size:11px;color:var(--t3);margin-top:2px}
+
+/* ══ CTA ══ */
+.cta-sec{padding:72px 5%}
+.cta-box{
+  max-width:1280px;margin:0 auto;
+  background:linear-gradient(135deg,var(--red) 0%,var(--red2) 50%,#8b0030 100%);
+  border-radius:28px;padding:clamp(36px,5vw,72px) clamp(24px,5vw,72px);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;
+  box-shadow:8px 10px 0 var(--red3),0 20px 56px var(--red-glow);
+}
+.cta-box::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle 280px at 80% 50%,rgba(255,255,255,.1) 0%,transparent 60%),
+    radial-gradient(circle 180px at 20% 80%,rgba(255,255,255,.06) 0%,transparent 50%);
+}
+.cta-copy{position:relative;z-index:1}
+.cta-copy h2{font-size:clamp(22px,3.2vw,38px);font-weight:900;color:#fff;letter-spacing:-.8px;margin-bottom:9px}
+.cta-copy p{font-size:16px;color:rgba(255,255,255,.8);font-weight:600;max-width:440px}
+.cta-btns{display:flex;gap:11px;flex-wrap:wrap;position:relative;z-index:1}
+.btn-wa{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--green);border:none;border-radius:var(--r2);
+  padding:16px 28px;color:#fff;
+  font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;
+  box-shadow:4px 5px 0 var(--green2),0 10px 28px rgba(37,211,102,.4);
+  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:56px;touch-action:manipulation;
+}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:5px 7px 0 var(--green2),0 16px 36px rgba(37,211,102,.5)}
+.btn-wa:active{transform:scale(.97)}
+.btn-cg{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.35);
+  border-radius:var(--r2);padding:16px 24px;
+  color:#fff;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;
+  min-height:56px;touch-action:manipulation;transition:all .2s;
+}
+.btn-cg:hover{background:rgba(255,255,255,.25)}
+
+/* ══ FOOTER ══ */
+footer{background:#07041a;border-top:1px solid rgba(255,255,255,.05);padding:48px 5% 28px}
+.footer-inner{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;
+  padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+@media(max-width:680px){.footer-inner{grid-template-columns:1fr}}
+.footer-brand{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.35);line-height:1.65;max-width:270px}
+.foot-col h4{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:13px}
+.foot-col a{display:block;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px;transition:color .15s}
+.foot-col a:hover{color:var(--t1)}
+.footer-bottom{text-align:center;padding-top:22px;font-size:12px;color:rgba(255,255,255,.2)}
+.footer-bottom strong{color:var(--red)}
+
+/* ══ WA FLOAT ══ */
+.wa-float{
+  position:fixed;bottom:26px;right:26px;
+  width:58px;height:58px;border-radius:50%;
+  background:var(--green);border:none;
+  display:flex;align-items:center;justify-content:center;
+  z-index:80;
+  box-shadow:3px 4px 0 var(--green2),0 8px 26px rgba(37,211,102,.5);
+  transition:transform .2s,box-shadow .2s;
+  animation:wap 3.5s ease-in-out infinite;
+  touch-action:manipulation;
+}
+.wa-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:4px 6px 0 var(--green2),0 14px 36px rgba(37,211,102,.65);animation:none}
+.wa-float:active{transform:scale(.94)}
+@media(max-width:600px){.wa-float{bottom:18px;right:14px;width:52px;height:52px}}
+@keyframes wap{0%,100%{box-shadow:3px 4px 0 var(--green2),0 8px 26px rgba(37,211,102,.5)}50%{box-shadow:3px 4px 0 var(--green2),0 8px 32px rgba(37,211,102,.75),0 0 0 12px rgba(37,211,102,.07)}}
+
+/* ══ MODAL ══ */
 .modal-ov{
   position:fixed;inset:0;
-  background:rgba(0,0,0,.85);backdrop-filter:blur(10px);
-  z-index:300;display:flex;
-  align-items:flex-end;justify-content:center;
-  opacity:0;visibility:hidden;
-  transition:opacity .3s,visibility .3s;
+  background:rgba(8,4,26,.75);backdrop-filter:blur(12px);
+  z-index:300;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;
 }
-@media(min-width:641px){.modal-ov{align-items:center;padding:24px;}}
-.modal-ov.open{opacity:1;visibility:visible;}
-
+@media(min-width:641px){.modal-ov{align-items:center;padding:24px}}
+.modal-ov.open{opacity:1;visibility:visible}
 .modal{
-  background:var(--bg2);width:100%;max-width:400px;
-  border-radius:8px 8px 0 0;overflow:hidden;
-  transform:translateY(30px);
-  transition:transform .35s cubic-bezier(.16,1,.3,1);
-  border:1px solid var(--border);
+  background:#1a1430;width:100%;max-width:430px;
+  border-radius:24px 24px 0 0;
+  border:1px solid var(--bord2);
+  transform:translateY(40px);transition:transform .38s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 -8px 40px rgba(229,9,20,.15);
 }
-@media(min-width:641px){.modal{border-radius:8px;}}
-.modal-ov.open .modal{transform:translateY(0);}
-
-.modal-handle{display:flex;justify-content:center;padding:12px 0 0;}
-@media(min-width:641px){.modal-handle{display:none;}}
-.handle-bar{width:36px;height:3px;background:var(--border);border-radius:2px;}
-
-.modal-content{padding:24px;}
-.modal-top{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
-.modal-logo{
-  width:64px;height:64px;background:var(--bg3);
-  border:1px solid var(--border);border-radius:8px;
+@media(min-width:641px){.modal{border-radius:24px}}
+.modal-ov.open .modal{transform:translateY(0)}
+.modal-drag{display:flex;justify-content:center;padding:13px 0 0}
+@media(min-width:641px){.modal-drag{display:none}}
+.modal-drag-bar{width:42px;height:5px;background:rgba(255,255,255,.12);border-radius:3px}
+.modal-body{padding:22px 26px 28px}
+.modal-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.modal-ico{
+  width:66px;height:66px;border-radius:18px;
+  background:rgba(255,255,255,.07);
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;overflow:hidden;
+  overflow:hidden;flex-shrink:0;
 }
-.modal-logo img{max-width:50px;max-height:50px;object-fit:contain;}
-.modal-logo-text{font-size:20px;font-weight:900;color:var(--t3);}
-.modal-name{font-size:20px;font-weight:800;color:var(--white);}
-.modal-desc{font-size:13px;color:var(--t2);margin-top:3px;}
-
-.modal-price-block{margin-bottom:20px;}
-.modal-price-big{font-size:44px;font-weight:900;color:var(--white);letter-spacing:-2px;line-height:1;}
-.modal-price-sub{font-size:12px;color:var(--t3);margin-top:4px;}
-
-.form-label{
-  display:block;font-size:11px;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;
-  color:var(--t2);margin-bottom:8px;
+.modal-ico img{width:52px;height:52px;object-fit:contain}
+.modal-ico-fb{width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.modal-pname{font-size:22px;font-weight:900;color:#fff}
+.modal-pdesc{font-size:13px;color:var(--t2);margin-top:3px}
+.modal-ppill{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border-radius:14px;padding:18px 22px;margin-bottom:22px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:3px 4px 0 var(--red3);
 }
-.form-select{
-  width:100%;background:var(--bg3);
-  border:1px solid var(--border);border-radius:6px;
-  padding:13px 16px;color:var(--white);
-  font-size:15px;font-weight:600;font-family:inherit;
-  cursor:pointer;margin-bottom:20px;
-  transition:border-color .15s;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23525252' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 16px center;
+.mpp-lbl{font-size:12px;font-weight:700;color:rgba(255,255,255,.7)}
+.mpp-price{font-size:40px;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
+.mpp-per{font-size:12px;color:rgba(255,255,255,.65);font-weight:600}
+.modal-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;display:block}
+.modal-sel{
+  width:100%;background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(229,9,20,.2);border-radius:12px;
+  padding:13px 16px;color:#fff;
+  font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;
+  appearance:none;margin-bottom:18px;cursor:pointer;min-height:50px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e50914' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
 }
-.form-select:focus{outline:none;border-color:var(--red);}
-.form-select option{background:var(--bg2);}
-
-.modal-actions{display:flex;flex-direction:column;gap:8px;}
-.modal-btn{
-  width:100%;border:none;border-radius:4px;
-  padding:15px;font-family:inherit;font-size:15px;font-weight:700;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:background .15s,transform .15s;
+.modal-sel:focus{outline:2px solid var(--red);outline-offset:2px}
+.modal-sel option{background:#1a1430}
+.modal-acts{display:flex;flex-direction:column;gap:9px}
+.modal-wa{
+  width:100%;background:var(--green);border:none;border-radius:12px;
+  padding:15px;color:#fff;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:3px 4px 0 var(--green2);
+  transition:all .2s cubic-bezier(.16,1,.3,1);min-height:52px;touch-action:manipulation;
 }
-.modal-btn-wa{background:#25D366;color:#fff;box-shadow:0 4px 16px rgba(37,211,102,.25);}
-.modal-btn-wa:hover{background:#1daa57;transform:translateY(-1px);}
-.modal-btn-cancel{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--t2);}
-.modal-btn-cancel:hover{background:rgba(255,255,255,.1);color:var(--white);}
-
-/* ── FOOTER ── */
-footer{
-  text-align:center;padding:32px 4%;
-  border-top:1px solid var(--border);
-  background:var(--bg2);
-  font-size:13px;color:var(--t3);
+.modal-wa:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--green2)}
+.modal-wa:active{transform:scale(.97)}
+.modal-cancel{
+  width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:13px;color:var(--t2);
+  font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;
+  transition:all .2s;min-height:46px;
 }
-footer strong{color:var(--red);}
+.modal-cancel:hover{background:rgba(255,255,255,.1);color:#fff}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
-::-webkit-scrollbar-thumb:hover{background:var(--t3);}
-
-/* ── SCROLL ANIMATIONS ── */
-.fade-up{opacity:0;transform:translateY(24px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);}
-.fade-up.visible{opacity:1;transform:translateY(0);}
-
-/* Hero reveal */
-.hero-eyebrow,.hero h1,.hero-desc,.hero-actions,.hero-stats{
-  opacity:0;transform:translateY(18px);
-  animation:hReveal .7s cubic-bezier(.16,1,.3,1) forwards;
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;bottom:96px;left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:var(--bg3);border:1px solid var(--bord2);
+  backdrop-filter:blur(20px);
+  color:var(--t1);padding:12px 22px;border-radius:10px;
+  font-size:13px;font-weight:700;
+  z-index:9999;opacity:0;
+  transition:opacity .25s,transform .25s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;white-space:nowrap;
+  box-shadow:var(--sh-card);
 }
-.hero h1{animation-delay:.1s;}
-.hero-desc{animation-delay:.2s;}
-.hero-actions{animation-delay:.3s;}
-.hero-stats{animation-delay:.35s;}
-@keyframes hReveal{to{opacity:1;transform:translateY(0);}}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══ FADE UP ══ */
+.fu{opacity:0;transform:translateY(24px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+.fu.vis{opacity:1;transform:translateY(0)}
+
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#07041a}
+::-webkit-scrollbar-thumb{background:rgba(139,92,246,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(229,9,20,.4)}
 </style>
 </head>
 <body>
@@ -647,392 +772,654 @@ footer strong{color:var(--red);}
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-inner">
-    <div class="brand">SICCHA</div>
-    <div class="nav-links">
-      <a href="sorteos.html">Sorteos</a>
-      <a href="resultados.html">Ganadores</a>
-      <a href="admin.html">Admin</a>
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <polygon points="6 3 20 12 6 21" fill="white"/>
+        </svg>
+      </div>
+      <div class="brand-name">SICCHA <span>STREAMING</span></div>
     </div>
-    <button class="cart-pill" id="cartBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      Carrito
-      <span class="cart-count" id="cartCount">0</span>
+    <nav class="nav-links">
+      <a href="#platforms">Plataformas</a>
+      <a href="#plans">Planes</a>
+      <a href="#how">Cómo funciona</a>
+      <a href="#reviews">Opiniones</a>
+    </nav>
+    <button class="nav-btn" id="navBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+      Pedir ahora
     </button>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-glow"></div>
+<section class="hero" id="inicio">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Streaming en Trujillo</div>
-    <h1>Tu entretenimiento<br><em>sin límites</em></h1>
-    <p class="hero-desc">Las plataformas más populares al mejor precio. Entrega inmediata y soporte garantizado en Trujillo, Perú.</p>
-    <div class="hero-actions">
-      <button class="hero-btn hero-btn-primary" id="heroShopBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-        Ver plataformas
-      </button>
-      <button class="hero-btn hero-btn-secondary" id="heroWaBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-        Consultar por WhatsApp
-      </button>
+
+    <!-- Copy -->
+    <div class="hero-copy">
+      <div class="hero-tag">
+        <span class="hero-tag-dot" aria-hidden="true"></span>
+        Streaming en Trujillo, Perú
+      </div>
+      <h1 class="hero-h1">Disfruta sin<br>límites tu<br><em>streaming</em></h1>
+      <p class="hero-sub">Las plataformas que amas al mejor precio. Entrega inmediata, precios en soles y soporte personalizado.</p>
+      <div class="hero-actions">
+        <a href="#platforms" class="btn-red">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          Ver plataformas
+        </a>
+        <button class="btn-ghost" id="heroWa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Consultar gratis
+        </button>
+      </div>
+      <div class="hero-pills">
+        <div class="hero-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Entrega inmediata
+        </div>
+        <div class="hero-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Garantía total
+        </div>
+        <div class="hero-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Soporte 24/7
+        </div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat-item">
-        <div class="hsi-num" id="statPlat">0</div>
-        <div class="hsi-label">Plataformas</div>
+
+    <!-- 3D Phones -->
+    <div class="hero-visual" aria-hidden="true">
+      <div class="star-field" id="sf"></div>
+      <div class="phone-scene" id="ps">
+
+        <!-- LEFT — Spotify -->
+        <div class="ph-wrap left">
+          <div class="phone">
+            <div class="phone-shell"></div>
+            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
+            <div class="phone-scr">
+              <div class="scr-bg"></div>
+              <div class="scr-orb" style="width:110px;height:110px;background:rgba(29,185,84,.45);top:-15px;left:-15px;animation-delay:-1s"></div>
+              <div class="scr-orb" style="width:70px;height:70px;background:rgba(29,185,84,.25);bottom:30px;right:-5px;animation-delay:-2.5s"></div>
+              <div class="dyn-island"></div>
+              <div class="scr-ui">
+                <div class="scr-app" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">
+                  <img src="assets/spotify.png" alt="Spotify" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="scr-app-fb" style="display:none"><svg viewBox="0 0 36 36" width="32" height="32"><circle cx="18" cy="18" r="14" fill="#1db954"/><path d="M11 16c4-2 9-2 13 0M11 19c3-1.5 7-1.5 11 0M11 22c2.5-1 5.5-1 8 0" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+                </div>
+                <div class="scr-name">Spotify Premium</div>
+                <div class="scr-price">S/ 12</div>
+                <div class="scr-per">por mes</div>
+                <div class="scr-rows">
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(29,185,84,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="#1db954"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/12</div></div>
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(29,185,84,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1db954" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">OK</div></div>
+                </div>
+                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar</div>
+              </div>
+            </div>
+            <div class="ph-glow"></div>
+          </div>
+        </div>
+
+        <!-- CENTER — Netflix -->
+        <div class="ph-wrap center">
+          <div class="phone">
+            <div class="phone-shell"></div>
+            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
+            <div class="phone-scr">
+              <div class="scr-bg"></div>
+              <div class="scr-orb" style="width:150px;height:150px;background:rgba(139,92,246,.5);top:-25px;right:-25px;animation-delay:0s"></div>
+              <div class="scr-orb" style="width:110px;height:110px;background:rgba(229,9,20,.3);bottom:25px;left:-15px;animation-delay:-2s"></div>
+              <div class="scr-orb" style="width:80px;height:80px;background:rgba(255,204,2,.18);top:48%;right:8px;animation-delay:-1s"></div>
+              <div class="dyn-island"></div>
+              <div class="scr-ui">
+                <div class="scr-app" style="background:linear-gradient(135deg,#e50914,#831010);width:64px;height:64px;border-radius:18px">
+                  <img src="assets/netflix.png" alt="Netflix" width="50" height="50" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="scr-app-fb" style="display:none;width:50px;height:50px"><svg viewBox="0 0 50 50" width="46" height="46"><text x="10" y="38" font-size="36" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg></div>
+                </div>
+                <div class="scr-name">Netflix Premium HD</div>
+                <div class="scr-price">S/ 15</div>
+                <div class="scr-per">por mes</div>
+                <div class="scr-rows">
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/15</div></div>
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 2l-4 5-4-5"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">HD</div></div>
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(229,9,20,.12)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">HOY</div></div>
+                </div>
+                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar ahora</div>
+              </div>
+            </div>
+            <div class="ph-glow"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT — Disney+ -->
+        <div class="ph-wrap right">
+          <div class="phone">
+            <div class="phone-shell"></div>
+            <div class="pb-r"></div><div class="pb-l1"></div><div class="pb-l2"></div>
+            <div class="phone-scr">
+              <div class="scr-bg"></div>
+              <div class="scr-orb" style="width:120px;height:120px;background:rgba(26,62,196,.45);top:-10px;right:-10px;animation-delay:-0.8s"></div>
+              <div class="scr-orb" style="width:75px;height:75px;background:rgba(100,150,255,.25);bottom:40px;left:0;animation-delay:-3s"></div>
+              <div class="dyn-island"></div>
+              <div class="scr-ui">
+                <div class="scr-app" style="background:linear-gradient(135deg,#1a3ec4,#0a1f7a)">
+                  <img src="assets/disney.png" alt="Disney+" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="scr-app-fb" style="display:none"><svg viewBox="0 0 44 44" width="38" height="38"><text x="3" y="32" font-size="22" font-weight="900" font-family="Georgia,serif" fill="#4a7fff" font-style="italic">D+</text></svg></div>
+                </div>
+                <div class="scr-name">Disney+ 4K</div>
+                <div class="scr-price">S/ 12</div>
+                <div class="scr-per">por mes</div>
+                <div class="scr-rows">
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(26,62,196,.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4a7fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">S/12</div></div>
+                  <div class="scr-row"><div class="sr-ico" style="background:rgba(26,62,196,.15)"><svg width="13" height="13" viewBox="0 0 24 24" fill="#4a7fff"><polygon points="10 8 16 12 10 16 10 8"/><circle cx="12" cy="12" r="10" fill="none" stroke="#4a7fff" stroke-width="2"/></svg></div><div class="sr-lines"><div class="sr-ln"></div><div class="sr-ln s"></div></div><div class="sr-tag">4K</div></div>
+                </div>
+                <div class="scr-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Comprar</div>
+              </div>
+            </div>
+            <div class="ph-glow"></div>
+          </div>
+        </div>
+
+      </div><!-- /phone-scene -->
+
+      <!-- Badges -->
+      <div class="h-badge hb-1">
+        <div class="hb-ico" style="background:rgba(255,204,2,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffcc02" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div><div class="hb-name">Entrega inmediata</div><div class="hb-sub">El mismo día</div></div>
       </div>
-      <div class="hero-stat-item">
-        <div class="hsi-num">24/7</div>
-        <div class="hsi-label">Soporte</div>
+      <div class="h-badge hb-2">
+        <div class="hb-ico" style="background:rgba(229,9,20,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="#ff5555"/></svg></div>
+        <div><div class="hb-name">+500 clientes</div><div class="hb-sub">Trujillo, Perú</div></div>
       </div>
-      <div class="hero-stat-item">
-        <div class="hsi-num">100%</div>
-        <div class="hsi-label">Garantía</div>
+      <div class="h-badge hb-3">
+        <div class="hb-ico" style="background:rgba(74,222,128,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke="#4ade80" stroke-width="2"/></svg></div>
+        <div><div class="hb-name">Garantía total</div><div class="hb-sub">100% seguro</div></div>
       </div>
+
     </div>
   </div>
-  <div class="scroll-hint">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
-    <span>Explorar</span>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust fu">
+  <div class="trust-inner">
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Entrega el mismo día</div>
+    <div class="trust-sep" aria-hidden="true"></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Desde S/ 7 por mes</div>
+    <div class="trust-sep" aria-hidden="true"></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Soporte 24/7 WhatsApp</div>
+    <div class="trust-sep" aria-hidden="true"></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Garantía de acceso</div>
+  </div>
+</div>
+
+<!-- PLATFORMS -->
+<section class="plat-sec" id="platforms">
+  <div class="sec-inner">
+    <div class="sec-head fu">
+      <div class="sec-eye">Catálogo</div>
+      <h2 class="sec-title">Todas las plataformas</h2>
+      <p class="sec-sub">Elige la que quieres y recíbela hoy mismo en Trujillo.</p>
+    </div>
+    <div class="plat-grid" id="platGrid" role="list"></div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="sec" id="plans">
+  <div class="sec-inner">
+    <div class="sec-head fu">
+      <div class="sec-eye">Planes y precios</div>
+      <h2 class="sec-title">Elige tu combo ideal</h2>
+      <p class="sec-sub">Combina plataformas y ahorra más. Entrega inmediata incluida.</p>
+    </div>
+    <div class="plans-grid fu">
+
+      <div class="plan-card">
+        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(229,9,20,.2),rgba(180,30,30,.1))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="plan-tag">Starter</div>
+        <div class="plan-title">Plan Básico</div>
+        <div class="plan-desc">Perfecto para empezar con una plataforma favorita.</div>
+        <div class="plan-price">S/ 15</div>
+        <div class="plan-psub">por plataforma / mes</div>
+        <ul class="plan-feats">
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 plataforma a elegir</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 perfil dedicado</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte por WhatsApp</li>
+          <li class="pf"><span class="pf-no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Descuento combo</li>
+        </ul>
+        <button class="plan-btn s" onclick="openWa('Plan Básico - S/ 15')">Elegir este plan</button>
+      </div>
+
+      <div class="plan-card feat">
+        <div class="plan-badge">Popular</div>
+        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(229,9,20,.25),rgba(139,0,0,.15))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="plan-tag">Combo</div>
+        <div class="plan-title">Duo Streaming</div>
+        <div class="plan-desc">Las 2 plataformas más populares juntas y más baratas.</div>
+        <div class="plan-price">S/ 25</div>
+        <div class="plan-psub">Netflix + Prime Video / mes</div>
+        <ul class="plan-feats">
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Prime Video</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>2 perfiles dedicados</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte por WhatsApp</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 6 vs individual</li>
+        </ul>
+        <button class="plan-btn p" onclick="openWa('Duo Streaming - S/ 25')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Quiero este combo
+        </button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(99,60,200,.1))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/><polygon points="12 7 13.8 10.6 17.8 11.2 14.9 14 15.6 18 12 16.1 8.4 18 9.1 14 6.2 11.2 10.2 10.6 12 7"/></svg>
+        </div>
+        <div class="plan-tag">Premium</div>
+        <div class="plan-title">Todo incluido</div>
+        <div class="plan-desc">Netflix + Disney+ + Spotify. El pack definitivo.</div>
+        <div class="plan-price">S/ 35</div>
+        <div class="plan-psub">3 plataformas / mes</div>
+        <ul class="plan-feats">
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Netflix + Disney+ + Spotify</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>3 perfiles dedicados</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Entrega el mismo día</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte prioritario VIP</li>
+          <li class="pf"><span class="pf-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Ahorra S/ 16 vs individual</li>
+        </ul>
+        <button class="plan-btn s" onclick="openWa('Todo incluido Premium - S/ 35')">Elegir premium</button>
+      </div>
+
+    </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="how">
-  <div class="how-inner">
-    <div class="section-eyebrow fade-up">Proceso simple</div>
-    <div class="section-title fade-up">¿Cómo funciona?</div>
+<section class="sec" id="how" style="background:var(--bg2)">
+  <div class="sec-inner">
+    <div class="sec-head fu">
+      <div class="sec-eye">Super sencillo</div>
+      <h2 class="sec-title">Como funciona</h2>
+      <p class="sec-sub">En 3 pasos tienes tu streaming listo hoy mismo.</p>
+    </div>
     <div class="how-grid">
-      <div class="how-step">
-        <div class="step-num">01</div>
-        <div class="step-title">Elige tu plataforma</div>
-        <div class="step-desc">Explora nuestro catálogo y selecciona la plataforma que quieres. Puedes agregar varias al carrito.</div>
+      <div class="how-card fu">
+        <div class="how-num" aria-hidden="true">01</div>
+        <div class="how-ico a"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+        <div class="how-title">Elige tu plataforma</div>
+        <p class="how-desc">Explora el catalogo y selecciona la plataforma o combo que quieres.</p>
       </div>
-      <div class="how-step">
-        <div class="step-num">02</div>
-        <div class="step-title">Contáctanos por WhatsApp</div>
-        <div class="step-desc">Haz clic en Comprar y te redirigimos a WhatsApp con tu pedido listo para confirmar.</div>
+      <div class="how-card fu">
+        <div class="how-num" aria-hidden="true">02</div>
+        <div class="how-ico b"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="how-title">Contacta por WhatsApp</div>
+        <p class="how-desc">Te redirigimos con tu pedido listo. Confirmamos en segundos.</p>
       </div>
-      <div class="how-step">
-        <div class="step-num">03</div>
-        <div class="step-title">Recibe al instante</div>
-        <div class="step-desc">Confirmamos el pago y recibes tu acceso de inmediato. ¡Listo para disfrutar tu streaming!</div>
+      <div class="how-card fu">
+        <div class="how-num" aria-hidden="true">03</div>
+        <div class="how-ico c"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="how-title">Disfruta al instante</div>
+        <p class="how-desc">Recibes tus credenciales el mismo dia. Listo para ver tu contenido.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<div class="products-section">
-  <div class="products-header" id="prodHeader">
-    <div>
-      <div class="section-eyebrow">Top 10</div>
-      <div class="section-title" style="margin-bottom:0">Plataformas populares</div>
+<!-- TESTIMONIALS -->
+<section class="testi-sec" id="reviews">
+  <div class="sec-inner">
+    <div class="sec-head fu">
+      <div class="sec-eye">Clientes felices</div>
+      <h2 class="sec-title">Lo que dicen ellos</h2>
+      <p class="sec-sub">Mas de 500 clientes en Trujillo ya disfrutan sus plataformas.</p>
     </div>
-    <div class="products-header-right">Trujillo, Perú</div>
+    <div class="testi-grid">
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">Netflix al instante, super barato y el soporte siempre responde rapido. Lo recomiendo a todos!</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">L</div><div><div class="testi-name">Luciana R.</div><div class="testi-sub">Cliente desde 2024 · Netflix</div></div></div>
+      </div>
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">Tengo el combo Disney + Netflix y pago menos que antes por uno solo. El trato es muy bueno.</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#e50914,#831010)">C</div><div><div class="testi-name">Carlos M.</div><div class="testi-sub">Cliente desde 2023 · Combo</div></div></div>
+      </div>
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">Spotify todo el mes por super precio. Nunca he tenido problemas y responden rapidisimo.</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#1db954,#0f8a3c)">V</div><div><div class="testi-name">Valeria S.</div><div class="testi-sub">Cliente desde 2024 · Spotify</div></div></div>
+      </div>
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">DGO para ver la Liga 1 es lo mejor. Siempre funciona sin cortes y el precio es imbatible.</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">A</div><div><div class="testi-name">Andre P.</div><div class="testi-sub">Cliente desde 2024 · DGO</div></div></div>
+      </div>
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">El plan premium es increible. Tengo Netflix, Disney y Spotify todo junto pagando menos.</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">D</div><div><div class="testi-name">Diego F.</div><div class="testi-sub">Cliente VIP · Plan Premium</div></div></div>
+      </div>
+      <div class="testi-card fu">
+        <div class="testi-stars" aria-label="5 estrellas"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="testi-quote">Crunchyroll para mi anime y todo bien. Recomende a 3 amigos y todos contentos. Muy confiable.</p>
+        <div class="testi-person"><div class="testi-av" style="background:linear-gradient(135deg,#f47521,#c45000)">S</div><div><div class="testi-name">Sofia T.</div><div class="testi-sub">Cliente desde 2024 · Crunchyroll</div></div></div>
+      </div>
+    </div>
   </div>
-  <div class="pgrid" id="grid"></div>
-</div>
+</section>
 
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-box fu">
+    <div class="cta-copy">
+      <h2>Listo para empezar?</h2>
+      <p>Escribenos ahora por WhatsApp y en minutos tienes tu streaming activo.</p>
+    </div>
+    <div class="cta-btns">
+      <button class="btn-wa" id="ctaWa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Pedir por WhatsApp
+      </button>
+      <a href="#plans" class="btn-cg">Ver planes</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <strong>SICCHA STREAMING</strong> &nbsp;·&nbsp; Trujillo, Perú &nbsp;·&nbsp; 2026<br>
-  <span style="font-size:12px;display:block;margin-top:6px">La mejor opción en streaming premium de Trujillo</span>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <div class="brand-mark" style="width:32px;height:32px;border-radius:9px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="6 3 20 12 6 21" fill="white"/></svg></div>
+        <span style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#fff">SICCHA <span style="color:var(--red)">STREAMING</span></span>
+      </div>
+      <p class="footer-desc">Las mejores plataformas de streaming al mejor precio en Trujillo, Peru.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Plataformas</h4>
+      <a href="#platforms">Netflix</a>
+      <a href="#platforms">Disney+</a>
+      <a href="#platforms">Spotify</a>
+      <a href="#platforms">HBO Max</a>
+      <a href="#platforms">Prime Video</a>
+    </div>
+    <div class="foot-col">
+      <h4>SICCHA</h4>
+      <a href="#plans">Planes</a>
+      <a href="#how">Como funciona</a>
+      <a href="#reviews">Opiniones</a>
+      <a href="#" id="footWa">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><strong>SICCHA STREAMING</strong> &middot; Trujillo, Peru &middot; 2026</div>
 </footer>
 
-<!-- MOBILE BAR -->
-<div class="mobile-bar">
-  <button class="cart-pill" id="cartBtnMobile">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    Ver carrito
-    <span class="cart-count" id="cartCountMobile">0</span>
-  </button>
-</div>
-
 <!-- WA FLOAT -->
-<button class="wa-float" id="waFloat">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+<button class="wa-float" id="waFloat" aria-label="Contactar por WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </button>
 
-<!-- DRAWER -->
-<div class="overlay" id="overlay"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-head">
-    <h3>Mi carrito</h3>
-    <button class="close-btn" id="closeDrawer">×</button>
-  </div>
-  <div class="drawer-body" id="drawerBody"></div>
-  <div class="drawer-foot">
-    <div class="total-row">
-      <span class="total-label">Total</span>
-      <span class="total-val" id="totalVal">S/ 0</span>
-    </div>
-    <button class="checkout-btn" id="checkoutBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-      Pedir por WhatsApp
-    </button>
-    <button class="clear-btn-d" id="clearCartBtn">Vaciar carrito</button>
-  </div>
-</div>
-
 <!-- MODAL -->
-<div class="modal-ov" id="modalOv">
+<div class="modal-ov" id="modalOv" role="dialog" aria-modal="true" aria-label="Comprar plataforma">
   <div class="modal">
-    <div class="modal-handle"><div class="handle-bar"></div></div>
-    <div class="modal-content">
+    <div class="modal-drag" aria-hidden="true"><div class="modal-drag-bar"></div></div>
+    <div class="modal-body">
       <div class="modal-top">
-        <div class="modal-logo">
-          <img id="modalImg" src="" alt="" onerror="this.style.display='none';document.getElementById('modalFb').style.display='flex'">
-          <div class="modal-logo-text" id="modalFb" style="display:none"></div>
+        <div class="modal-ico" id="mIco">
+          <img id="mImg" src="" alt="" onerror="this.style.display='none';document.getElementById('mFb').style.display='flex'">
+          <div id="mFb" class="modal-ico-fb" style="display:none"></div>
         </div>
-        <div>
-          <div class="modal-name" id="modalName"></div>
-          <div class="modal-desc" id="modalDesc"></div>
-        </div>
+        <div><div class="modal-pname" id="mName"></div><div class="modal-pdesc" id="mDesc"></div></div>
       </div>
-      <div class="modal-price-block">
-        <div class="modal-price-big" id="modalPrice"></div>
-        <div class="modal-price-sub">por perfil / mes</div>
+      <div class="modal-ppill">
+        <div><div class="mpp-lbl">Precio por perfil</div><div class="mpp-price" id="mPrice"></div></div>
+        <div class="mpp-per">/ mes</div>
       </div>
-      <label class="form-label">Cantidad de perfiles</label>
-      <select class="form-select" id="qtySelect">
+      <label class="modal-lbl" for="qtySelect">Cantidad de perfiles</label>
+      <select class="modal-sel" id="qtySelect">
         <option value="1">1 Perfil</option>
         <option value="2">2 Perfiles</option>
         <option value="3">3 Perfiles</option>
         <option value="4">4 Perfiles</option>
         <option value="5">5 Perfiles</option>
-        <option value="6">6 Perfiles</option>
       </select>
-      <div class="modal-actions">
-        <button class="modal-btn modal-btn-wa" id="buyWaBtn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+      <div class="modal-acts">
+        <button class="modal-wa" id="mWaBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
           Comprar por WhatsApp
         </button>
-        <button class="modal-btn modal-btn-cancel" id="cancelModal">Cancelar</button>
+        <button class="modal-cancel" id="mCancel">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const WHATSAPP = "51934574931";
-const CART_KEY = "siccha_cart_v4";
+var WA = '51934574931';
+var activeProduct = null;
+var toastTimer;
 
-const PRODUCTS = [
-  { id:"netflix",   name:"Netflix",      price:15, status:"DISPONIBLE", rank:1,  logo:"assets/netflix.png",    desc:"1 Perfil · Premium HD" },
-  { id:"prime",     name:"Prime Video",  price:8,  status:"DISPONIBLE", rank:2,  logo:"assets/prime-video.png",desc:"1 Perfil · Catálogo completo" },
-  { id:"disney",    name:"Disney+",      price:12, status:"DISPONIBLE", rank:3,  logo:"assets/disney.png",     desc:"1 Perfil · 4K · Marvel & Star Wars" },
-  { id:"max",       name:"HBO Max",      price:8,  status:"DISPONIBLE", rank:4,  logo:"assets/hbo-max.png",    desc:"1 Perfil · Series HD" },
-  { id:"spotify",   name:"Spotify",      price:12, status:"AGOTADO",    rank:5,  logo:"assets/spotify.png",    desc:"1 Perfil · Música sin límites" },
-  { id:"crunchy",   name:"Crunchyroll",  price:8,  status:"DISPONIBLE", rank:6,  logo:"assets/crunchyroll.png",desc:"1 Perfil · Anime Mega Fan" },
-  { id:"vix",       name:"VIX+",         price:7,  status:"DISPONIBLE", rank:7,  logo:"assets/vix.png",        desc:"1 Perfil · Contenido en español" },
-  { id:"paramount", name:"Paramount+",   price:7,  status:"DISPONIBLE", rank:8,  logo:"assets/paramount.png",  desc:"1 Perfil · Películas y series" },
-  { id:"dgo",       name:"DGO + Liga 1", price:19, status:"DISPONIBLE", rank:9,  logo:"assets/dgo.png",        desc:"1 Perfil · Fútbol en HD" },
-  { id:"flujotv",   name:"Flujo TV",     price:12, status:"DISPONIBLE", rank:10, logo:"assets/flujotv.png",    desc:"1 Perfil · TV en vivo HD" }
+var PLATS = [
+  {id:'netflix',   name:'Netflix',      price:15, ok:true,  logo:'assets/netflix.png',    desc:'1 Perfil · HD Premium',       svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#141414"/><text x="8" y="32" font-size="28" font-weight="900" font-family="Arial" fill="#e50914">N</text></svg>'},
+  {id:'disney',    name:'Disney+',      price:12, ok:true,  logo:'assets/disney.png',     desc:'1 Perfil · 4K · Marvel',      svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0b0d2b"/><text x="4" y="30" font-size="16" font-weight="900" font-family="Georgia,serif" fill="#1a6bd7" font-style="italic">D+</text></svg>'},
+  {id:'prime',     name:'Prime Video',  price:8,  ok:true,  logo:'assets/prime-video.png',desc:'1 Perfil · Series HD',         svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#00a8e0"/><text x="4" y="26" font-size="11" font-weight="800" font-family="Arial" fill="white">prime</text><text x="4" y="38" font-size="9" font-family="Arial" fill="rgba(255,255,255,.7)">video</text></svg>'},
+  {id:'max',       name:'HBO Max',      price:8,  ok:true,  logo:'assets/hbo-max.png',    desc:'1 Perfil · Series exclusivas', svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0b0030"/><text x="3" y="28" font-size="16" font-weight="900" font-family="Arial" fill="white">MAX</text></svg>'},
+  {id:'spotify',   name:'Spotify',      price:12, ok:true,  logo:'assets/spotify.png',    desc:'Musica sin limites',           svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#191414"/><circle cx="22" cy="22" r="14" fill="#1db954"/><path d="M14 19c5-2.5 11-2.5 16 0M14 23c4-2 9-2 13.5 0M14 27c3-1.5 7-1.5 10 0" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>'},
+  {id:'crunchy',   name:'Crunchyroll',  price:8,  ok:true,  logo:'assets/crunchyroll.png',desc:'1 Perfil · Anime completo',    svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#f47521"/><circle cx="22" cy="22" r="14" fill="rgba(0,0,0,.2)"/><text x="10" y="27" font-size="13" font-weight="900" font-family="Arial" fill="white">CR</text></svg>'},
+  {id:'paramount', name:'Paramount+',   price:7,  ok:true,  logo:'assets/paramount.png',  desc:'1 Perfil · Peliculas y series',svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#0a1628"/><path d="M22 10l12 9-12 7-12-7z" fill="#0064ff"/><path d="M10 19l12 8 12-8M10 24l12 8 12-8" stroke="#0064ff" stroke-width="1.5" fill="none" stroke-opacity=".5"/></svg>'},
+  {id:'vix',       name:'VIX+',         price:7,  ok:true,  logo:'assets/vix.png',        desc:'1 Perfil · Contenido latino',  svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#001f3d"/><text x="6" y="29" font-size="20" font-weight="900" font-family="Arial" fill="#00b4d8">VIX</text></svg>'},
+  {id:'dgo',       name:'DGO + Liga 1', price:19, ok:true,  logo:'assets/dgo.png',        desc:'1 Perfil · Futbol en HD',      svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#e4002b"/><text x="5" y="28" font-size="18" font-weight="900" font-family="Arial" fill="white">DGO</text></svg>'},
+  {id:'flujo',     name:'Flujo TV',     price:12, ok:true,  logo:'assets/flujotv.png',    desc:'1 Perfil · TV en vivo',        svg:'<svg viewBox="0 0 44 44" width="40" height="40"><rect width="44" height="44" rx="8" fill="#6c3fff"/><path d="M10 16h24M10 22h18M10 28h22" stroke="white" stroke-width="2.2" stroke-linecap="round"/><polygon points="30 19 38 22 30 25" fill="white"/></svg>'}
 ];
 
-let cart = {};
-let modalProduct = null;
-
-function loadCart() {
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch { cart = {}; }
-}
-function saveCart() {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  updateCartUI();
-}
-
-/* ── RENDER ── */
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = PRODUCTS.map(function(p) {
-    const avail = p.status === 'DISPONIBLE';
-    const top3 = p.rank <= 3;
-    return '<div class="pcard">' +
-      '<div class="pc-img">' +
-        '<img id="logo-' + p.id + '" src="' + p.logo + '" alt="' + p.name + '"' +
-          ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
-        '<div class="pc-fallback" style="display:none">' + p.name.substring(0,2) + '</div>' +
-        '<div class="pc-rank' + (top3 ? ' top3' : '') + '">#' + p.rank + '</div>' +
-        '<div class="pc-dot ' + (avail ? 'ok' : 'out') + '"></div>' +
-      '</div>' +
-      '<div class="pc-body">' +
-        '<div class="pc-name">' + p.name + '</div>' +
-        '<div class="pc-desc">' + p.desc + '</div>' +
-        '<div class="pc-price">S/ ' + p.price + ' <sub>/ mes</sub></div>' +
-        '<div class="pc-actions">' +
-          (avail
-            ? '<button class="pc-btn-buy" onclick="openModal(\'' + p.id + '\')">' +
-                '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>' +
-                'Comprar' +
-              '</button>'
-            : '<div class="pc-out-badge">Agotado</div>'
-          ) +
-        '</div>' +
-      '</div>' +
-    '</div>';
+/* ── RENDER PLATFORMS ── */
+function renderPlats() {
+  var g = document.getElementById('platGrid');
+  if (!g) return;
+  g.innerHTML = PLATS.map(function(p) {
+    return '<div class="plat-card" data-id="' + p.id + '" role="listitem">'
+      + '<div class="pc-head">'
+        + '<div class="pc-logo">'
+          + '<img src="' + p.logo + '" alt="' + p.name + '" width="44" height="44" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+          + '<div class="pc-logo-fb" style="display:none">' + p.svg + '</div>'
+        + '</div>'
+        + (p.ok ? '<div class="pc-live" aria-label="Disponible"></div>' : '<div class="pc-out-ind"></div>')
+      + '</div>'
+      + '<div class="pc-name">' + p.name + '</div>'
+      + '<div class="pc-desc">' + p.desc + '</div>'
+      + '<div class="pc-foot">'
+        + '<div class="pc-price"><strong>S/ ' + p.price + '</strong><span>/mes</span></div>'
+        + (p.ok
+            ? '<button class="pc-buy" data-pid="' + p.id + '" aria-label="Comprar ' + p.name + '">'
+              + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
+              + 'Comprar</button>'
+            : '<span class="pc-na">No disponible</span>')
+      + '</div>'
+    + '</div>';
   }).join('');
 
-  // observe cards
-  document.querySelectorAll('.pcard').forEach(function(el, i) {
-    el.style.transitionDelay = (i % 5) * 0.06 + 's';
-    cardObserver.observe(el);
+  /* attach buy button events */
+  g.querySelectorAll('.pc-buy').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      openModal(this.getAttribute('data-pid'));
+    });
   });
-}
 
-/* ── CART UI ── */
-function updateCartUI() {
-  var count = Object.values(cart).reduce(function(a,b){return a+b;}, 0);
-  document.getElementById('cartCount').textContent = count;
-  document.getElementById('cartCountMobile').textContent = count;
-
-  var items = Object.entries(cart).map(function(e) {
-    var p = PRODUCTS.find(function(x){return x.id===e[0];});
-    return p ? Object.assign({}, p, {qty:e[1]}) : null;
-  }).filter(Boolean);
-
-  var total = items.reduce(function(s,i){return s+i.price*i.qty;}, 0);
-  document.getElementById('totalVal').textContent = 'S/ ' + total;
-
-  var body = document.getElementById('drawerBody');
-  if (!items.length) {
-    body.innerHTML = '<div class="cart-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><p>Tu carrito está vacío</p></div>';
-    return;
-  }
-  body.innerHTML = items.map(function(i) {
-    return '<div class="ci">' +
-      '<div class="ci-top"><div class="ci-img"><img src="' + i.logo + '" alt="' + i.name + '" onerror="this.style.display=\'none\'"></div>' +
-      '<div><div class="ci-name">' + i.name + '</div><div class="ci-meta">S/ ' + i.price + ' c/u</div></div></div>' +
-      '<div class="ci-bottom">' +
-        '<div class="qty-row"><button class="qty-btn" onclick="changeQty(\'' + i.id + '\',-1)">−</button>' +
-        '<span class="qty-num">' + i.qty + '</span>' +
-        '<button class="qty-btn" onclick="changeQty(\'' + i.id + '\',1)">+</button></div>' +
-        '<div class="ci-total">S/ ' + (i.price*i.qty) + '</div>' +
-      '</div>' +
-      '<button class="del-btn" onclick="removeItem(\'' + i.id + '\')">Eliminar</button>' +
-    '</div>';
-  }).join('');
-}
-
-function changeQty(id, d) {
-  cart[id] = (cart[id]||0) + d;
-  if (cart[id] <= 0) delete cart[id];
-  saveCart();
-}
-function removeItem(id) { delete cart[id]; saveCart(); }
-
-/* ── DRAWER ── */
-function openDrawer()  { document.getElementById('overlay').classList.add('open'); document.getElementById('drawer').classList.add('open'); }
-function closeDrawer() { document.getElementById('overlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
-
-/* ── CHECKOUT ── */
-function checkout() {
-  var items = Object.entries(cart).map(function(e) {
-    var p = PRODUCTS.find(function(x){return x.id===e[0];});
-    return p ? Object.assign({},p,{qty:e[1]}) : null;
-  }).filter(Boolean);
-  if (!items.length) { showToast('Tu carrito está vacío'); return; }
-  var total = items.reduce(function(s,i){return s+i.price*i.qty;},0);
-  var lines = items.map(function(i){return '- '+i.name+' x'+i.qty+' = S/ '+i.price*i.qty;}).join('%0A');
-  window.open('https://wa.me/'+WHATSAPP+'?text=PEDIDO SICCHA STREAMING%0A%0A'+lines+'%0A%0ATOTAL: S/ '+total+'%0A%0A%C2%A1Gracias!','_blank');
+  /* observe cards */
+  g.querySelectorAll('.plat-card').forEach(function(el, i) {
+    el.style.transitionDelay = (i % 5) * 0.055 + 's';
+    cardObs.observe(el);
+  });
 }
 
 /* ── MODAL ── */
 function openModal(id) {
-  var p = PRODUCTS.find(function(x){return x.id===id;});
-  if (!p || p.status !== 'DISPONIBLE') return;
-  modalProduct = p;
-  var img = document.getElementById('modalImg');
-  img.src = p.logo; img.style.display = 'block';
-  document.getElementById('modalFb').textContent = p.name.substring(0,2);
-  document.getElementById('modalName').textContent = p.name;
-  document.getElementById('modalDesc').textContent = p.desc;
-  document.getElementById('modalPrice').textContent = 'S/ ' + p.price;
+  var p = PLATS.find(function(x) { return x.id === id; });
+  if (!p || !p.ok) return;
+  activeProduct = p;
+
+  var img = document.getElementById('mImg');
+  var fb  = document.getElementById('mFb');
+  img.src = p.logo; img.style.display = 'block'; fb.style.display = 'none';
+  img.onerror = function() { this.style.display = 'none'; fb.style.display = 'flex'; fb.innerHTML = p.svg; };
+
+  document.getElementById('mName').textContent  = p.name;
+  document.getElementById('mDesc').textContent  = p.desc;
+  document.getElementById('mPrice').textContent = 'S/ ' + p.price;
   document.getElementById('qtySelect').value = '1';
   document.getElementById('modalOv').classList.add('open');
+  document.getElementById('mWaBtn').focus();
 }
-function closeModal() { document.getElementById('modalOv').classList.remove('open'); modalProduct = null; }
-function buyWa() {
-  if (!modalProduct) return;
-  var qty = parseInt(document.getElementById('qtySelect').value)||1;
-  var total = modalProduct.price*qty;
-  window.open('https://wa.me/'+WHATSAPP+'?text=COMPRA SICCHA STREAMING%0A%0APRODUCTO: '+modalProduct.name+'%0APerfiles: '+qty+'%0APRECIO: S/ '+total+'%0A%0A%C2%A1Gracias!','_blank');
+function closeModal() {
+  document.getElementById('modalOv').classList.remove('open');
+  activeProduct = null;
+}
+
+/* ── WA HELPERS ── */
+function openWa(plan) {
+  var msg = plan
+    ? 'Hola%21%20Estoy%20interesado%20en%3A%20' + encodeURIComponent(plan) + '%0A%0A%C2%A1Me%20puedes%20dar%20m%C3%A1s%20info%3F'
+    : 'Hola%21%20Quiero%20informaci%C3%B3n%20sobre%20las%20plataformas%20de%20streaming%20de%20SICCHA.';
+  window.open('https://api.whatsapp.com/send?phone=' + WA + '&text=' + msg, '_blank');
 }
 
 /* ── TOAST ── */
-var toastT;
 function showToast(msg) {
   var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  clearTimeout(toastT);
-  toastT = setTimeout(function(){t.classList.remove('show');}, 2200);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2600);
 }
 
-/* ── SCROLL ── */
+/* ── NAV SCROLL ── */
 window.addEventListener('scroll', function() {
   document.getElementById('nav').classList.toggle('solid', window.scrollY > 60);
+}, { passive: true });
+
+/* ── OBSERVERS ── */
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+
+var cardObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); cardObs.unobserve(e.target); }
+    /* cards use .vis on .fu — but .plat-card uses opacity transition directly */
+    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+  });
+}, { threshold: 0.04 });
+
+document.querySelectorAll('.fu').forEach(function(el) { obs.observe(el); });
+/* init cards hidden */
+document.querySelectorAll('.plat-card').forEach(function(el) {
+  el.style.opacity = '0'; el.style.transform = 'translateY(20px)';
 });
 
-/* ── INTERSECTION OBSERVER ── */
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-  });
-}, { threshold: 0.1 });
-
-var cardObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('visible'); cardObserver.unobserve(e.target); }
-  });
-}, { threshold: 0.05 });
-
-document.querySelectorAll('.fade-up, .how-step').forEach(function(el){ observer.observe(el); });
-observer.observe(document.getElementById('prodHeader'));
-
-/* ── ANIMATED COUNTER ── */
-function animateCounter(el, target) {
-  var start = null;
-  function step(ts) {
-    if (!start) start = ts;
-    var p = Math.min((ts-start)/1000, 1);
-    el.textContent = Math.floor(p * target);
-    if (p < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-}
-setTimeout(function(){ animateCounter(document.getElementById('statPlat'), 10); }, 500);
+/* ── KEYBOARD ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('modalOv').classList.contains('open')) closeModal();
+});
 
 /* ── EVENTS ── */
-document.getElementById('cartBtn').addEventListener('click', openDrawer);
-document.getElementById('cartBtnMobile').addEventListener('click', openDrawer);
-document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
-document.getElementById('overlay').addEventListener('click', closeDrawer);
-document.getElementById('checkoutBtn').addEventListener('click', checkout);
-document.getElementById('clearCartBtn').addEventListener('click', function(){
-  if (confirm('¿Vaciar el carrito?')) { cart={}; saveCart(); }
+document.getElementById('navBtn').addEventListener('click', function() { openWa(null); });
+document.getElementById('heroWa').addEventListener('click', function() { openWa(null); });
+document.getElementById('ctaWa').addEventListener('click', function() { openWa(null); });
+document.getElementById('waFloat').addEventListener('click', function() { openWa(null); });
+document.getElementById('footWa').addEventListener('click', function(e) { e.preventDefault(); openWa(null); });
+document.getElementById('mWaBtn').addEventListener('click', function() {
+  if (!activeProduct) return;
+  var qty   = parseInt(document.getElementById('qtySelect').value) || 1;
+  var total = activeProduct.price * qty;
+  var msg = 'COMPRA%20SICCHA%20STREAMING%0A%0AProducto%3A%20' + encodeURIComponent(activeProduct.name)
+          + '%0APerfiles%3A%20' + qty + '%0APrecio%3A%20S%2F%20' + total + '%0A%0A%C2%A1Gracias!';
+  window.open('https://api.whatsapp.com/send?phone=' + WA + '&text=' + msg, '_blank');
+  showToast('Redirigiendo a WhatsApp...');
+  closeModal();
 });
-document.getElementById('buyWaBtn').addEventListener('click', buyWa);
-document.getElementById('cancelModal').addEventListener('click', closeModal);
-document.getElementById('modalOv').addEventListener('click', function(e){ if(e.target.id==='modalOv') closeModal(); });
-document.getElementById('waFloat').addEventListener('click', function(){
-  window.open('https://wa.me/'+WHATSAPP+'?text=Hola%2C%20me%20interesa%20adquirir%20una%20plataforma%20de%20streaming.%20%C2%BFMe%20puedes%20dar%20m%C3%A1s%20informaci%C3%B3n%3F','_blank');
-});
-document.getElementById('heroShopBtn').addEventListener('click', function(){
-  document.querySelector('.products-section').scrollIntoView({behavior:'smooth'});
-});
-document.getElementById('heroWaBtn').addEventListener('click', function(){
-  window.open('https://wa.me/'+WHATSAPP+'?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20plataformas','_blank');
-});
+document.getElementById('mCancel').addEventListener('click', closeModal);
+document.getElementById('modalOv').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-loadCart();
-renderGrid();
-updateCartUI();
+/* ── 3D PHONE PARALLAX ── */
+(function() {
+  /* Stars */
+  var sf = document.getElementById('sf');
+  if (sf) {
+    for (var i = 0; i < 55; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      var sz = Math.random() * 2.2 + 0.5;
+      s.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--d:'+(2+Math.random()*4)+'s;--dl:-'+(Math.random()*4)+'s';
+      sf.appendChild(s);
+    }
+  }
+
+  /* Mouse parallax */
+  var scene  = document.getElementById('ps');
+  var heroEl = document.querySelector('.hero');
+  if (!scene || !heroEl) return;
+
+  var tx = 0, ty = 0, cx = 0, cy = 0;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function tick() {
+    cx = lerp(cx, tx, 0.07);
+    cy = lerp(cy, ty, 0.07);
+    scene.style.transform = 'rotateX(' + cy + 'deg) rotateY(' + cx + 'deg)';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  heroEl.addEventListener('mousemove', function(e) {
+    var r = heroEl.getBoundingClientRect();
+    var nx = (e.clientX - r.left) / r.width  - 0.5;
+    var ny = (e.clientY - r.top)  / r.height - 0.5;
+    tx =  nx * 20;
+    ty = -ny * 12;
+  });
+  heroEl.addEventListener('mouseleave', function() { tx = 0; ty = 0; });
+  heroEl.addEventListener('touchmove', function(e) {
+    if (!e.touches[0]) return;
+    var r = heroEl.getBoundingClientRect();
+    tx =  ((e.touches[0].clientX - r.left) / r.width  - 0.5) * 14;
+    ty = -((e.touches[0].clientY - r.top)  / r.height - 0.5) * 9;
+  }, { passive: true });
+  heroEl.addEventListener('touchend', function() { tx = 0; ty = 0; });
+
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(e) {
+      if (e.gamma === null) return;
+      tx = Math.max(-25, Math.min(25, e.gamma)) / 25 * 10;
+      ty = -Math.max(-25, Math.min(25, (e.beta || 0) - 45)) / 25 * 7;
+    }, { passive: true });
+  }
+
+  /* Click on screen buttons → WA */
+  document.querySelectorAll('.scr-btn').forEach(function(btn) {
+    btn.style.cursor = 'pointer';
+    btn.addEventListener('click', function(e) { e.stopPropagation(); openWa(null); });
+  });
+})();
+
+/* ── INIT ── */
+renderPlats();
 </script>
 </body>
 </html>
