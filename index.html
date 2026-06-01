@@ -46,29 +46,6 @@ button{cursor:pointer;font-family:inherit;border:none}
 :focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-/* ─── iPHONE-STYLE SCREEN FRAME (mobile only) ─── */
-.ios-frame{display:none}
-@media(max-width:767px){
-  .ios-frame{
-    display:block;position:fixed;inset:0;z-index:500;pointer-events:none;
-    border-radius:44px;
-    /* glossy edge light + dark vignette = looks like an iPhone screen bezel */
-    box-shadow:
-      inset 0 0 0 1.5px rgba(255,255,255,.14),
-      inset 0 0 0 3px rgba(0,0,0,.55),
-      inset 0 0 22px rgba(0,0,0,.55),
-      inset 0 1px 1px rgba(255,255,255,.22),
-      inset 0 -1px 1px rgba(255,255,255,.10);
-  }
-  .ios-frame::after{
-    content:'';position:absolute;inset:0;border-radius:inherit;
-    background:linear-gradient(135deg,rgba(255,255,255,.10) 0%,transparent 22%,transparent 78%,rgba(255,255,255,.06) 100%);
-    mix-blend-mode:screen;
-  }
-  /* slightly round the actual content edges to match the frame */
-  body{border-radius:42px;overflow:hidden auto}
-}
-
 /* ─── LIQUID GLASS ─── */
 .glass{
   background:rgba(255,255,255,.04);
@@ -806,12 +783,66 @@ footer{background:#0a0404;border-top:1px solid rgba(255,255,255,.05);padding:44p
 .toast{position:fixed;bottom:calc(var(--bot-h) + 16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(12px);background:#1e0808;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(20px);color:var(--fg);padding:11px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .25s,transform .25s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.35)}
 @media(min-width:768px){.toast{bottom:28px}}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══════════════════════════════════════════════
+   MOBILE POLISH — clean spacing & rhythm
+═══════════════════════════════════════════════ */
+@media(max-width:767px){
+  /* kill any horizontal overflow */
+  html,body{max-width:100%;overflow-x:hidden}
+
+  /* tighter, consistent section rhythm */
+  .plat-sec,.plans-sec,.how-sec,.testi-sec{padding:52px 16px}
+  .cta-sec{padding:40px 16px 56px}
+
+  /* hero a bit more compact and breathable */
+  .hero{padding:calc(var(--nav-h) + 24px) 20px 64px;min-height:auto}
+  .hero-mob-phone{margin-bottom:26px}
+  .hmp-wrap{width:178px;height:356px}
+  .hero-tag{margin-bottom:20px;font-size:10px;padding:6px 14px}
+  .hero-h1{font-size:clamp(34px,11vw,52px);letter-spacing:-1.5px;margin-bottom:16px}
+  .hero-sub{font-size:14px;margin-bottom:26px}
+
+  /* section heads */
+  .sec-head{margin-bottom:24px}
+  .sec-title{letter-spacing:-1px}
+  .sec-sub{font-size:13.5px}
+
+  /* platform grid — clean 2-col with even gaps */
+  .plat-grid{gap:11px}
+  .plat-card{border-radius:16px}
+
+  /* phones preview smaller so it doesn't dominate the fold */
+  .phones-sticky{margin-bottom:28px}
+  .ps-phones-wrap{height:280px}
+  .ps-hp{width:118px;height:236px}
+  .ps-label{margin-bottom:16px}
+  .ps-stats{margin-top:18px;padding:12px 14px}
+
+  /* cards: consistent inner padding */
+  .plan-card{padding:26px 20px;border-radius:20px}
+  .how-card{padding:26px 20px;border-radius:18px}
+  .testi-card{padding:20px 16px}
+
+  /* CTA box stacks cleanly */
+  .cta-box{padding:32px 22px;border-radius:22px;gap:20px}
+  .cta-copy h2{font-size:clamp(22px,7vw,30px)}
+  .cta-copy p{font-size:14px}
+
+  /* footer breathing room */
+  footer{padding:36px 18px 22px}
+  .foot-inner{gap:26px}
+}
+
+/* very small phones */
+@media(max-width:360px){
+  .plat-grid{gap:9px}
+  .hero-h1{font-size:clamp(30px,12vw,44px)}
+  .hmp-wrap{width:160px;height:320px}
+}
 </style>
 </head>
 <body>
-
-<!-- iOS screen frame (mobile) -->
-<div class="ios-frame" aria-hidden="true"></div>
 
 <!-- ══ NAV ══ -->
 <nav id="nav">
