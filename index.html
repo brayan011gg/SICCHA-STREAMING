@@ -246,7 +246,7 @@ const WHATSAPP = "51934574931";
 const CART_KEY = "siccha_cart_v5";
 
 const PRODUCTS = [
-  { id:"netflix",   name:"Netflix",      price:15, status:"DISPONIBLE", rank:1,  color:"#E50914", logo:"assets/netflix.png",     desc:"1 Perfil · Premium HD" },
+  { id:"netflix",   name:"Netflix",      price:15, status:"AGOTADO",    rank:1,  color:"#E50914", logo:"assets/netflix.png",     desc:"1 Perfil · Premium HD" },
   { id:"prime",     name:"Prime Video",  price:8,  status:"DISPONIBLE", rank:2,  color:"#00A8E1", logo:"assets/prime-video.png", desc:"1 Perfil · Catálogo completo" },
   { id:"disney",    name:"Disney+",      price:12, status:"DISPONIBLE", rank:3,  color:"#113CCF", logo:"assets/disney.png",      desc:"1 Perfil · 4K · Marvel & Star Wars" },
   { id:"max",       name:"HBO Max",      price:8,  status:"DISPONIBLE", rank:4,  color:"#4317B5", logo:"assets/hbo-max.png",     desc:"1 Perfil · Series HD" },
@@ -284,7 +284,7 @@ function renderGrid(){
         '<div class="text-[21px] sm:text-[22px] font-bold text-gray-900 tracking-tight mb-3">S/ '+p.price+' <span class="text-[11px] font-normal text-gray-400">/mes</span></div>'+
         (avail
           ? '<button onclick="openModal(\''+p.id+'\')" class="w-full bg-blue-500 hover:bg-blue-600 active:scale-[.98] text-white font-medium text-[13px] rounded-full py-2.5 transition">Comprar</button>'
-          : '<div class="w-full text-center text-[12px] font-medium text-gray-400 bg-gray-50 rounded-full py-2.5">Agotado</div>'
+          : '<div class="w-full text-center text-[12px] font-medium text-gray-400 bg-gray-50 rounded-full py-2.5">Pronto disponible</div>'
         )+
       '</div>'+
     '</div>';
