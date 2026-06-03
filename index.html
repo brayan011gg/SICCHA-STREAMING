@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SICCHA STREAMING — Trujillo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  html,body{margin:0;min-height:100%;background:#f0f0ee;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:8px}
+  ::-webkit-scrollbar-track{background:#e7e7e3}
+  ::-webkit-scrollbar-thumb{background:#c7c7c0;border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:#a8a8a0}
+
+  .overlay{position:fixed;inset:0;background:rgba(20,22,28,.45);backdrop-filter:blur(4px);z-index:200;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .overlay.open{opacity:1;visibility:visible}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:min(420px,100vw);background:#fff;z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .4s cubic-bezier(.16,1,.3,1);box-shadow:-12px 0 50px rgba(0,0,0,.12)}
+  .drawer.open{transform:translateX(0)}
+
+  .modal-ov{position:fixed;inset:0;background:rgba(20,22,28,.5);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  @media(min-width:641px){.modal-ov{align-items:center;padding:24px}}
+  .modal-ov.open{opacity:1;visibility:visible}
+  .modal-box{background:#fff;width:100%;max-width:400px;border-radius:24px 24px 0 0;transform:translateY(40px);transition:transform .35s cubic-bezier(.16,1,.3,1);max-height:92dvh;overflow-y:auto}
+  @media(min-width:641px){.modal-box{border-radius:24px}}
+  .modal-ov.open .modal-box{transform:translateY(0)}
+
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:#1f2937;color:#fff;padding:11px 22px;border-radius:999px;font-size:13px;font-weight:500;z-index:998;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  /* Mobile menu */
+  #mobileMenu{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .3s;opacity:0}
+  #mobileMenu.open{max-height:280px;opacity:1}
+
+  /* Hero entrance */
+  .h-rise{opacity:0;transform:translateY(18px);animation:hrise .7s cubic-bezier(.16,1,.3,1) forwards}
+  .h-rise.d1{animation-delay:.1s}.h-rise.d2{animation-delay:.2s}.h-rise.d3{animation-delay:.3s}
+  @keyframes hrise{to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body class="text-gray-900">
+
+<!-- ===== NAV ===== -->
+<nav class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-6 px-4 sm:px-8">
+  <div class="flex items-center justify-center gap-2 sm:gap-3">
+    <div class="flex items-center justify-center rounded-full w-10 h-10 sm:w-11 sm:h-11 shrink-0 shadow-sm" style="background-color:#EDEDED">
+      <svg width="18" height="18" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgb(84, 84, 84)" d="M 160 88 L 194 34 L 216 0 L 256 0 L 256 40 L 221.5 93.5 L 200 128 L 256 128 L 256 256 L 96 256 L 96 168 L 64.246 220 L 40 256 L 0 256 L 0 216 L 34 162 L 56 128 L 0 128 L 0 0 L 160 0 Z"/>
+      </svg>
+    </div>
+
+    <div class="hidden md:flex items-center gap-6 lg:gap-10 rounded-xl px-6 lg:px-8 py-3 shadow-sm" style="background-color:#EDEDED">
+      <a href="#inicio" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Inicio</a>
+      <a href="#plataformas" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Plataformas</a>
+      <a href="#como" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Cómo funciona</a>
+      <a href="https://wa.me/51934574931" target="_blank" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Soporte</a>
+    </div>
+
+    <button id="cartBtn" class="relative flex items-center gap-2 rounded-full px-4 sm:px-5 h-10 sm:h-11 shrink-0 shadow-sm text-[13px] font-medium text-gray-800 hover:text-gray-900 transition-colors" style="background-color:#EDEDED">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <span class="hidden sm:inline">Carrito</span>
+      <span id="cartCount" class="flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-blue-500 text-white text-[10px] font-bold">0</span>
+    </button>
+
+    <button id="menuBtn" class="md:hidden flex items-center justify-center rounded-full w-10 h-10 shrink-0 shadow-sm text-gray-700" style="background-color:#EDEDED" aria-label="Menú">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mobileMenu" class="md:hidden mx-auto mt-2 max-w-xs">
+    <div class="rounded-2xl py-2 shadow-lg" style="background-color:#EDEDED">
+      <a href="#inicio" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Inicio</a>
+      <a href="#plataformas" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Plataformas</a>
+      <a href="#como" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Cómo funciona</a>
+      <a href="https://wa.me/51934574931" target="_blank" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Soporte</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="inicio" class="relative min-h-[100svh] overflow-hidden bg-[#f0f0ee]">
+  <div class="absolute inset-0 bg-gradient-to-br from-[#f0f0ee] via-[#dfe3ea] to-[#c7cfdb]"></div>
+  <video class="absolute inset-0 w-full h-full object-cover" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_215831_c6a8989c-d716-4d8d-8745-e972a2eec711.mp4" autoplay muted loop playsinline></video>
+  <!-- scrim para legibilidad -->
+  <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#f0f0ee] via-[#f0f0ee]/55 to-transparent"></div>
+
+  <div class="relative z-10 flex flex-col min-h-[100svh]">
+    <div class="flex-1 flex items-end pb-12 sm:pb-16 lg:pb-20 px-6 sm:px-12 md:px-20 lg:px-28">
+      <div class="max-w-md">
+        <a href="https://wa.me/51934574931" target="_blank" rel="noreferrer" class="h-rise inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 hover:text-blue-600 transition-colors mb-3 group">
+          Streaming premium en Trujillo
+          <span class="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+        </a>
+        <h1 class="h-rise d1 text-[1.7rem] sm:text-[2.2rem] lg:text-[2.6rem] leading-[1.1] font-semibold text-gray-900 tracking-tight mb-4">
+          Tu entretenimiento favorito, sin l&iacute;mites y al mejor precio.
+        </h1>
+        <p class="h-rise d2 text-[14px] sm:text-[15px] text-gray-500 font-normal mb-5 max-w-sm">Las plataformas m&aacute;s populares con entrega inmediata y soporte 24/7 en Trujillo, Per&uacute;.</p>
+        <div class="h-rise d3 flex flex-wrap items-center gap-3">
+          <a href="#plataformas" class="inline-flex items-center gap-2 text-[13px] font-medium bg-blue-500 text-white border border-blue-500 rounded-full px-6 py-3 hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group shadow-lg shadow-blue-500/20">
+            Ver plataformas
+            <span class="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+          </a>
+          <a href="https://wa.me/51934574931" target="_blank" class="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 border border-gray-300 bg-white/70 backdrop-blur rounded-full px-6 py-3 hover:bg-white transition-all duration-200">
+            Consultar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CÓMO FUNCIONA ===== -->
+<section id="como" class="px-6 sm:px-12 md:px-20 lg:px-28 py-16 sm:py-20">
+  <div class="max-w-6xl mx-auto">
+    <p class="reveal text-[11.5px] font-medium text-blue-500 tracking-wide mb-2">Proceso simple</p>
+    <h2 class="reveal text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-gray-900 mb-10 sm:mb-12">¿Cómo funciona?</h2>
+    <div class="grid sm:grid-cols-3 gap-4">
+      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">01</div>
+        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Elige tu plataforma</h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">Explora el catálogo y agrega al carrito las plataformas que quieras.</p>
+      </div>
+      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7" style="transition-delay:.1s">
+        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">02</div>
+        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Confirma por WhatsApp</h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">Te redirigimos a WhatsApp con tu pedido listo para coordinar el pago.</p>
+      </div>
+      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7" style="transition-delay:.2s">
+        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">03</div>
+        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Recibe al instante</h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">Confirmamos el pago y recibes tu acceso de inmediato. ¡A disfrutar!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLATAFORMAS ===== -->
+<section id="plataformas" class="px-6 sm:px-12 md:px-20 lg:px-28 pb-20 sm:pb-24">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal flex items-end justify-between mb-7 sm:mb-8 flex-wrap gap-3">
+      <div>
+        <p class="text-[11.5px] font-medium text-blue-500 tracking-wide mb-2">Catálogo</p>
+        <h2 class="text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-gray-900">Plataformas disponibles</h2>
+      </div>
+      <span class="text-[13px] text-gray-400">Trujillo, Perú</span>
+    </div>
+    <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4"></div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="border-t border-gray-200 px-6 py-10 text-center">
+  <div class="font-semibold text-gray-900">SICCHA STREAMING</div>
+  <div class="text-[13px] text-gray-400 mt-1">Trujillo, Perú · 2026 · La mejor opción en streaming premium</div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+    <h3 class="text-[17px] font-semibold text-gray-900">Mi carrito</h3>
+    <button id="closeDrawer" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="flex-1 overflow-y-auto px-5 py-4" id="drawerBody"></div>
+  <div class="px-5 pt-4 pb-5 border-t border-gray-100">
+    <div class="flex items-center justify-between mb-4">
+      <span class="text-[13px] text-gray-500">Total</span>
+      <span class="text-[26px] font-bold text-gray-900 tracking-tight" id="totalVal">S/ 0</span>
+    </div>
+    <button id="checkoutBtn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1daa57] text-white font-semibold text-[14px] rounded-full py-3.5 mb-2 transition">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51z"/></svg>
+      Pedir por WhatsApp
+    </button>
+    <button id="clearCartBtn" class="w-full border border-gray-200 text-gray-500 hover:border-gray-400 hover:text-gray-700 text-[13px] rounded-full py-2.5 transition">Vaciar carrito</button>
+  </div>
+</aside>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-ov" id="modalOv">
+  <div class="modal-box">
+    <div class="flex justify-center pt-3 sm:hidden"><div class="w-9 h-1 rounded-full bg-gray-200"></div></div>
+    <div class="p-6">
+      <div class="flex items-center gap-4 mb-5">
+        <div id="modalLogoWrap" class="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 border border-gray-200">
+          <img id="modalImg" src="" alt="" class="max-w-[48px] max-h-[48px] object-contain" onerror="this.style.display='none';document.getElementById('modalFb').style.display='block'">
+          <span id="modalFb" class="text-[18px] font-bold text-gray-400" style="display:none"></span>
+        </div>
+        <div>
+          <div id="modalName" class="text-[19px] font-semibold text-gray-900"></div>
+          <div id="modalDesc" class="text-[13px] text-gray-400 mt-0.5"></div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <div id="modalPrice" class="text-[40px] font-bold text-gray-900 tracking-tight leading-none"></div>
+        <div class="text-[12px] text-gray-400 mt-1">por perfil / mes</div>
+      </div>
+      <label class="block text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-2">Cantidad de perfiles</label>
+      <select id="qtySelect" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 mb-5 focus:outline-none focus:border-blue-400 transition">
+        <option value="1">1 Perfil</option><option value="2">2 Perfiles</option><option value="3">3 Perfiles</option>
+        <option value="4">4 Perfiles</option><option value="5">5 Perfiles</option><option value="6">6 Perfiles</option>
+      </select>
+      <div class="flex flex-col gap-2">
+        <button id="addCartBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-[14px] rounded-full py-3.5 transition">Agregar al carrito</button>
+        <button id="buyWaBtn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1daa57] text-white font-semibold text-[14px] rounded-full py-3.5 transition">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207z"/></svg>
+          Comprar ahora
+        </button>
+        <button id="cancelModal" class="w-full text-gray-400 hover:text-gray-700 text-[13px] py-2 transition">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DIALOG ===== -->
+<div class="modal-ov" id="confirmOv">
+  <div class="modal-box" style="max-width:340px">
+    <div class="flex justify-center pt-3 sm:hidden"><div class="w-9 h-1 rounded-full bg-gray-200"></div></div>
+    <div class="p-6 text-center">
+      <div class="mx-auto w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+      </div>
+      <h3 class="text-[17px] font-semibold text-gray-900 mb-1">¿Vaciar el carrito?</h3>
+      <p class="text-[13px] text-gray-500 mb-5">Se eliminarán todos los productos agregados.</p>
+      <div class="flex gap-2">
+        <button id="confirmCancel" class="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 text-[14px] font-medium rounded-full py-3 transition">Cancelar</button>
+        <button id="confirmOk" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-[14px] font-semibold rounded-full py-3 transition">Vaciar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHATSAPP FLOAT ===== -->
+<button id="waFloat" class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#25D366] hover:scale-105 flex items-center justify-center shadow-lg shadow-green-500/30 z-40 transition-transform">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WHATSAPP = "51934574931";
+const CART_KEY = "siccha_cart_v5";
+
+const PRODUCTS = [
+  { id:"netflix",   name:"Netflix",      price:15, status:"AGOTADO",    rank:1,  color:"#E50914", logo:"assets/netflix.png",     desc:"1 Perfil · Premium HD" },
+  { id:"prime",     name:"Prime Video",  price:10, status:"DISPONIBLE", rank:2,  color:"#00A8E1", logo:"assets/prime-video.png", desc:"1 Perfil · Catálogo completo" },
+  { id:"disney",    name:"Disney+",      price:12, status:"DISPONIBLE", rank:3,  color:"#113CCF", logo:"assets/disney.png",      desc:"1 Perfil · 4K · Marvel & Star Wars" },
+  { id:"max",       name:"HBO Max",      price:8,  status:"DISPONIBLE", rank:4,  color:"#4317B5", logo:"assets/hbo-max.png",     desc:"1 Perfil · Series HD" },
+  { id:"spotify",   name:"Spotify",      price:12, status:"AGOTADO",    rank:5,  color:"#1DB954", logo:"assets/spotify.png",     desc:"1 Perfil · Música sin límites" },
+  { id:"crunchy",   name:"Crunchyroll",  price:8,  status:"DISPONIBLE", rank:6,  color:"#F47521", logo:"assets/crunchyroll.png", desc:"1 Perfil · Anime Mega Fan" },
+  { id:"vix",       name:"VIX+",         price:7,  status:"DISPONIBLE", rank:7,  color:"#E8125C", logo:"assets/vix.png",         desc:"1 Perfil · Contenido en español" },
+  { id:"paramount", name:"Paramount+",   price:7,  status:"DISPONIBLE", rank:8,  color:"#0064FF", logo:"assets/paramount.png",   desc:"1 Perfil · Películas y series" },
+  { id:"dgo",       name:"DGO + Liga 1", price:19, status:"DISPONIBLE", rank:9,  color:"#0096D6", logo:"assets/dgo.png",         desc:"1 Perfil · Fútbol en HD" },
+  { id:"flujotv",   name:"Flujo TV",     price:12, status:"DISPONIBLE", rank:10, color:"#6366F1", logo:"assets/flujotv.png",     desc:"1 Perfil · TV en vivo HD" }
+];
+
+let cart = {};
+let modalProduct = null;
+
+function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
+function loadCart(){ try{ cart = JSON.parse(localStorage.getItem(CART_KEY)) || {}; }catch{ cart = {}; } }
+function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartUI(); }
+
+function renderGrid(){
+  document.getElementById('grid').innerHTML = PRODUCTS.map(function(p){
+    const avail = p.status === 'DISPONIBLE';
+    const tint = 'radial-gradient(circle at 50% 38%, '+hexA(p.color,.14)+', '+hexA(p.color,.04)+')';
+    return ''+
+    '<div class="group relative bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_44px_-14px_rgba(0,0,0,0.22)] hover:-translate-y-1.5">'+
+      '<div class="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10" style="background:'+p.color+'"></div>'+
+      '<div class="relative h-28 sm:h-32 flex items-center justify-center" style="background:'+tint+'">'+
+        '<img src="'+p.logo+'" alt="'+p.name+'" class="max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain transition-transform duration-300 group-hover:scale-110" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
+        '<span class="text-[20px] font-bold" style="display:none;color:'+p.color+'">'+p.name.substring(0,2)+'</span>'+
+        (p.rank<=3 ? '<span class="absolute top-2.5 left-2.5 text-[9px] font-bold uppercase tracking-wide text-white px-2 py-0.5 rounded-full" style="background:'+p.color+'">Top</span>' : '')+
+        '<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full '+(avail?'bg-green-500':'bg-gray-300')+'"></span>'+
+      '</div>'+
+      '<div class="p-3.5 sm:p-4">'+
+        '<div class="text-[14px] sm:text-[15px] font-semibold text-gray-900">'+p.name+'</div>'+
+        '<div class="text-[11px] text-gray-400 mb-3 leading-snug min-h-[28px]">'+p.desc+'</div>'+
+        '<div class="text-[21px] sm:text-[22px] font-bold text-gray-900 tracking-tight mb-3">S/ '+p.price+' <span class="text-[11px] font-normal text-gray-400">/mes</span></div>'+
+        (avail
+          ? '<button onclick="openModal(\''+p.id+'\')" class="w-full bg-blue-500 hover:bg-blue-600 active:scale-[.98] text-white font-medium text-[13px] rounded-full py-2.5 transition">Comprar</button>'
+          : '<div class="w-full text-center text-[12px] font-medium text-gray-400 bg-gray-50 rounded-full py-2.5">Pronto disponible</div>'
+        )+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function updateCartUI(){
+  const count = Object.values(cart).reduce(function(a,b){return a+b;},0);
+  document.getElementById('cartCount').textContent = count;
+
+  const items = Object.entries(cart).map(function(e){
+    const p = PRODUCTS.find(function(x){return x.id===e[0];});
+    return p ? Object.assign({}, p, {qty:e[1]}) : null;
+  }).filter(Boolean);
+
+  const total = items.reduce(function(s,i){return s+i.price*i.qty;},0);
+  document.getElementById('totalVal').textContent = 'S/ '+total;
+
+  const body = document.getElementById('drawerBody');
+  if(!items.length){
+    body.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-3 text-gray-300">'+
+      '<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>'+
+      '<p class="text-[14px] text-gray-400">Tu carrito está vacío</p></div>';
+    return;
+  }
+  body.innerHTML = items.map(function(i){
+    return ''+
+    '<div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-3">'+
+      '<div class="flex items-center gap-3 mb-3">'+
+        '<div class="w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">'+
+          '<img src="'+i.logo+'" alt="'+i.name+'" class="max-w-[30px] max-h-[30px] object-contain" onerror="this.style.display=\'none\'"></div>'+
+        '<div><div class="text-[14px] font-semibold text-gray-900">'+i.name+'</div>'+
+        '<div class="text-[12px] text-gray-400">S/ '+i.price+' c/u</div></div></div>'+
+      '<div class="flex items-center justify-between">'+
+        '<div class="flex items-center gap-3">'+
+          '<button onclick="changeQty(\''+i.id+'\',-1)" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:text-blue-500 font-semibold transition">−</button>'+
+          '<span class="text-[15px] font-semibold min-w-[20px] text-center">'+i.qty+'</span>'+
+          '<button onclick="changeQty(\''+i.id+'\',1)" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:text-blue-500 font-semibold transition">+</button>'+
+        '</div>'+
+        '<div class="text-[16px] font-bold text-gray-900">S/ '+(i.price*i.qty)+'</div>'+
+      '</div>'+
+      '<button onclick="removeItem(\''+i.id+'\')" class="mt-3 text-[11px] font-medium uppercase tracking-wide text-gray-400 hover:text-red-500 transition">Eliminar</button>'+
+    '</div>';
+  }).join('');
+}
+
+function changeQty(id,d){ cart[id]=(cart[id]||0)+d; if(cart[id]<=0) delete cart[id]; saveCart(); }
+function removeItem(id){ delete cart[id]; saveCart(); }
+
+function openDrawer(){ document.getElementById('overlay').classList.add('open'); document.getElementById('drawer').classList.add('open'); }
+function closeDrawer(){ document.getElementById('overlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
+
+function checkout(){
+  const items = Object.entries(cart).map(function(e){
+    const p = PRODUCTS.find(function(x){return x.id===e[0];});
+    return p ? Object.assign({},p,{qty:e[1]}) : null;
+  }).filter(Boolean);
+  if(!items.length){ showToast('Tu carrito está vacío'); return; }
+  const total = items.reduce(function(s,i){return s+i.price*i.qty;},0);
+  const lines = items.map(function(i){return '- '+i.name+' x'+i.qty+' = S/ '+i.price*i.qty;}).join('%0A');
+  window.open('https://wa.me/'+WHATSAPP+'?text=PEDIDO SICCHA STREAMING%0A%0A'+lines+'%0A%0ATOTAL: S/ '+total+'%0A%0A%C2%A1Gracias!','_blank');
+}
+
+function openModal(id){
+  const p = PRODUCTS.find(function(x){return x.id===id;});
+  if(!p || p.status!=='DISPONIBLE') return;
+  modalProduct = p;
+  const img = document.getElementById('modalImg');
+  img.src = p.logo; img.style.display='block';
+  document.getElementById('modalLogoWrap').style.background = 'radial-gradient(circle at 50% 38%, '+hexA(p.color,.16)+', '+hexA(p.color,.05)+')';
+  document.getElementById('modalFb').textContent = p.name.substring(0,2);
+  document.getElementById('modalFb').style.display='none';
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = 'S/ '+p.price;
+  document.getElementById('qtySelect').value='1';
+  document.getElementById('modalOv').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalOv').classList.remove('open'); modalProduct=null; }
+
+function addToCart(){
+  if(!modalProduct) return;
+  const qty = parseInt(document.getElementById('qtySelect').value)||1;
+  cart[modalProduct.id] = (cart[modalProduct.id]||0) + qty;
+  saveCart();
+  showToast(modalProduct.name+' agregado al carrito');
+  closeModal();
+}
+function buyWa(){
+  if(!modalProduct) return;
+  const qty = parseInt(document.getElementById('qtySelect').value)||1;
+  const total = modalProduct.price*qty;
+  window.open('https://wa.me/'+WHATSAPP+'?text=COMPRA SICCHA STREAMING%0A%0APRODUCTO: '+modalProduct.name+'%0APerfiles: '+qty+'%0APRECIO: S/ '+total+'%0A%0A%C2%A1Gracias!','_blank');
+}
+
+let toastT;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+const io = new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target);} });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+/* mobile menu */
+const mm = document.getElementById('mobileMenu');
+document.getElementById('menuBtn').addEventListener('click', function(){ mm.classList.toggle('open'); });
+mm.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mm.classList.remove('open'); }); });
+
+document.getElementById('cartBtn').addEventListener('click', openDrawer);
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+document.getElementById('overlay').addEventListener('click', closeDrawer);
+document.getElementById('checkoutBtn').addEventListener('click', checkout);
+document.getElementById('clearCartBtn').addEventListener('click', function(){ document.getElementById('confirmOv').classList.add('open'); });
+document.getElementById('confirmCancel').addEventListener('click', function(){ document.getElementById('confirmOv').classList.remove('open'); });
+document.getElementById('confirmOk').addEventListener('click', function(){ cart={}; saveCart(); document.getElementById('confirmOv').classList.remove('open'); showToast('Carrito vaciado'); });
+document.getElementById('confirmOv').addEventListener('click', function(e){ if(e.target.id==='confirmOv') document.getElementById('confirmOv').classList.remove('open'); });
+document.getElementById('addCartBtn').addEventListener('click', addToCart);
+document.getElementById('buyWaBtn').addEventListener('click', buyWa);
+document.getElementById('cancelModal').addEventListener('click', closeModal);
+document.getElementById('modalOv').addEventListener('click', function(e){ if(e.target.id==='modalOv') closeModal(); });
+document.getElementById('waFloat').addEventListener('click', function(){
+  window.open('https://wa.me/'+WHATSAPP+'?text=Hola%2C%20me%20interesa%20una%20plataforma%20de%20streaming.%20%C2%BFMe%20das%20m%C3%A1s%20info%3F','_blank');
+});
+
+loadCart(); renderGrid(); updateCartUI();
+</script>
+</body>
+</html>

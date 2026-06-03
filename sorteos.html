@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SICCHA Streaming | Sorteo Abierto 🎁</title>
+
+  <style>
+    :root{
+      --bg:#070707;
+      --panel: rgba(20,20,20,.85);
+      --border: rgba(255,255,255,.10);
+      --red:#e50914;
+      --muted:#b3b3b3;
+      --good:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    html, body{
+      margin:0;
+      padding:0;
+      height: 100%;
+      min-height: 100vh;
+    }
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+      color:#fff;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(229,9,20,.28), transparent 55%),
+        radial-gradient(900px 500px at 85% 0%, rgba(34,197,94,.12), transparent 50%),
+        linear-gradient(180deg, #0a0a0a, #141414 40%, #0a0a0a);
+      overflow-x:hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .christmas-lights {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .light {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    .light:nth-child(odd) {
+      background: #e50914;
+      box-shadow: 0 0 12px #e50914, 0 0 25px rgba(229,9,20,0.5);
+    }
+    .light:nth-child(even) {
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e, 0 0 25px rgba(34,197,94,0.5);
+      animation-delay: 1s;
+    }
+    .light:nth-child(3n) {
+      background: #fbbf24;
+      box-shadow: 0 0 12px #fbbf24, 0 0 25px rgba(251,191,36,0.5);
+      animation-delay: 0.5s;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    .snow {
+      pointer-events:none;
+      position:fixed; inset:0; z-index:0;
+      background-image:
+        radial-gradient(3px 3px at 20px 30px, rgba(255,255,255,.9), transparent),
+        radial-gradient(2px 2px at 120px 80px, rgba(255,255,255,.8), transparent),
+        radial-gradient(2px 2px at 60px 140px, rgba(255,255,255,.9), transparent),
+        radial-gradient(1px 1px at 180px 200px, rgba(255,255,255,.7), transparent),
+        radial-gradient(3px 3px at 240px 120px, rgba(255,255,255,.85), transparent),
+        radial-gradient(2px 2px at 40px 240px, rgba(255,255,255,.75), transparent);
+      background-size: 280px 280px, 240px 240px, 260px 260px, 300px 300px, 220px 220px, 290px 290px;
+      animation: snowMove 12s linear infinite;
+      opacity:.4;
+    }
+    @keyframes snowMove{
+      from{background-position: 0 -50px, 20px -30px, 40px -60px, 60px -40px, 80px -55px, 100px -45px;}
+      to{background-position: 0 50px, 20px 30px, 40px 60px, 60px 40px, 80px 55px, 100px 45px;}
+    }
+
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      z-index: 1;
+      user-select: none;
+      cursor: default;
+      animation: fall linear infinite;
+      color: rgba(255,255,255,0.8);
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+    @keyframes fall {
+      to { transform: translateY(105vh) rotate(360deg); }
+    }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(12px) saturate(180%);
+      background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 100%);
+      border-bottom: 1px solid rgba(34,197,94,.3);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+    .topbar{
+      max-width:1100px; margin:0 auto; padding:18px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:.5px;
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+    .brand:hover {
+      transform: scale(1.05);
+    }
+    .brand .dot{
+      width:12px; height:12px; border-radius:999px; background:var(--red);
+      box-shadow: 0 0 20px rgba(229,9,20,.9), 0 0 40px rgba(229,9,20,0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .brand span{
+      color:var(--red);
+      text-shadow: 0 0 15px rgba(229,9,20,0.6);
+    }
+    .pill{
+      border:1px solid rgba(34,197,94,.4);
+      background: linear-gradient(135deg, rgba(34,197,94,.3), rgba(34,197,94,.15));
+      padding:10px 16px;
+      border-radius:999px;
+      color:#fff;
+      font-size:13px;
+      white-space:nowrap;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+      animation: pulseGreen 2s ease-in-out infinite;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 4px 15px rgba(34,197,94,0.3); }
+      50% { box-shadow: 0 6px 25px rgba(34,197,94,0.5); }
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 18px 56px;
+      position:relative;
+      z-index:1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:20px;
+      align-items:stretch;
+      width: 100%;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr;} }
+
+    .card{
+      border:1px solid rgba(255,255,255,.12);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      border-radius:24px;
+      overflow:hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #22c55e, #16a34a, #22c55e);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .cardPad{padding:20px 20px 18px;}
+    .headline{
+      padding:26px 24px 20px;
+      background:
+        radial-gradient(600px 220px at 10% 0%, rgba(34,197,94,.25), transparent 70%),
+        radial-gradient(400px 200px at 90% 100%, rgba(34,197,94,.15), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .headline::after {
+      content: '🎁';
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 32px;
+      opacity: 0.3;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.1;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, #22c55e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sub{
+      margin:0;
+      color:#d1d5db;
+      line-height:1.5;
+      font-size: 15px;
+    }
+
+    .btn{
+      padding:14px 24px;
+      border-radius:16px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:.5px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    .btn:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+    .btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btnPrimary{
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color:#fff;
+      box-shadow: 0 10px 30px rgba(34,197,94,.35);
+    }
+    .btnPrimary:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(34,197,94,.45);
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.1);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .btnGhost:hover{
+      background: rgba(255,255,255,.15);
+      border-color: rgba(255,255,255,.25);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    footer{
+      max-width:1100px;
+      margin:auto auto 0;
+      padding:24px 18px;
+      color:rgba(255,255,255,.4);
+      font-size:13px;
+      text-align:center;
+    }
+    .badges{
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content: center;
+    }
+    .badge{
+      font-size:13px;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    .badge:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(34,197,94,0.2);
+      border-color: rgba(34,197,94,.3);
+    }
+
+    .adminWrap{
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.78);
+      backdrop-filter: blur(10px);
+      z-index:100;
+      padding:16px;
+    }
+    .adminModal{
+      width:min(440px, 100%);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.15);
+      background: linear-gradient(180deg, rgba(20,20,20,.98), rgba(15,15,15,.98));
+      box-shadow: 0 30px 90px rgba(0,0,0,.85);
+      overflow:hidden;
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .adminBody{padding:20px;}
+    .adminGrid{display:grid; gap:12px;}
+    .modalTop{
+      padding:18px 20px 14px;
+      background: linear-gradient(135deg, rgba(229,9,20,.2), rgba(229,9,20,.05));
+      border-bottom:1px solid rgba(255,255,255,.1);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .x{
+      background: rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.15);
+      color:#fff;
+      border-radius:12px;
+      padding:8px 12px;
+      cursor:pointer;
+      font-weight:900;
+      transition: all 0.3s ease;
+    }
+    .x:hover {
+      background: rgba(255,255,255,.15);
+      transform: rotate(90deg);
+    }
+    label{
+      display:block;
+      font-size:13px;
+      color:#9ca3af;
+      margin:12px 0 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input{
+      width:100%;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(10,10,10,.6);
+      color:#fff;
+      outline:none;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    input:focus{
+      border-color: rgba(34,197,94,.7);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.15);
+      background: rgba(15,15,15,.8);
+      transform: translateY(-2px);
+    }
+    .mini{font-size:13px; color:var(--muted); line-height: 1.6;}
+
+    .santa-hat {
+      position: fixed;
+      top: 80px;
+      right: 30px;
+      font-size: 50px;
+      opacity: 0.15;
+      z-index: 0;
+      animation: sway 4s ease-in-out infinite;
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 28px; }
+    }
+
+    /* ==============================
+       MODAL TICKET (AGREGADO)
+       ============================== */
+    .tm-overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.65);
+      backdrop-filter: blur(6px);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999;
+      padding:16px;
+    }
+    .tm-card{
+      width:min(520px, 96vw);
+      background:rgba(10,10,10,.92);
+      border:1px solid rgba(34,197,94,.35);
+      border-radius:18px;
+      box-shadow:0 20px 80px rgba(0,0,0,.55);
+      padding:18px 18px 14px;
+      position:relative;
+    }
+    .tm-title{
+      font-size:20px; font-weight:900; color:#eafff1;
+    }
+    .tm-sub{
+      margin-top:6px;
+      color:rgba(255,255,255,.75);
+      font-size:13px;
+    }
+    .tm-ticketBox{
+      margin-top:14px;
+      border-radius:14px;
+      padding:14px;
+      border:1px dashed rgba(255,255,255,.22);
+      background:linear-gradient(135deg, rgba(34,197,94,.18), rgba(255,255,255,.06));
+    }
+    .tm-ticketLabel{
+      font-size:11px; letter-spacing:.18em;
+      color:rgba(255,255,255,.6);
+    }
+    .tm-ticketCode{
+      margin-top:6px;
+      font-size:30px;
+      font-weight:1000;
+      letter-spacing:.10em;
+      color:#22c55e;
+      text-shadow:0 0 18px rgba(34,197,94,.25);
+    }
+    .tm-note{
+      margin-top:12px;
+      font-size:13px;
+      color:rgba(255,255,255,.82);
+      line-height:1.35;
+      border-left:3px solid rgba(34,197,94,.75);
+      padding-left:10px;
+    }
+    .tm-actions{
+      margin-top:14px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .tm-btn{
+      flex:1;
+      min-width:170px;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .tm-btn:hover{background:rgba(255,255,255,.10)}
+    .tm-btnPrimary{
+      border-color:rgba(34,197,94,.35);
+      background:rgba(34,197,94,.16);
+    }
+    .tm-foot{
+      margin-top:10px;
+      font-size:11px;
+      color:rgba(255,255,255,.5);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="christmas-lights">
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+  </div>
+
+  <div class="snow"></div>
+  <div class="santa-hat">🎅</div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand"><div class="dot"></div> SICCHA <span>Streaming</span></div>
+      <div class="pill">✅ INSCRIPCIONES ABIERTAS</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="card">
+        <div class="headline">
+          <h1>¡Participa y gana! 🎁</h1>
+          <p class="sub">
+            Regístrate ahora para participar en el sorteo. Completa el formulario con tus datos y recibirás un ticket de participación.
+          </p>
+          <div class="badges">
+            <div class="badge">🎯 5 Ganadores</div>
+            <div class="badge">🎊 Sorteo válido</div>
+          </div>
+        </div>
+
+        <div class="cardPad">
+          <label>Nombre completo</label>
+          <input id="nombre" placeholder="Juan Pérez">
+
+          <label>Teléfono</label>
+          <input id="telefono" placeholder="999999999">
+
+          <button id="registrarBtn" class="btn btnPrimary" style="margin-top: 20px;">
+            <span>🎫 Registrarme ahora</span>
+          </button>
+
+          <div id="mensaje" class="mini" style="margin-top: 12px; text-align: center;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="headline">
+          <h1 style="font-size:28px;margin-bottom:8px;">Información del sorteo</h1>
+          <p class="sub">Todo lo que necesitas saber para participar.</p>
+        </div>
+        <div class="cardPad">
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#22c55e;">✓</strong> Registro completamente gratis
+          </p>
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#22c55e;">✓</strong> Recibirás un ticket único
+          </p>
+          <p class="mini" style="margin-bottom: 12px;">
+            <strong style="color:#22c55e;">✓</strong> 5 ganadores seleccionados al azar
+          </p>
+          <p class="mini" style="margin-bottom: 20px;">
+            <strong style="color:#22c55e;">✓</strong> Resultados publicados en tiempo real
+          </p>
+
+          <div style="background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); border-radius: 16px; padding: 16px; margin-top: 20px;">
+            <p style="margin: 0; color: #fff; font-size: 14px; line-height: 1.6;">
+              <strong>💡 Importante:</strong> Guarda tu ticket de participación.
+              Lo necesitarás para reclamar tu premio si resultas ganador.
+            </p>
+          </div>
+
+          <button class="btn btnGhost" style="margin-top: 20px;" onclick="location.href='ruleta.html'">
+            <span>🎡 Ver Ruleta</span>
+            <button class="btn btnGhost" style="margin-top: 12px;" onclick="location.href='resultados.html'">
+  <span>🏆 Ver Ganadores</span>
+</button>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    SICCHA Streaming © 2025 • Sorteo promocional (no afiliado a Prime Video).
+    <div style="margin-top:16px;">
+      <button id="openAdmin" class="btn btnGhost" style="max-width:340px;">
+        🔐 Iniciar sesión administrador
+      </button>
+    </div>
+  </footer>
+
+  <div class="adminWrap" id="adminWrap">
+    <div class="adminModal">
+      <div class="modalTop">
+        <div style="font-weight:900;font-size:16px;">🔐 Admin • SICCHA Streaming</div>
+        <button class="x" id="closeAdmin">✕</button>
+      </div>
+      <div class="adminBody">
+        <div class="adminGrid">
+          <div>
+            <label>Email</label>
+            <input id="adminEmail" placeholder="admin@email.com">
+          </div>
+          <div>
+            <label>Contraseña</label>
+            <input id="adminPass" type="password" placeholder="••••••••">
+          </div>
+          <button id="adminLoginBtn" class="btn btnPrimary">Entrar</button>
+          <div id="adminMsg" class="mini"></div>
+          <button class="btn btnGhost" onclick="location.href='admin.html'">
+            Ir al panel (si ya iniciaste sesión)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    function createSnowflakes() {
+      const snowflakes = ['❄', '❅', '❆'];
+      for(let i = 0; i < 25; i++) {
+        setTimeout(() => {
+          const snowflake = document.createElement('div');
+          snowflake.className = 'snowflake';
+          snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+          snowflake.style.left = Math.random() * 100 + '%';
+          snowflake.style.animationDuration = (Math.random() * 4 + 6) + 's';
+          snowflake.style.fontSize = (Math.random() * 12 + 16) + 'px';
+          snowflake.style.opacity = Math.random() * 0.6 + 0.3;
+          document.body.appendChild(snowflake);
+          setTimeout(() => snowflake.remove(), 10000);
+        }, i * 300);
+      }
+    }
+    createSnowflakes();
+    setInterval(createSnowflakes, 7000);
+
+    const sb = window.supabase.createClient(
+      "https://wwfdmvuwjdqzpkeaxgcb.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3ZmRtdnV3amRxenBrZWF4Z2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1MjMyNTUsImV4cCI6MjA4MjA5OTI1NX0.T5V4yNw3egtrmJwZN0TM--3fuV9x1jqNHFiPAaUqgT4"
+    );
+
+    const $ = (id) => document.getElementById(id);
+
+    function openAdmin(){
+      $("adminWrap").style.display = "flex";
+      if($("adminMsg")) $("adminMsg").textContent = "";
+    }
+
+    function closeAdmin(){
+      $("adminWrap").style.display = "none";
+      if($("adminMsg")) $("adminMsg").textContent = "";
+    }
+
+    if($("openAdmin")) {
+      $("openAdmin").addEventListener("click", openAdmin);
+    }
+
+    if($("closeAdmin")) {
+      $("closeAdmin").addEventListener("click", closeAdmin);
+    }
+
+    if($("adminWrap")) {
+      $("adminWrap").addEventListener("click", (e) => {
+        if(e.target.id === "adminWrap") closeAdmin();
+      });
+    }
+
+    if($("adminLoginBtn")) {
+      $("adminLoginBtn").addEventListener("click", async () => {
+        const email = ($("adminEmail").value || "").trim();
+        const password = $("adminPass").value || "";
+
+        if(!email || !password) {
+          if($("adminMsg")) $("adminMsg").textContent = "❌ Por favor ingresa email y contraseña.";
+          return;
+        }
+
+        if($("adminMsg")) $("adminMsg").textContent = "Ingresando...";
+
+        try {
+          const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if(error){
+            console.error("Error de login:", error);
+            if($("adminMsg")) $("adminMsg").textContent = "❌ Email o contraseña incorrectos.";
+            return;
+          }
+
+          if($("adminMsg")) $("adminMsg").textContent = "✅ Sesión iniciada. Redirigiendo al panel...";
+          setTimeout(() => {
+            window.location.href = "admin.html";
+          }, 600);
+        } catch(err) {
+          console.error("Error inesperado:", err);
+          if($("adminMsg")) $("adminMsg").textContent = "❌ Error al iniciar sesión.";
+        }
+      });
+    }
+
+    // REGISTRO DE PARTICIPANTES
+    if($("registrarBtn")) {
+      $("registrarBtn").addEventListener("click", async () => {
+        const nombre = ($("nombre").value || "").trim();
+        const telefono = ($("telefono").value || "").trim();
+        const mensaje = $("mensaje");
+
+        if(!nombre || !telefono) {
+          mensaje.textContent = "❌ Por favor completa todos los campos.";
+          mensaje.style.color = "#e50914";
+          return;
+        }
+
+        mensaje.textContent = "⏳ Registrando...";
+        mensaje.style.color = "#fbbf24";
+
+        try {
+          // 1️⃣ Verificar si el teléfono ya existe
+          const { data: existe, error: errorCheck } = await sb
+            .from('participants')
+            .select('id, ticket')
+            .eq('phone', telefono)
+            .limit(1);
+
+          if (errorCheck) {
+            mensaje.textContent = "❌ Error al verificar teléfono";
+            mensaje.style.color = "#e50914";
+            return;
+          }
+
+          if (existe && existe.length > 0) {
+            mensaje.innerHTML = `⚠️ Este número ya está registrado.<br><strong>Tu ticket:</strong> ${existe[0].ticket}`;
+            mensaje.style.color = "#fbbf24";
+            return;
+          }
+
+          // 2️⃣ Insertar si NO existe
+          const ticket = 'SS-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+
+          const { error } = await sb
+            .from('participants')
+            .insert([{
+              name: nombre,
+              phone: telefono,
+              ticket: ticket
+            }]);
+
+          if (error) {
+            mensaje.textContent = `❌ ${error.message}`;
+            mensaje.style.color = "#e50914";
+            return;
+          }
+
+          // 3️⃣ Éxito
+          mensaje.innerHTML = `✅ Registro exitoso<br><strong>Tu ticket:</strong> ${ticket}`;
+          mensaje.style.color = "#22c55e";
+
+          $("nombre").value = "";
+          $("telefono").value = "";
+
+          // ✅ (AGREGADO) Modal flotante para que guarde su ticket
+          openTicketModal(ticket);
+
+        } catch(err) {
+          console.error("Error inesperado:", err);
+          mensaje.innerHTML = `❌ Error: ${err.message || 'Error al procesar'}`;
+          mensaje.style.color = "#e50914";
+        }
+      });
+    }
+
+    /* ================= MODAL TICKET (AGREGADO) ================= */
+    let ticketGuardado = false;
+
+    function openTicketModal(ticket){
+      ticketGuardado = false;
+      const overlay = document.getElementById("ticketModal");
+      const codeEl = document.getElementById("tmTicketCode");
+      codeEl.textContent = ticket;
+      overlay.style.display = "flex";
+    }
+
+    function closeTicketModal(){
+      document.getElementById("ticketModal").style.display = "none";
+    }
+
+    function downloadTicketImage(ticket){
+      const canvas = document.createElement("canvas");
+      const w = 1100, h = 620;
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#0b0f0c";
+      ctx.fillRect(0,0,w,h);
+
+      const grad = ctx.createRadialGradient(w*0.25, h*0.35, 10, w*0.25, h*0.35, 520);
+      grad.addColorStop(0, "rgba(34,197,94,0.30)");
+      grad.addColorStop(1, "rgba(34,197,94,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,w,h);
+
+      ctx.fillStyle = "rgba(255,255,255,0.06)";
+      roundRect(ctx, 70, 70, w-140, h-140, 28, true, false);
+
+      ctx.strokeStyle = "rgba(34,197,94,0.35)";
+      ctx.lineWidth = 4;
+      roundRect(ctx, 70, 70, w-140, h-140, 28, false, true);
+
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = "900 44px Segoe UI, Arial";
+      ctx.fillText("🎟️ Ticket de participación", 120, 160);
+
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "600 22px Segoe UI, Arial";
+      ctx.fillText("Guárdalo. Solo con este ticket podrás canjear tu premio si sales ganador.", 120, 210);
+
+      ctx.fillStyle = "rgba(34,197,94,0.10)";
+      roundRect(ctx, 120, 260, w-240, 170, 18, true, false);
+
+      ctx.fillStyle = "rgba(255,255,255,0.60)";
+      ctx.font = "700 18px Segoe UI, Arial";
+      ctx.fillText("CÓDIGO", 150, 310);
+
+      ctx.fillStyle = "#22c55e";
+      ctx.font = "1000 86px Segoe UI, Arial";
+      ctx.fillText(ticket, 150, 385);
+
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.font = "700 22px Segoe UI, Arial";
+      ctx.fillText("SICCHA Streaming 🎄", 120, 515);
+
+      const link = document.createElement("a");
+      link.download = `ticket-${ticket}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      const r = typeof radius === "number" ? {tl:radius,tr:radius,br:radius,bl:radius} : radius;
+      ctx.beginPath();
+      ctx.moveTo(x + r.tl, y);
+      ctx.lineTo(x + width - r.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + r.tr);
+      ctx.lineTo(x + width, y + height - r.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - r.br, y + height);
+      ctx.lineTo(x + r.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - r.bl);
+      ctx.lineTo(x, y + r.tl);
+      ctx.quadraticCurveTo(x, y, x + r.tl, y);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    // Bloqueo: no cierra tocando afuera hasta que copie o descargue
+    document.addEventListener("click", async (e) => {
+      if (e.target?.id === "ticketModal") {
+        if (!ticketGuardado) return;
+        closeTicketModal();
+        return;
+      }
+
+      if (e.target?.id === "tmCopy") {
+        const t = document.getElementById("tmTicketCode").textContent;
+        try{
+          await navigator.clipboard.writeText(t);
+          ticketGuardado = true;
+          e.target.textContent = "✅ Copiado";
+          setTimeout(()=> e.target.textContent="📋 Copiar", 1200);
+          setTimeout(()=> closeTicketModal(), 600);
+        } catch {
+          alert("No se pudo copiar. Copia manual: " + t);
+        }
+        return;
+      }
+
+      if (e.target?.id === "tmDownload") {
+        const t = document.getElementById("tmTicketCode").textContent;
+        downloadTicketImage(t);
+        ticketGuardado = true;
+        setTimeout(()=> closeTicketModal(), 800);
+        return;
+      }
+    });
+  </script>
+
+  <!-- MODAL TICKET -->
+  <div id="ticketModal" class="tm-overlay" style="display:none;">
+    <div class="tm-card">
+      <div class="tm-title">🎟️ Tu ticket de participación</div>
+      <div class="tm-sub">Guárdalo (captura o descarga). Lo necesitarás si sales ganador.</div>
+
+      <div class="tm-ticketBox">
+        <div class="tm-ticketLabel">CÓDIGO</div>
+        <div class="tm-ticketCode" id="tmTicketCode">SS-XXXXXX</div>
+      </div>
+
+      <div class="tm-note">
+        ✅ <b>Importante:</b> Solo con este ticket podrás <b>canjear</b> tu premio si resultas ganador.
+        <br>📸 Tómale captura o descarga la imagen.
+      </div>
+
+      <div class="tm-actions">
+        <button class="tm-btn" id="tmCopy">📋 Copiar</button>
+        <button class="tm-btn tm-btnPrimary" id="tmDownload">⬇️ Descargar imagen</button>
+      </div>
+
+      <div class="tm-foot">SICCHA Streaming 🎄</div>
+    </div>
+  </div>
+</body>
+</html>
