@@ -160,14 +160,24 @@
 </section>
 
 <!-- ===== PLATAFORMAS ===== -->
-<section id="plataformas" class="px-6 sm:px-12 md:px-20 lg:px-28 pb-20 sm:pb-24">
-  <div class="max-w-6xl mx-auto">
+<section id="plataformas" class="relative overflow-hidden pt-16 sm:pt-20 px-6 sm:px-12 md:px-20 lg:px-28 pb-20 sm:pb-28">
+
+  <!-- Video de fondo -->
+  <video class="absolute inset-0 w-full h-full object-cover" src="assets/netflix_mine.mp4" autoplay muted loop playsinline></video>
+  <!-- Overlay oscuro para que las cartas destaquen -->
+  <div class="absolute inset-0 pointer-events-none" style="background:rgba(8,8,12,.78)"></div>
+  <!-- Fade superior desde la sección anterior -->
+  <div class="absolute inset-x-0 top-0 h-20 pointer-events-none" style="background:linear-gradient(to bottom,#f0f0ee,transparent)"></div>
+  <!-- Fade inferior hacia el footer -->
+  <div class="absolute inset-x-0 bottom-0 h-20 pointer-events-none" style="background:linear-gradient(to top,#f0f0ee,transparent)"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto">
     <div class="reveal flex items-end justify-between mb-7 sm:mb-8 flex-wrap gap-3">
       <div>
-        <p class="text-[11.5px] font-medium text-blue-500 tracking-wide mb-2">Catálogo</p>
-        <h2 class="text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-gray-900">Plataformas disponibles</h2>
+        <p class="text-[11.5px] font-medium text-red-400 tracking-wide mb-2">Catálogo</p>
+        <h2 class="text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-white">Plataformas disponibles</h2>
       </div>
-      <span class="text-[13px] text-gray-400">Trujillo, Perú</span>
+      <span class="text-[13px] text-white/40">Trujillo, Perú</span>
     </div>
     <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4"></div>
   </div>
