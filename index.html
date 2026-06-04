@@ -38,6 +38,17 @@
   .h-rise{opacity:0;transform:translateY(18px);animation:hrise .7s cubic-bezier(.16,1,.3,1) forwards}
   .h-rise.d1{animation-delay:.1s}.h-rise.d2{animation-delay:.2s}.h-rise.d3{animation-delay:.3s}
   @keyframes hrise{to{opacity:1;transform:translateY(0)}}
+
+  /* === Cartas Premium === */
+  @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+  .card-3d{transform-style:preserve-3d;will-change:transform;cursor:pointer;transition:box-shadow .4s cubic-bezier(.16,1,.3,1)}
+  .card-shimmer{background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);transform:translateX(-140%);transition:transform 0s}
+  .card-3d:hover .card-shimmer{transform:translateX(140%);transition:transform .75s cubic-bezier(.16,1,.3,1)}
+  .card-logo{transition:transform .4s cubic-bezier(.16,1,.3,1),filter .4s}
+  .card-3d:hover .card-logo{transform:scale(1.13) translateY(-5px)}
+  .card-btn{transition:opacity .3s,box-shadow .3s,transform .15s}
+  @keyframes pulsedot{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.6)}65%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+  .pulse-dot{animation:pulsedot 2.2s ease-in-out infinite}
 </style>
 </head>
 <body class="text-gray-900">
@@ -267,29 +278,67 @@ function loadCart(){ try{ cart = JSON.parse(localStorage.getItem(CART_KEY)) || {
 function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartUI(); }
 
 function renderGrid(){
-  document.getElementById('grid').innerHTML = PRODUCTS.map(function(p){
-    const avail = p.status === 'DISPONIBLE';
-    const tint = 'radial-gradient(circle at 50% 38%, '+hexA(p.color,.14)+', '+hexA(p.color,.04)+')';
-    return ''+
-    '<div class="group relative bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_44px_-14px_rgba(0,0,0,0.22)] hover:-translate-y-1.5">'+
-      '<div class="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10" style="background:'+p.color+'"></div>'+
-      '<div class="relative h-28 sm:h-32 flex items-center justify-center" style="background:'+tint+'">'+
-        '<img src="'+p.logo+'" alt="'+p.name+'" class="max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain transition-transform duration-300 group-hover:scale-110" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
-        '<span class="text-[20px] font-bold" style="display:none;color:'+p.color+'">'+p.name.substring(0,2)+'</span>'+
-        (p.rank<=3 ? '<span class="absolute top-2.5 left-2.5 text-[9px] font-bold uppercase tracking-wide text-white px-2 py-0.5 rounded-full" style="background:'+p.color+'">Top</span>' : '')+
-        '<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full '+(avail?'bg-green-500':'bg-gray-300')+'"></span>'+
+  document.getElementById('grid').innerHTML = PRODUCTS.map(function(p,i){
+    var avail = p.status === 'DISPONIBLE';
+    return (
+      '<div class="card-3d group relative rounded-[22px] overflow-hidden" style="background:linear-gradient(160deg,#1d1d27 0%,#0f0f14 100%);box-shadow:0 2px 20px rgba(0,0,0,.22);animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;animation-delay:'+(i*.07)+'s">'+
+
+      /* glow blob */
+      '<div class="absolute -top-10 left-1/2 -translate-x-1/2 w-52 h-52 rounded-full blur-3xl opacity-0 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none" style="background:'+p.color+'"></div>'+
+
+      /* shimmer sweep */
+      '<div class="card-shimmer absolute inset-0 pointer-events-none z-20"></div>'+
+
+      /* top gradient line */
+      '<div class="absolute top-0 left-0 right-0 h-[2px]" style="background:linear-gradient(90deg,'+hexA(p.color,0)+','+p.color+','+hexA(p.color,0)+')"></div>'+
+
+      /* header color wash */
+      '<div class="absolute top-0 left-0 right-0 h-32 pointer-events-none" style="background:linear-gradient(180deg,'+hexA(p.color,.2)+' 0%,'+hexA(p.color,0)+' 100%)"></div>'+
+
+      /* logo zone */
+      '<div class="relative h-28 sm:h-32 flex items-center justify-center">'+
+        '<span class="absolute top-3 right-3 flex items-center gap-1.5">'+
+          '<span class="w-2 h-2 rounded-full inline-block '+(avail?'bg-emerald-400 pulse-dot':'bg-gray-600')+'" style="'+(avail?'box-shadow:0 0 7px #34d399':'')+'"></span>'+
+        '</span>'+
+        (p.rank<=3?'<span class="absolute top-2.5 left-2.5 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full text-white" style="background:'+hexA(p.color,.85)+';border:1px solid '+hexA(p.color,.45)+'">★ Top</span>':'')+
+        '<img src="'+p.logo+'" alt="'+p.name+'" class="card-logo max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain relative z-10" style="filter:drop-shadow(0 4px 12px rgba(0,0,0,.55))" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
+        '<span style="display:none;color:'+p.color+';font-size:24px;font-weight:800">'+p.name.substring(0,2)+'</span>'+
       '</div>'+
-      '<div class="p-3.5 sm:p-4">'+
-        '<div class="text-[14px] sm:text-[15px] font-semibold text-gray-900">'+p.name+'</div>'+
-        '<div class="text-[11px] text-gray-400 mb-3 leading-snug min-h-[28px]">'+p.desc+'</div>'+
-        '<div class="text-[21px] sm:text-[22px] font-bold text-gray-900 tracking-tight mb-3">S/ '+p.price+' <span class="text-[11px] font-normal text-gray-400">/mes</span></div>'+
+
+      /* info */
+      '<div class="px-4 pb-4">'+
+        '<div class="text-[14px] sm:text-[15px] font-bold text-white/90 mb-0.5 truncate">'+p.name+'</div>'+
+        '<div class="text-[10.5px] text-white/35 mb-3 leading-snug min-h-[26px]">'+p.desc+'</div>'+
+        '<div class="flex items-baseline gap-1 mb-3.5">'+
+          '<span class="text-[24px] sm:text-[26px] font-black tracking-tight leading-none" style="color:'+p.color+';text-shadow:0 0 18px '+hexA(p.color,.45)+'">S/ '+p.price+'</span>'+
+          '<span class="text-[10px] text-white/35 font-normal">/mes</span>'+
+        '</div>'+
         (avail
-          ? '<button onclick="openModal(\''+p.id+'\')" class="w-full bg-blue-500 hover:bg-blue-600 active:scale-[.98] text-white font-medium text-[13px] rounded-full py-2.5 transition">Comprar</button>'
-          : '<div class="w-full text-center text-[12px] font-medium text-gray-400 bg-gray-50 rounded-full py-2.5">Pronto disponible</div>'
+          ? '<button onclick="openModal(\''+p.id+'\')" class="card-btn w-full text-white text-[12.5px] font-bold rounded-xl py-2.5 opacity-65 group-hover:opacity-100 active:scale-[.97]" style="background:linear-gradient(135deg,'+hexA(p.color,.92)+','+hexA(p.color,.68)+');border:1px solid '+hexA(p.color,.38)+';box-shadow:0 4px 18px '+hexA(p.color,.22)+'">Comprar →</button>'
+          : '<div class="w-full text-center text-[11px] font-medium text-white/25 rounded-xl py-2.5" style="border:1px solid rgba(255,255,255,.08)">Próximamente</div>'
         )+
       '</div>'+
-    '</div>';
+
+      '</div>'
+    );
   }).join('');
+  addTilt();
+}
+
+function addTilt(){
+  document.querySelectorAll('.card-3d').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=this.getBoundingClientRect();
+      var dx=((e.clientX-r.left)/r.width-.5)*2;
+      var dy=((e.clientY-r.top)/r.height-.5)*2;
+      this.style.transform='perspective(900px) rotateX('+(-dy*6)+'deg) rotateY('+(dx*6)+'deg) scale3d(1.03,1.03,1.03)';
+      this.style.boxShadow='0 28px 55px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.045)';
+    });
+    card.addEventListener('mouseleave',function(){
+      this.style.transform='';
+      this.style.boxShadow='';
+    });
+  });
 }
 
 function updateCartUI(){
