@@ -44,7 +44,7 @@
   /* === Cartas Premium === */
   @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
   .card-3d{transform-style:preserve-3d;will-change:transform;cursor:pointer;transition:box-shadow .4s cubic-bezier(.16,1,.3,1)}
-  .card-shimmer{background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-140%);transition:transform 0s}
+  .card-shimmer{background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);transform:translateX(-140%);transition:transform 0s}
   .card-3d:hover .card-shimmer{transform:translateX(140%);transition:transform .75s cubic-bezier(.16,1,.3,1)}
   .card-logo{transition:transform .4s cubic-bezier(.16,1,.3,1),filter .4s}
   .card-3d:hover .card-logo{transform:scale(1.13) translateY(-5px)}
@@ -140,20 +140,20 @@
     <p class="reveal text-[11.5px] font-medium text-red-400 tracking-wide mb-2">Proceso simple</p>
     <h2 class="reveal text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-white mb-10 sm:mb-12">¿Cómo funciona?</h2>
     <div class="grid sm:grid-cols-3 gap-4">
-      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
-        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">01</div>
-        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Elige tu plataforma</h3>
-        <p class="text-[13px] text-gray-500 leading-relaxed">Explora el catálogo y agrega al carrito las plataformas que quieras.</p>
+      <div class="reveal rounded-2xl p-6 sm:p-7" style="background:linear-gradient(160deg,#1d1d27,#0f0f14);border:1px solid rgba(255,255,255,.07)">
+        <div class="text-[40px] font-bold leading-none mb-4" style="color:#E50914">01</div>
+        <h3 class="text-[16px] font-semibold text-white mb-2">Elige tu plataforma</h3>
+        <p class="text-[13px] leading-relaxed" style="color:rgba(255,255,255,.45)">Explora el catálogo y agrega al carrito las plataformas que quieras.</p>
       </div>
-      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7" style="transition-delay:.1s">
-        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">02</div>
-        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Confirma por WhatsApp</h3>
-        <p class="text-[13px] text-gray-500 leading-relaxed">Te redirigimos a WhatsApp con tu pedido listo para coordinar el pago.</p>
+      <div class="reveal rounded-2xl p-6 sm:p-7" style="background:linear-gradient(160deg,#1d1d27,#0f0f14);border:1px solid rgba(255,255,255,.07);transition-delay:.1s">
+        <div class="text-[40px] font-bold leading-none mb-4" style="color:#25D366">02</div>
+        <h3 class="text-[16px] font-semibold text-white mb-2">Confirma por WhatsApp</h3>
+        <p class="text-[13px] leading-relaxed" style="color:rgba(255,255,255,.45)">Te redirigimos a WhatsApp con tu pedido listo para coordinar el pago.</p>
       </div>
-      <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7" style="transition-delay:.2s">
-        <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">03</div>
-        <h3 class="text-[16px] font-semibold text-gray-900 mb-2">Recibe al instante</h3>
-        <p class="text-[13px] text-gray-500 leading-relaxed">Confirmamos el pago y recibes tu acceso de inmediato. ¡A disfrutar!</p>
+      <div class="reveal rounded-2xl p-6 sm:p-7" style="background:linear-gradient(160deg,#1d1d27,#0f0f14);border:1px solid rgba(255,255,255,.07);transition-delay:.2s">
+        <div class="text-[40px] font-bold leading-none mb-4" style="color:#6366F1">03</div>
+        <h3 class="text-[16px] font-semibold text-white mb-2">Recibe al instante</h3>
+        <p class="text-[13px] leading-relaxed" style="color:rgba(255,255,255,.45)">Confirmamos el pago y recibes tu acceso de inmediato. ¡A disfrutar!</p>
       </div>
     </div>
   </div>
@@ -327,35 +327,41 @@ function renderGrid(){
   document.getElementById('grid').innerHTML = PRODUCTS.map(function(p,i){
     var avail = p.status === 'DISPONIBLE';
     return (
-      '<div class="card-3d group relative bg-white rounded-[20px] overflow-hidden" style="box-shadow:0 2px 16px rgba(0,0,0,.25);animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;animation-delay:'+(i*.07)+'s">'+
+      '<div class="card-3d group relative rounded-[22px] overflow-hidden" style="background:linear-gradient(160deg,#1d1d27 0%,#0f0f14 100%);box-shadow:0 2px 20px rgba(0,0,0,.35);animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;animation-delay:'+(i*.07)+'s">'+
 
-      /* shimmer */
+      /* glow blob */
+      '<div class="absolute -top-10 left-1/2 -translate-x-1/2 w-52 h-52 rounded-full blur-3xl opacity-0 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none" style="background:'+p.color+'"></div>'+
+
+      /* shimmer sweep */
       '<div class="card-shimmer absolute inset-0 pointer-events-none z-20"></div>'+
 
-      /* top color line */
-      '<div class="absolute top-0 left-0 right-0 h-[3px]" style="background:'+p.color+'"></div>'+
+      /* top gradient line */
+      '<div class="absolute top-0 left-0 right-0 h-[2px]" style="background:linear-gradient(90deg,'+hexA(p.color,0)+','+p.color+','+hexA(p.color,0)+')"></div>'+
 
-      /* logo zone con tint suave */
-      '<div class="relative h-28 sm:h-32 flex items-center justify-center" style="background:radial-gradient(circle at 50% 40%,'+hexA(p.color,.1)+','+hexA(p.color,.02)+')">'+
+      /* header color wash */
+      '<div class="absolute top-0 left-0 right-0 h-32 pointer-events-none" style="background:linear-gradient(180deg,'+hexA(p.color,.2)+' 0%,'+hexA(p.color,0)+' 100%)"></div>'+
+
+      /* logo zone */
+      '<div class="relative h-28 sm:h-32 flex items-center justify-center">'+
         '<span class="absolute top-3 right-3 flex items-center gap-1.5">'+
-          '<span class="w-2 h-2 rounded-full inline-block '+(avail?'bg-emerald-500 pulse-dot':'bg-gray-300')+'" style="'+(avail?'box-shadow:0 0 6px #22c55e':'')+'"></span>'+
+          '<span class="w-2 h-2 rounded-full inline-block '+(avail?'bg-emerald-400 pulse-dot':'bg-gray-600')+'" style="'+(avail?'box-shadow:0 0 7px #34d399':'')+'"></span>'+
         '</span>'+
-        (p.rank<=3?'<span class="absolute top-2.5 left-2.5 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full text-white" style="background:'+p.color+'">★ Top</span>':'')+
-        '<img src="'+p.logo+'" alt="'+p.name+'" class="card-logo max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain relative z-10" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
+        (p.rank<=3?'<span class="absolute top-2.5 left-2.5 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full text-white" style="background:'+hexA(p.color,.85)+';border:1px solid '+hexA(p.color,.45)+'">★ Top</span>':'')+
+        '<img src="'+p.logo+'" alt="'+p.name+'" class="card-logo max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain relative z-10" style="filter:drop-shadow(0 4px 12px rgba(0,0,0,.55))" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
         '<span style="display:none;color:'+p.color+';font-size:24px;font-weight:800">'+p.name.substring(0,2)+'</span>'+
       '</div>'+
 
       /* info */
       '<div class="px-4 pb-4">'+
-        '<div class="text-[14px] sm:text-[15px] font-bold text-gray-900 mb-0.5 truncate">'+p.name+'</div>'+
-        '<div class="text-[10.5px] text-gray-400 mb-3 leading-snug min-h-[26px]">'+p.desc+'</div>'+
+        '<div class="text-[14px] sm:text-[15px] font-bold text-white/90 mb-0.5 truncate">'+p.name+'</div>'+
+        '<div class="text-[10.5px] text-white/35 mb-3 leading-snug min-h-[26px]">'+p.desc+'</div>'+
         '<div class="flex items-baseline gap-1 mb-3.5">'+
-          '<span class="text-[24px] sm:text-[26px] font-black tracking-tight leading-none" style="color:'+p.color+'">S/ '+p.price+'</span>'+
-          '<span class="text-[10px] text-gray-400 font-normal">/mes</span>'+
+          '<span class="text-[24px] sm:text-[26px] font-black tracking-tight leading-none" style="color:'+p.color+';text-shadow:0 0 18px '+hexA(p.color,.45)+'">S/ '+p.price+'</span>'+
+          '<span class="text-[10px] text-white/35 font-normal">/mes</span>'+
         '</div>'+
         (avail
-          ? '<button onclick="openModal(\''+p.id+'\')" class="card-btn w-full text-white text-[12.5px] font-bold rounded-xl py-2.5 active:scale-[.97]" style="background:'+p.color+';box-shadow:0 4px 14px '+hexA(p.color,.3)+'">Comprar →</button>'
-          : '<div class="w-full text-center text-[11px] font-medium text-gray-400 rounded-xl py-2.5 bg-gray-50">Próximamente</div>'
+          ? '<button onclick="openModal(\''+p.id+'\')" class="card-btn w-full text-white text-[12.5px] font-bold rounded-xl py-2.5 opacity-70 group-hover:opacity-100 active:scale-[.97]" style="background:linear-gradient(135deg,'+hexA(p.color,.92)+','+hexA(p.color,.68)+');border:1px solid '+hexA(p.color,.38)+';box-shadow:0 4px 18px '+hexA(p.color,.22)+'">Comprar →</button>'
+          : '<div class="w-full text-center text-[11px] font-medium text-white/25 rounded-xl py-2.5" style="border:1px solid rgba(255,255,255,.08)">Próximamente</div>'
         )+
       '</div>'+
 
