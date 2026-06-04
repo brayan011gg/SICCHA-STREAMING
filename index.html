@@ -92,29 +92,33 @@
 </nav>
 
 <!-- ===== HERO ===== -->
-<section id="inicio" class="relative min-h-[100svh] overflow-hidden bg-[#f0f0ee]">
-  <div class="absolute inset-0 bg-gradient-to-br from-[#f0f0ee] via-[#dfe3ea] to-[#c7cfdb]"></div>
+<section id="inicio" class="relative min-h-[100svh] overflow-hidden bg-black">
   <video class="absolute inset-0 w-full h-full object-cover" src="assets/netflix_intro.mp4" autoplay muted loop playsinline></video>
-  <!-- scrim para legibilidad -->
-  <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#f0f0ee] via-[#f0f0ee]/55 to-transparent"></div>
+
+  <!-- Vignette perimetral sutil — no tapa el video -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 60% 50%,transparent 35%,rgba(0,0,0,.6) 100%)"></div>
+  <!-- Gradiente izquierdo para leer el texto -->
+  <div class="absolute inset-y-0 left-0 w-4/5 sm:w-1/2 pointer-events-none" style="background:linear-gradient(to right,rgba(0,0,0,.78) 0%,transparent 100%)"></div>
+  <!-- Fundido inferior mínimo hacia el resto de la página -->
+  <div class="absolute inset-x-0 bottom-0 h-24 pointer-events-none" style="background:linear-gradient(to top,#f0f0ee,transparent)"></div>
 
   <div class="relative z-10 flex flex-col min-h-[100svh]">
-    <div class="flex-1 flex items-end pb-12 sm:pb-16 lg:pb-20 px-6 sm:px-12 md:px-20 lg:px-28">
+    <div class="flex-1 flex items-end pb-14 sm:pb-18 lg:pb-22 px-6 sm:px-12 md:px-20 lg:px-28">
       <div class="max-w-md">
-        <a href="https://wa.me/51934574931" target="_blank" rel="noreferrer" class="h-rise inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 hover:text-blue-600 transition-colors mb-3 group">
+        <a href="https://wa.me/51934574931" target="_blank" rel="noreferrer" class="h-rise inline-flex items-center gap-1.5 text-[11.5px] font-medium text-red-400 hover:text-red-300 transition-colors mb-3 group">
           Streaming premium en Trujillo
           <span class="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
         </a>
-        <h1 class="h-rise d1 text-[1.7rem] sm:text-[2.2rem] lg:text-[2.6rem] leading-[1.1] font-semibold text-gray-900 tracking-tight mb-4">
+        <h1 class="h-rise d1 text-[1.7rem] sm:text-[2.2rem] lg:text-[2.6rem] leading-[1.1] font-semibold text-white tracking-tight mb-4" style="text-shadow:0 2px 20px rgba(0,0,0,.5)">
           Tu entretenimiento favorito, sin l&iacute;mites y al mejor precio.
         </h1>
-        <p class="h-rise d2 text-[14px] sm:text-[15px] text-gray-500 font-normal mb-5 max-w-sm">Las plataformas m&aacute;s populares con entrega inmediata y soporte 24/7 en Trujillo, Per&uacute;.</p>
+        <p class="h-rise d2 text-[14px] sm:text-[15px] text-white/65 font-normal mb-5 max-w-sm">Las plataformas m&aacute;s populares con entrega inmediata y soporte 24/7 en Trujillo, Per&uacute;.</p>
         <div class="h-rise d3 flex flex-wrap items-center gap-3">
-          <a href="#plataformas" class="inline-flex items-center gap-2 text-[13px] font-medium bg-blue-500 text-white border border-blue-500 rounded-full px-6 py-3 hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group shadow-lg shadow-blue-500/20">
+          <a href="#plataformas" class="inline-flex items-center gap-2 text-[13px] font-semibold bg-red-600 text-white border border-red-600 rounded-full px-6 py-3 hover:bg-red-700 hover:border-red-700 transition-all duration-200 group shadow-lg shadow-red-600/30">
             Ver plataformas
             <span class="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
           </a>
-          <a href="https://wa.me/51934574931" target="_blank" class="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 border border-gray-300 bg-white/70 backdrop-blur rounded-full px-6 py-3 hover:bg-white transition-all duration-200">
+          <a href="https://wa.me/51934574931" target="_blank" class="inline-flex items-center gap-2 text-[13px] font-medium text-white/90 border border-white/25 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 hover:bg-white/20 transition-all duration-200">
             Consultar
           </a>
         </div>
