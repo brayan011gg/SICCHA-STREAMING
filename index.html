@@ -6,11 +6,11 @@
 <title>SICCHA STREAMING — Trujillo</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  html,body{margin:0;min-height:100%;background:#f0f0ee;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;min-height:100%;background:#08080f;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   ::-webkit-scrollbar{width:8px}
-  ::-webkit-scrollbar-track{background:#e7e7e3}
-  ::-webkit-scrollbar-thumb{background:#c7c7c0;border-radius:4px}
-  ::-webkit-scrollbar-thumb:hover{background:#a8a8a0}
+  ::-webkit-scrollbar-track{background:#111118}
+  ::-webkit-scrollbar-thumb{background:#2e2e3e;border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:#3e3e52}
 
   .overlay{position:fixed;inset:0;background:rgba(20,22,28,.45);backdrop-filter:blur(4px);z-index:200;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
   .overlay.open{opacity:1;visibility:visible}
@@ -44,7 +44,7 @@
   /* === Cartas Premium === */
   @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
   .card-3d{transform-style:preserve-3d;will-change:transform;cursor:pointer;transition:box-shadow .4s cubic-bezier(.16,1,.3,1)}
-  .card-shimmer{background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);transform:translateX(-140%);transition:transform 0s}
+  .card-shimmer{background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-140%);transition:transform 0s}
   .card-3d:hover .card-shimmer{transform:translateX(140%);transition:transform .75s cubic-bezier(.16,1,.3,1)}
   .card-logo{transition:transform .4s cubic-bezier(.16,1,.3,1),filter .4s}
   .card-3d:hover .card-logo{transform:scale(1.13) translateY(-5px)}
@@ -58,37 +58,37 @@
 <!-- ===== NAV ===== -->
 <nav class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-6 px-4 sm:px-8">
   <div class="flex items-center justify-center gap-2 sm:gap-3">
-    <div class="flex items-center justify-center rounded-full w-10 h-10 sm:w-11 sm:h-11 shrink-0 shadow-sm" style="background-color:#EDEDED">
+    <div class="flex items-center justify-center rounded-full w-10 h-10 sm:w-11 sm:h-11 shrink-0" style="background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)">
       <svg width="18" height="18" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill="rgb(84, 84, 84)" d="M 160 88 L 194 34 L 216 0 L 256 0 L 256 40 L 221.5 93.5 L 200 128 L 256 128 L 256 256 L 96 256 L 96 168 L 64.246 220 L 40 256 L 0 256 L 0 216 L 34 162 L 56 128 L 0 128 L 0 0 L 160 0 Z"/>
+        <path fill="rgba(255,255,255,.85)" d="M 160 88 L 194 34 L 216 0 L 256 0 L 256 40 L 221.5 93.5 L 200 128 L 256 128 L 256 256 L 96 256 L 96 168 L 64.246 220 L 40 256 L 0 256 L 0 216 L 34 162 L 56 128 L 0 128 L 0 0 L 160 0 Z"/>
       </svg>
     </div>
 
-    <div class="hidden md:flex items-center gap-6 lg:gap-10 rounded-xl px-6 lg:px-8 py-3 shadow-sm" style="background-color:#EDEDED">
-      <a href="#inicio" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Inicio</a>
-      <a href="#plataformas" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Plataformas</a>
-      <a href="#como" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Cómo funciona</a>
-      <a href="https://wa.me/51934574931" target="_blank" class="text-[14px] font-medium text-gray-700 hover:text-gray-900 transition-colors">Soporte</a>
+    <div class="hidden md:flex items-center gap-6 lg:gap-10 rounded-xl px-6 lg:px-8 py-3" style="background:rgba(255,255,255,.08);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1)">
+      <a href="#inicio" class="text-[14px] font-medium text-white/70 hover:text-white transition-colors">Inicio</a>
+      <a href="#plataformas" class="text-[14px] font-medium text-white/70 hover:text-white transition-colors">Plataformas</a>
+      <a href="#como" class="text-[14px] font-medium text-white/70 hover:text-white transition-colors">Cómo funciona</a>
+      <a href="https://wa.me/51934574931" target="_blank" class="text-[14px] font-medium text-white/70 hover:text-white transition-colors">Soporte</a>
     </div>
 
-    <button id="cartBtn" class="relative flex items-center gap-2 rounded-full px-4 sm:px-5 h-10 sm:h-11 shrink-0 shadow-sm text-[13px] font-medium text-gray-800 hover:text-gray-900 transition-colors" style="background-color:#EDEDED">
+    <button id="cartBtn" class="relative flex items-center gap-2 rounded-full px-4 sm:px-5 h-10 sm:h-11 shrink-0 text-[13px] font-medium text-white/80 hover:text-white transition-colors" style="background:rgba(255,255,255,.08);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
       <span class="hidden sm:inline">Carrito</span>
-      <span id="cartCount" class="flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-blue-500 text-white text-[10px] font-bold">0</span>
+      <span id="cartCount" class="flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold">0</span>
     </button>
 
-    <button id="menuBtn" class="md:hidden flex items-center justify-center rounded-full w-10 h-10 shrink-0 shadow-sm text-gray-700" style="background-color:#EDEDED" aria-label="Menú">
+    <button id="menuBtn" class="md:hidden flex items-center justify-center rounded-full w-10 h-10 shrink-0 text-white/80" style="background:rgba(255,255,255,.08);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1)" aria-label="Menú">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 
   <!-- Mobile dropdown -->
   <div id="mobileMenu" class="md:hidden mx-auto mt-2 max-w-xs">
-    <div class="rounded-2xl py-2 shadow-lg" style="background-color:#EDEDED">
-      <a href="#inicio" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Inicio</a>
-      <a href="#plataformas" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Plataformas</a>
-      <a href="#como" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Cómo funciona</a>
-      <a href="https://wa.me/51934574931" target="_blank" class="block px-6 py-2.5 text-[14px] font-medium text-gray-700 hover:text-gray-900 hover:bg-black/5 transition">Soporte</a>
+    <div class="rounded-2xl py-2" style="background:rgba(15,15,22,.92);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1)">
+      <a href="#inicio" class="block px-6 py-2.5 text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition">Inicio</a>
+      <a href="#plataformas" class="block px-6 py-2.5 text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition">Plataformas</a>
+      <a href="#como" class="block px-6 py-2.5 text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition">Cómo funciona</a>
+      <a href="https://wa.me/51934574931" target="_blank" class="block px-6 py-2.5 text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition">Soporte</a>
     </div>
   </div>
 </nav>
@@ -107,7 +107,7 @@
   <div class="hidden sm:block absolute inset-y-0 left-0 w-1/2 pointer-events-none" style="background:linear-gradient(to right,rgba(0,0,0,.8) 0%,transparent 100%)"></div>
 
   <!-- Fundido inferior hacia la página (mínimo) -->
-  <div class="absolute inset-x-0 bottom-0 h-16 sm:h-20 pointer-events-none" style="background:linear-gradient(to top,#f0f0ee,transparent)"></div>
+  <div class="absolute inset-x-0 bottom-0 h-16 sm:h-20 pointer-events-none" style="background:linear-gradient(to top,#08080f,transparent)"></div>
 
   <div class="relative z-10 flex flex-col min-h-[100svh]">
     <div class="flex-1 flex items-end pb-16 sm:pb-16 lg:pb-20 px-5 sm:px-12 md:px-20 lg:px-28">
@@ -137,8 +137,8 @@
 <!-- ===== CÓMO FUNCIONA ===== -->
 <section id="como" class="px-6 sm:px-12 md:px-20 lg:px-28 py-16 sm:py-20">
   <div class="max-w-6xl mx-auto">
-    <p class="reveal text-[11.5px] font-medium text-blue-500 tracking-wide mb-2">Proceso simple</p>
-    <h2 class="reveal text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-gray-900 mb-10 sm:mb-12">¿Cómo funciona?</h2>
+    <p class="reveal text-[11.5px] font-medium text-red-400 tracking-wide mb-2">Proceso simple</p>
+    <h2 class="reveal text-[1.6rem] sm:text-[2rem] font-semibold tracking-tight text-white mb-10 sm:mb-12">¿Cómo funciona?</h2>
     <div class="grid sm:grid-cols-3 gap-4">
       <div class="reveal bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
         <div class="text-[40px] font-bold text-blue-500/90 leading-none mb-4">01</div>
@@ -167,9 +167,9 @@
   <!-- Overlay más suave — video más visible -->
   <div class="absolute inset-0 pointer-events-none" style="background:rgba(8,8,12,.45)"></div>
   <!-- Fade superior: blanco → color del overlay → transparente (sin choque brusco) -->
-  <div class="absolute inset-x-0 top-0 h-32 pointer-events-none" style="background:linear-gradient(to bottom,#f0f0ee 0%,rgba(240,240,238,.55) 38%,transparent 100%)"></div>
+  <div class="absolute inset-x-0 top-0 h-32 pointer-events-none" style="background:linear-gradient(to bottom,#08080f 0%,rgba(240,240,238,.55) 38%,transparent 100%)"></div>
   <!-- Fade inferior igual -->
-  <div class="absolute inset-x-0 bottom-0 h-32 pointer-events-none" style="background:linear-gradient(to top,#f0f0ee 0%,rgba(240,240,238,.55) 38%,transparent 100%)"></div>
+  <div class="absolute inset-x-0 bottom-0 h-32 pointer-events-none" style="background:linear-gradient(to top,#08080f 0%,rgba(240,240,238,.55) 38%,transparent 100%)"></div>
 
   <div class="relative z-10 max-w-6xl mx-auto">
     <div class="reveal flex items-end justify-between mb-7 sm:mb-8 flex-wrap gap-3">
@@ -184,9 +184,9 @@
 </section>
 
 <!-- ===== FOOTER ===== -->
-<footer class="border-t border-gray-200 px-6 py-10 text-center">
-  <div class="font-semibold text-gray-900">SICCHA STREAMING</div>
-  <div class="text-[13px] text-gray-400 mt-1">Trujillo, Perú · 2026 · La mejor opción en streaming premium</div>
+<footer class="px-6 py-10 text-center" style="border-top:1px solid rgba(255,255,255,.08)">
+  <div class="font-semibold text-white">SICCHA STREAMING</div>
+  <div class="text-[13px] mt-1" style="color:rgba(255,255,255,.35)">Trujillo, Perú · 2026 · La mejor opción en streaming premium</div>
 </footer>
 
 <!-- ===== CART DRAWER ===== -->
@@ -219,53 +219,53 @@
     <div class="flex justify-center pt-3 pb-0 sm:hidden">
       <div class="w-10 h-[3px] rounded-full" style="background:rgba(255,255,255,.13)"></div>
     </div>
-    <div class="p-5 sm:p-6 pt-4">
+    <div class="p-4 sm:p-6 pt-3 sm:pt-4">
 
       <!-- Header: logo + nombre -->
-      <div class="flex items-center gap-4 mb-5">
-        <div id="modalLogoWrap" class="w-[62px] h-[62px] rounded-2xl flex items-center justify-center overflow-hidden shrink-0" style="border:1px solid rgba(255,255,255,.1)">
-          <img id="modalImg" src="" alt="" class="max-w-[44px] max-h-[44px] object-contain" style="filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))" onerror="this.style.display='none';document.getElementById('modalFb').style.display='block'">
-          <span id="modalFb" class="text-[18px] font-bold" style="display:none"></span>
+      <div class="flex items-center gap-3 mb-4 sm:mb-5">
+        <div id="modalLogoWrap" class="w-[54px] h-[54px] sm:w-[62px] sm:h-[62px] rounded-2xl flex items-center justify-center overflow-hidden shrink-0" style="border:1px solid rgba(255,255,255,.1)">
+          <img id="modalImg" src="" alt="" class="max-w-[38px] max-h-[38px] sm:max-w-[44px] sm:max-h-[44px] object-contain" style="filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))" onerror="this.style.display='none';document.getElementById('modalFb').style.display='block'">
+          <span id="modalFb" class="text-[16px] font-bold" style="display:none"></span>
         </div>
         <div>
-          <div id="modalName" class="text-[19px] font-bold text-white leading-tight"></div>
-          <div id="modalDesc" class="text-[12px] mt-0.5" style="color:rgba(255,255,255,.38)"></div>
+          <div id="modalName" class="text-[17px] sm:text-[19px] font-bold text-white leading-tight"></div>
+          <div id="modalDesc" class="text-[11px] sm:text-[12px] mt-0.5" style="color:rgba(255,255,255,.38)"></div>
         </div>
       </div>
 
       <!-- Precio unitario -->
-      <div class="mb-5 pb-5" style="border-bottom:1px solid rgba(255,255,255,.07)">
-        <div id="modalPrice" class="text-[42px] font-black tracking-tight leading-none"></div>
-        <div class="text-[11.5px] mt-1" style="color:rgba(255,255,255,.32)">por perfil · mensual</div>
+      <div class="mb-4 sm:mb-5 pb-4 sm:pb-5" style="border-bottom:1px solid rgba(255,255,255,.07)">
+        <div id="modalPrice" class="text-[34px] sm:text-[42px] font-black tracking-tight leading-none"></div>
+        <div class="text-[11px] mt-1" style="color:rgba(255,255,255,.32)">por perfil · mensual</div>
       </div>
 
       <!-- Selector de perfiles visual -->
-      <div class="mb-5">
-        <p class="text-[10px] font-bold uppercase tracking-widest mb-3" style="color:rgba(255,255,255,.3)">Cantidad de perfiles</p>
-        <div class="grid grid-cols-6 gap-2">
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="1" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">1</button>
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="2" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">2</button>
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="3" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">3</button>
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="4" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">4</button>
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="5" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">5</button>
-          <button class="qty-btn h-11 rounded-xl text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="6" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">6</button>
+      <div class="mb-4 sm:mb-5">
+        <p class="text-[10px] font-bold uppercase tracking-widest mb-2.5" style="color:rgba(255,255,255,.3)">Cantidad de perfiles</p>
+        <div class="grid grid-cols-6 gap-1.5 sm:gap-2">
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="1" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">1</button>
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="2" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">2</button>
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="3" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">3</button>
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="4" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">4</button>
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="5" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">5</button>
+          <button class="qty-btn h-9 sm:h-11 rounded-xl text-[13px] sm:text-[15px] font-bold transition-all duration-200 active:scale-95" data-qty="6" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)">6</button>
         </div>
       </div>
 
       <!-- Total -->
-      <div class="flex items-center justify-between mb-5 px-4 py-3 rounded-xl" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)">
-        <span class="text-[13px]" style="color:rgba(255,255,255,.4)">Total a pagar</span>
-        <span id="modalTotal" class="text-[22px] font-black text-white"></span>
+      <div class="flex items-center justify-between mb-4 sm:mb-5 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)">
+        <span class="text-[12px] sm:text-[13px]" style="color:rgba(255,255,255,.4)">Total a pagar</span>
+        <span id="modalTotal" class="text-[20px] sm:text-[22px] font-black text-white"></span>
       </div>
 
       <!-- Botones -->
-      <div class="flex flex-col gap-2.5">
-        <button id="addCartBtn" class="w-full text-white font-bold text-[14px] rounded-xl py-3.5 transition-all duration-200 active:scale-[.98]">+ Agregar al carrito</button>
-        <button id="buyWaBtn" class="w-full flex items-center justify-center gap-2 text-white font-bold text-[14px] rounded-xl py-3.5 transition-all duration-200 active:scale-[.98]" style="background:#25D366">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+      <div class="flex flex-col gap-2">
+        <button id="addCartBtn" class="w-full text-white font-bold text-[13px] sm:text-[14px] rounded-xl py-3 sm:py-3.5 transition-all duration-200 active:scale-[.98]">+ Agregar al carrito</button>
+        <button id="buyWaBtn" class="w-full flex items-center justify-center gap-2 text-white font-bold text-[13px] sm:text-[14px] rounded-xl py-3 sm:py-3.5 transition-all duration-200 active:scale-[.98]" style="background:#25D366">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
           Comprar ahora
         </button>
-        <button id="cancelModal" class="w-full py-2.5 text-[12.5px] transition-colors" style="color:rgba(255,255,255,.25)">Cancelar</button>
+        <button id="cancelModal" class="w-full py-2 text-[12px] transition-colors" style="color:rgba(255,255,255,.25)">Cancelar</button>
       </div>
 
     </div>
@@ -327,41 +327,35 @@ function renderGrid(){
   document.getElementById('grid').innerHTML = PRODUCTS.map(function(p,i){
     var avail = p.status === 'DISPONIBLE';
     return (
-      '<div class="card-3d group relative rounded-[22px] overflow-hidden" style="background:linear-gradient(160deg,#1d1d27 0%,#0f0f14 100%);box-shadow:0 2px 20px rgba(0,0,0,.22);animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;animation-delay:'+(i*.07)+'s">'+
+      '<div class="card-3d group relative bg-white rounded-[20px] overflow-hidden" style="box-shadow:0 2px 16px rgba(0,0,0,.25);animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;animation-delay:'+(i*.07)+'s">'+
 
-      /* glow blob */
-      '<div class="absolute -top-10 left-1/2 -translate-x-1/2 w-52 h-52 rounded-full blur-3xl opacity-0 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none" style="background:'+p.color+'"></div>'+
-
-      /* shimmer sweep */
+      /* shimmer */
       '<div class="card-shimmer absolute inset-0 pointer-events-none z-20"></div>'+
 
-      /* top gradient line */
-      '<div class="absolute top-0 left-0 right-0 h-[2px]" style="background:linear-gradient(90deg,'+hexA(p.color,0)+','+p.color+','+hexA(p.color,0)+')"></div>'+
+      /* top color line */
+      '<div class="absolute top-0 left-0 right-0 h-[3px]" style="background:'+p.color+'"></div>'+
 
-      /* header color wash */
-      '<div class="absolute top-0 left-0 right-0 h-32 pointer-events-none" style="background:linear-gradient(180deg,'+hexA(p.color,.2)+' 0%,'+hexA(p.color,0)+' 100%)"></div>'+
-
-      /* logo zone */
-      '<div class="relative h-28 sm:h-32 flex items-center justify-center">'+
+      /* logo zone con tint suave */
+      '<div class="relative h-28 sm:h-32 flex items-center justify-center" style="background:radial-gradient(circle at 50% 40%,'+hexA(p.color,.1)+','+hexA(p.color,.02)+')">'+
         '<span class="absolute top-3 right-3 flex items-center gap-1.5">'+
-          '<span class="w-2 h-2 rounded-full inline-block '+(avail?'bg-emerald-400 pulse-dot':'bg-gray-600')+'" style="'+(avail?'box-shadow:0 0 7px #34d399':'')+'"></span>'+
+          '<span class="w-2 h-2 rounded-full inline-block '+(avail?'bg-emerald-500 pulse-dot':'bg-gray-300')+'" style="'+(avail?'box-shadow:0 0 6px #22c55e':'')+'"></span>'+
         '</span>'+
-        (p.rank<=3?'<span class="absolute top-2.5 left-2.5 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full text-white" style="background:'+hexA(p.color,.85)+';border:1px solid '+hexA(p.color,.45)+'">★ Top</span>':'')+
-        '<img src="'+p.logo+'" alt="'+p.name+'" class="card-logo max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain relative z-10" style="filter:drop-shadow(0 4px 12px rgba(0,0,0,.55))" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
+        (p.rank<=3?'<span class="absolute top-2.5 left-2.5 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full text-white" style="background:'+p.color+'">★ Top</span>':'')+
+        '<img src="'+p.logo+'" alt="'+p.name+'" class="card-logo max-w-[58px] max-h-[58px] sm:max-w-[64px] sm:max-h-[64px] object-contain relative z-10" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
         '<span style="display:none;color:'+p.color+';font-size:24px;font-weight:800">'+p.name.substring(0,2)+'</span>'+
       '</div>'+
 
       /* info */
       '<div class="px-4 pb-4">'+
-        '<div class="text-[14px] sm:text-[15px] font-bold text-white/90 mb-0.5 truncate">'+p.name+'</div>'+
-        '<div class="text-[10.5px] text-white/35 mb-3 leading-snug min-h-[26px]">'+p.desc+'</div>'+
+        '<div class="text-[14px] sm:text-[15px] font-bold text-gray-900 mb-0.5 truncate">'+p.name+'</div>'+
+        '<div class="text-[10.5px] text-gray-400 mb-3 leading-snug min-h-[26px]">'+p.desc+'</div>'+
         '<div class="flex items-baseline gap-1 mb-3.5">'+
-          '<span class="text-[24px] sm:text-[26px] font-black tracking-tight leading-none" style="color:'+p.color+';text-shadow:0 0 18px '+hexA(p.color,.45)+'">S/ '+p.price+'</span>'+
-          '<span class="text-[10px] text-white/35 font-normal">/mes</span>'+
+          '<span class="text-[24px] sm:text-[26px] font-black tracking-tight leading-none" style="color:'+p.color+'">S/ '+p.price+'</span>'+
+          '<span class="text-[10px] text-gray-400 font-normal">/mes</span>'+
         '</div>'+
         (avail
-          ? '<button onclick="openModal(\''+p.id+'\')" class="card-btn w-full text-white text-[12.5px] font-bold rounded-xl py-2.5 opacity-65 group-hover:opacity-100 active:scale-[.97]" style="background:linear-gradient(135deg,'+hexA(p.color,.92)+','+hexA(p.color,.68)+');border:1px solid '+hexA(p.color,.38)+';box-shadow:0 4px 18px '+hexA(p.color,.22)+'">Comprar →</button>'
-          : '<div class="w-full text-center text-[11px] font-medium text-white/25 rounded-xl py-2.5" style="border:1px solid rgba(255,255,255,.08)">Próximamente</div>'
+          ? '<button onclick="openModal(\''+p.id+'\')" class="card-btn w-full text-white text-[12.5px] font-bold rounded-xl py-2.5 active:scale-[.97]" style="background:'+p.color+';box-shadow:0 4px 14px '+hexA(p.color,.3)+'">Comprar →</button>'
+          : '<div class="w-full text-center text-[11px] font-medium text-gray-400 rounded-xl py-2.5 bg-gray-50">Próximamente</div>'
         )+
       '</div>'+
 
